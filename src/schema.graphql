@@ -1,0 +1,14 @@
+# import * from './generated/prisma.graphql'
+
+type Mutation {
+  createPertanyaan: String!
+}
+
+type Query {
+  pertanyaan: String!
+}
+
+type Pertanyaan {
+  id: ID!
+  isi: String!
+}
