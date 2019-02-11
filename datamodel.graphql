@@ -9,7 +9,10 @@ type User {
   id: ID! @unique
   email: String! @unique
   password: String!
-  permissions: Permission
+  permissions: [Permission]
+  mahasiswa: Mahasiswa
+  dosen: Dosen
+  pengawas: Pengawas
   resetToken: String
   resetTokenExpiry: String
 }

@@ -1,4 +1,5 @@
-type AggregateDosen {
+module.exports = {
+        typeDefs: /* GraphQL */ `type AggregateDosen {
   count: Int!
 }
 
@@ -2102,3 +2103,6 @@ input UserWhereUniqueInput {
   id: ID
   email: String
 }
+`
+      }
+    

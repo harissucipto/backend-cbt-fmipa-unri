@@ -1,14 +1,16 @@
-# import * from './generated/prisma.graphql'
+# import * from 'generated/prisma.graphql'
 
 type Mutation {
-  createPertanyaan: String!
+  signup(email: String!, password: String!): User!
+  signin(email: String!, password: String!): User!
 }
 
 type Query {
   pertanyaan: String!
 }
 
-type Pertanyaan {
+type User {
   id: ID!
-  isi: String!
+  email: String!
+  permissions: [Permission!]!
 }
