@@ -1,0 +1,95 @@
+enum Permission {
+  USER
+  ADMIN
+  DOSEN
+  MAHASISWA
+}
+
+type User {
+  id: ID! @unique
+  email: String! @unique
+  password: String!
+  permissions: Permission
+  resetToken: String
+  resetTokenExpiry: String
+}
+
+type Mahasiswa {
+  id: ID! @unique
+  nim: String! @unique
+  nama: String!
+  user: User!
+}
+
+type Dosen {
+  id: ID! @unique
+  nip: String!
+  nama: String!
+  user: User!
+}
+
+type Pengawas {
+  id: ID! @unique
+  nama: String!
+  user: User!
+}
+
+type MataKuliah {
+  id: ID! @unique
+  kode: String! @unique
+  nama: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type Kelas {
+  id: ID! @unique
+  tahunAjaran: String!
+  mataKuliah: MataKuliah!
+  listMahasiswa: [Mahasiswa]!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type Jawaban {
+  id: ID! @unique
+  isi: String!
+  gambar: String
+  pertanyaan: Pertanyaan!
+  kebenaran: Boolean! @default(value: false)
+}
+
+type Pertanyaan {
+  id: ID! @unique
+  isi: String!
+  gambar: [String!]
+}
+
+type PilihanGanda {
+  id: ID! @unique
+  pertanyaan: Pertanyaan!
+  jawaban: [Jawaban!]!
+}
+
+type JawabanMahasiswa {
+  id: ID! @unique
+  JawabanSoal: Jawaban!
+}
+
+type SoalMahasiswa {
+  id: ID! @unique
+  mahasiswa: Mahasiswa!
+  listSoal: [PilihanGanda!]!
+  listJawaban: [JawabanMahasiswa!]!
+}
+
+type Ujian {
+  id: ID! @unique
+  Kelas: Kelas!
+  pengawas: Pengawas!
+  listSoal: [SoalMahasiswa!]!
+  tanggalPelaksanaan: DateTime!
+  tokenUjian: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
