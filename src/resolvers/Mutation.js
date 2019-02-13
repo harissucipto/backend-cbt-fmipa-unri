@@ -59,6 +59,52 @@ const mutations = {
     ctx.response.clearCookie('token');
     return { message: 'Goodbye!' };
   },
+
+  async updateAdmin(parent, args, ctx, info) {
+    // 1. login  punya hak akses dan query user login tersebut
+    const { userId } = ctx.request;
+    if (!userId) throw new Error('Kamu Harus Login dahulu, untuk melakukan aksi ini');
+    const user = await ctx.db.query.user(
+      { where: { id: userId } },
+      `{
+      id
+
+      email
+      admin {
+        id
+        nama
+      }}`,
+    );
+
+    if (user.id !== userId) {
+      throw new Error('Kamu tidak punya izin akses untuk melakukan ini');
+    }
+
+    // console.log(args, 'ini args');
+
+    // // 4. update data
+
+    const updateInfo = await ctx.db.mutation.updateUser(
+      {
+        where: {
+          id: 'cjs0ncg9r00gd07186gzlv2e9',
+        },
+        data: {
+          ...args.user,
+          admin: {
+            update: {
+              ...args.admin,
+            },
+          },
+        },
+      },
+      info,
+    );
+
+    // 4. return data
+
+    return updateInfo;
+  },
 };
 
 module.exports = mutations;

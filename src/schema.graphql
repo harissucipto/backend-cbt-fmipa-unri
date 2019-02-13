@@ -8,6 +8,15 @@ type Mutation {
   signup(email: String!, password: String!): User!
   signin(email: String!, password: String!): User!
   signout: SuccessMessage
+  updateAdmin(user: UserInput, admin: AdminInput): User
+}
+
+input UserInput {
+  email: String
+}
+
+input AdminInput {
+  nama: String
 }
 
 type Query {
@@ -19,6 +28,7 @@ type User {
   id: ID!
   email: String!
   permissions: [Permission!]!
+  admin: Admin
   mahasiswa: Mahasiswa
   dosen: Dosen
   pengawas: Pengawas

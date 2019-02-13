@@ -7,14 +7,22 @@ enum Permission {
 
 type User {
   id: ID! @unique
+  gambar: String
   email: String! @unique
   password: String!
   permissions: [Permission]
+  admin: Admin
   mahasiswa: Mahasiswa
   dosen: Dosen
   pengawas: Pengawas
   resetToken: String
   resetTokenExpiry: String
+}
+
+type Admin {
+  id: ID! @unique
+  nama: String!
+  user: User!
 }
 
 type Mahasiswa {

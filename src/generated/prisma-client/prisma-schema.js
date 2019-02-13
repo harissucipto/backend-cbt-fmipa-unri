@@ -1,5 +1,136 @@
 module.exports = {
-        typeDefs: /* GraphQL */ `type AggregateDosen {
+        typeDefs: /* GraphQL */ `type Admin {
+  id: ID!
+  nama: String!
+  user: User!
+}
+
+type AdminConnection {
+  pageInfo: PageInfo!
+  edges: [AdminEdge]!
+  aggregate: AggregateAdmin!
+}
+
+input AdminCreateInput {
+  nama: String!
+  user: UserCreateOneWithoutAdminInput!
+}
+
+input AdminCreateOneWithoutUserInput {
+  create: AdminCreateWithoutUserInput
+  connect: AdminWhereUniqueInput
+}
+
+input AdminCreateWithoutUserInput {
+  nama: String!
+}
+
+type AdminEdge {
+  node: Admin!
+  cursor: String!
+}
+
+enum AdminOrderByInput {
+  id_ASC
+  id_DESC
+  nama_ASC
+  nama_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type AdminPreviousValues {
+  id: ID!
+  nama: String!
+}
+
+type AdminSubscriptionPayload {
+  mutation: MutationType!
+  node: Admin
+  updatedFields: [String!]
+  previousValues: AdminPreviousValues
+}
+
+input AdminSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: AdminWhereInput
+  AND: [AdminSubscriptionWhereInput!]
+  OR: [AdminSubscriptionWhereInput!]
+  NOT: [AdminSubscriptionWhereInput!]
+}
+
+input AdminUpdateInput {
+  nama: String
+  user: UserUpdateOneRequiredWithoutAdminInput
+}
+
+input AdminUpdateOneWithoutUserInput {
+  create: AdminCreateWithoutUserInput
+  update: AdminUpdateWithoutUserDataInput
+  upsert: AdminUpsertWithoutUserInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: AdminWhereUniqueInput
+}
+
+input AdminUpdateWithoutUserDataInput {
+  nama: String
+}
+
+input AdminUpsertWithoutUserInput {
+  update: AdminUpdateWithoutUserDataInput!
+  create: AdminCreateWithoutUserInput!
+}
+
+input AdminWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  nama: String
+  nama_not: String
+  nama_in: [String!]
+  nama_not_in: [String!]
+  nama_lt: String
+  nama_lte: String
+  nama_gt: String
+  nama_gte: String
+  nama_contains: String
+  nama_not_contains: String
+  nama_starts_with: String
+  nama_not_starts_with: String
+  nama_ends_with: String
+  nama_not_ends_with: String
+  user: UserWhereInput
+  AND: [AdminWhereInput!]
+  OR: [AdminWhereInput!]
+  NOT: [AdminWhereInput!]
+}
+
+input AdminWhereUniqueInput {
+  id: ID
+}
+
+type AggregateAdmin {
+  count: Int!
+}
+
+type AggregateDosen {
   count: Int!
 }
 
@@ -997,6 +1128,12 @@ input MataKuliahWhereUniqueInput {
 }
 
 type Mutation {
+  createAdmin(data: AdminCreateInput!): Admin!
+  updateAdmin(data: AdminUpdateInput!, where: AdminWhereUniqueInput!): Admin
+  updateManyAdmins(data: AdminUpdateInput!, where: AdminWhereInput): BatchPayload!
+  upsertAdmin(where: AdminWhereUniqueInput!, create: AdminCreateInput!, update: AdminUpdateInput!): Admin!
+  deleteAdmin(where: AdminWhereUniqueInput!): Admin
+  deleteManyAdmins(where: AdminWhereInput): BatchPayload!
   createDosen(data: DosenCreateInput!): Dosen!
   updateDosen(data: DosenUpdateInput!, where: DosenWhereUniqueInput!): Dosen
   updateManyDosens(data: DosenUpdateInput!, where: DosenWhereInput): BatchPayload!
@@ -1491,6 +1628,9 @@ input PilihanGandaWhereUniqueInput {
 }
 
 type Query {
+  admin(where: AdminWhereUniqueInput!): Admin
+  admins(where: AdminWhereInput, orderBy: AdminOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Admin]!
+  adminsConnection(where: AdminWhereInput, orderBy: AdminOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): AdminConnection!
   dosen(where: DosenWhereUniqueInput!): Dosen
   dosens(where: DosenWhereInput, orderBy: DosenOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Dosen]!
   dosensConnection(where: DosenWhereInput, orderBy: DosenOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): DosenConnection!
@@ -1654,6 +1794,7 @@ input SoalMahasiswaWhereUniqueInput {
 }
 
 type Subscription {
+  admin(where: AdminSubscriptionWhereInput): AdminSubscriptionPayload
   dosen(where: DosenSubscriptionWhereInput): DosenSubscriptionPayload
   jawaban(where: JawabanSubscriptionWhereInput): JawabanSubscriptionPayload
   jawabanMahasiswa(where: JawabanMahasiswaSubscriptionWhereInput): JawabanMahasiswaSubscriptionPayload
@@ -1817,6 +1958,7 @@ type User {
   email: String!
   password: String!
   permissions: [Permission!]!
+  admin: Admin
   mahasiswa: Mahasiswa
   dosen: Dosen
   pengawas: Pengawas
@@ -1834,11 +1976,17 @@ input UserCreateInput {
   email: String!
   password: String!
   permissions: UserCreatepermissionsInput
+  admin: AdminCreateOneWithoutUserInput
   mahasiswa: MahasiswaCreateOneWithoutUserInput
   dosen: DosenCreateOneWithoutUserInput
   pengawas: PengawasCreateOneWithoutUserInput
   resetToken: String
   resetTokenExpiry: String
+}
+
+input UserCreateOneWithoutAdminInput {
+  create: UserCreateWithoutAdminInput
+  connect: UserWhereUniqueInput
 }
 
 input UserCreateOneWithoutDosenInput {
@@ -1860,10 +2008,22 @@ input UserCreatepermissionsInput {
   set: [Permission!]
 }
 
+input UserCreateWithoutAdminInput {
+  email: String!
+  password: String!
+  permissions: UserCreatepermissionsInput
+  mahasiswa: MahasiswaCreateOneWithoutUserInput
+  dosen: DosenCreateOneWithoutUserInput
+  pengawas: PengawasCreateOneWithoutUserInput
+  resetToken: String
+  resetTokenExpiry: String
+}
+
 input UserCreateWithoutDosenInput {
   email: String!
   password: String!
   permissions: UserCreatepermissionsInput
+  admin: AdminCreateOneWithoutUserInput
   mahasiswa: MahasiswaCreateOneWithoutUserInput
   pengawas: PengawasCreateOneWithoutUserInput
   resetToken: String
@@ -1874,6 +2034,7 @@ input UserCreateWithoutMahasiswaInput {
   email: String!
   password: String!
   permissions: UserCreatepermissionsInput
+  admin: AdminCreateOneWithoutUserInput
   dosen: DosenCreateOneWithoutUserInput
   pengawas: PengawasCreateOneWithoutUserInput
   resetToken: String
@@ -1884,6 +2045,7 @@ input UserCreateWithoutPengawasInput {
   email: String!
   password: String!
   permissions: UserCreatepermissionsInput
+  admin: AdminCreateOneWithoutUserInput
   mahasiswa: MahasiswaCreateOneWithoutUserInput
   dosen: DosenCreateOneWithoutUserInput
   resetToken: String
@@ -1943,11 +2105,19 @@ input UserUpdateInput {
   email: String
   password: String
   permissions: UserUpdatepermissionsInput
+  admin: AdminUpdateOneWithoutUserInput
   mahasiswa: MahasiswaUpdateOneWithoutUserInput
   dosen: DosenUpdateOneWithoutUserInput
   pengawas: PengawasUpdateOneWithoutUserInput
   resetToken: String
   resetTokenExpiry: String
+}
+
+input UserUpdateOneRequiredWithoutAdminInput {
+  create: UserCreateWithoutAdminInput
+  update: UserUpdateWithoutAdminDataInput
+  upsert: UserUpsertWithoutAdminInput
+  connect: UserWhereUniqueInput
 }
 
 input UserUpdateOneRequiredWithoutDosenInput {
@@ -1975,10 +2145,22 @@ input UserUpdatepermissionsInput {
   set: [Permission!]
 }
 
+input UserUpdateWithoutAdminDataInput {
+  email: String
+  password: String
+  permissions: UserUpdatepermissionsInput
+  mahasiswa: MahasiswaUpdateOneWithoutUserInput
+  dosen: DosenUpdateOneWithoutUserInput
+  pengawas: PengawasUpdateOneWithoutUserInput
+  resetToken: String
+  resetTokenExpiry: String
+}
+
 input UserUpdateWithoutDosenDataInput {
   email: String
   password: String
   permissions: UserUpdatepermissionsInput
+  admin: AdminUpdateOneWithoutUserInput
   mahasiswa: MahasiswaUpdateOneWithoutUserInput
   pengawas: PengawasUpdateOneWithoutUserInput
   resetToken: String
@@ -1989,6 +2171,7 @@ input UserUpdateWithoutMahasiswaDataInput {
   email: String
   password: String
   permissions: UserUpdatepermissionsInput
+  admin: AdminUpdateOneWithoutUserInput
   dosen: DosenUpdateOneWithoutUserInput
   pengawas: PengawasUpdateOneWithoutUserInput
   resetToken: String
@@ -1999,10 +2182,16 @@ input UserUpdateWithoutPengawasDataInput {
   email: String
   password: String
   permissions: UserUpdatepermissionsInput
+  admin: AdminUpdateOneWithoutUserInput
   mahasiswa: MahasiswaUpdateOneWithoutUserInput
   dosen: DosenUpdateOneWithoutUserInput
   resetToken: String
   resetTokenExpiry: String
+}
+
+input UserUpsertWithoutAdminInput {
+  update: UserUpdateWithoutAdminDataInput!
+  create: UserCreateWithoutAdminInput!
 }
 
 input UserUpsertWithoutDosenInput {
@@ -2063,6 +2252,7 @@ input UserWhereInput {
   password_not_starts_with: String
   password_ends_with: String
   password_not_ends_with: String
+  admin: AdminWhereInput
   mahasiswa: MahasiswaWhereInput
   dosen: DosenWhereInput
   pengawas: PengawasWhereInput
