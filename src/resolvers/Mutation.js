@@ -146,6 +146,32 @@ const mutations = {
 
     return dosen;
   },
+
+  async deleteDosen(parent, args, ctx, info) {
+    const where = { id: args.id };
+    // 1. find the item
+    const item = await ctx.db.query.dosen({ where }, '{ id  user { id }}');
+    // 2. Check if they own that item, or have the permissions
+    const ownsItem = item.user.id === ctx.request.userId;
+    const hasPermissions = ctx.request.user.permissions.some(permission =>
+      ['ADMIN'].includes(permission));
+
+    if (!ownsItem && !hasPermissions) {
+      throw new Error("You don't have permission to do that!");
+    }
+
+    // // 3. Delete it!
+    await ctx.db.mutation.deleteDosen({ where }, info);
+    await ctx.db.mutation.deleteUser(
+      {
+        where: {
+          id: item.user.id,
+        },
+      },
+      '{id}',
+    );
+    return item;
+  },
 };
 
 module.exports = mutations;

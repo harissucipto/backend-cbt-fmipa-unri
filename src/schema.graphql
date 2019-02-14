@@ -9,6 +9,7 @@ type Mutation {
   signout: SuccessMessage
   updateAdmin(user: UserInput, admin: AdminInput): User!
   addDosen(user: UserBaruInput, dosen: DosenBaruInput): User!
+  deleteDosen(id: ID!): Dosen!
 }
 
 input UserInput {
