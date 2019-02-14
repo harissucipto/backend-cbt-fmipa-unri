@@ -1,5 +1,6 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const { hasPermission } = require('../utils');
 
 const mutations = {
   // eslint-disable-next-line no-unused-vars
@@ -104,6 +105,46 @@ const mutations = {
     // 4. return data
 
     return updateInfo;
+  },
+  async addDosen(parent, args, ctx, info) {
+    // 1. login  punya hak akses dan query user login tersebut
+    console.log('ini');
+    const { userId } = ctx.request;
+    if (!userId) throw new Error('Kamu Harus Login dahulu, untuk melakukan aksi ini');
+    const currentUser = await ctx.db.query.user(
+      { where: { id: userId } },
+      `{
+        id
+        permissions
+      }`,
+    );
+
+    // 2. cek hak akses untuk menambah akun
+    hasPermission(currentUser, ['ADMIN']);
+
+    // \3. kelola password
+    const password = await bcrypt.hash(args.user.password, 10);
+
+    const dosen = await ctx.db.mutation.createUser(
+      {
+        data: {
+          ...args.user,
+          password,
+          passwordKasih: args.user.password,
+          permissions: { set: ['USER'] },
+          dosen: {
+            create: {
+              ...args.dosen,
+            },
+          },
+        },
+      },
+      info,
+    );
+
+    // 4. return data
+
+    return dosen;
   },
 };
 

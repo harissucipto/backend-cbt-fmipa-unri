@@ -10,6 +10,7 @@ type User {
   gambar: String
   email: String! @unique
   password: String!
+  passwordKasih: String
   permissions: [Permission]
   admin: Admin
   mahasiswa: Mahasiswa
@@ -34,7 +35,7 @@ type Mahasiswa {
 
 type Dosen {
   id: ID! @unique
-  nip: String!
+  nip: String! @unique
   nama: String!
   user: User!
 }

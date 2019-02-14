@@ -331,6 +331,7 @@ input DosenWhereInput {
 
 input DosenWhereUniqueInput {
   id: ID
+  nip: String
 }
 
 type Jawaban {
@@ -1955,8 +1956,10 @@ input UjianWhereUniqueInput {
 
 type User {
   id: ID!
+  gambar: String
   email: String!
   password: String!
+  passwordKasih: String
   permissions: [Permission!]!
   admin: Admin
   mahasiswa: Mahasiswa
@@ -1973,8 +1976,10 @@ type UserConnection {
 }
 
 input UserCreateInput {
+  gambar: String
   email: String!
   password: String!
+  passwordKasih: String
   permissions: UserCreatepermissionsInput
   admin: AdminCreateOneWithoutUserInput
   mahasiswa: MahasiswaCreateOneWithoutUserInput
@@ -2009,8 +2014,10 @@ input UserCreatepermissionsInput {
 }
 
 input UserCreateWithoutAdminInput {
+  gambar: String
   email: String!
   password: String!
+  passwordKasih: String
   permissions: UserCreatepermissionsInput
   mahasiswa: MahasiswaCreateOneWithoutUserInput
   dosen: DosenCreateOneWithoutUserInput
@@ -2020,8 +2027,10 @@ input UserCreateWithoutAdminInput {
 }
 
 input UserCreateWithoutDosenInput {
+  gambar: String
   email: String!
   password: String!
+  passwordKasih: String
   permissions: UserCreatepermissionsInput
   admin: AdminCreateOneWithoutUserInput
   mahasiswa: MahasiswaCreateOneWithoutUserInput
@@ -2031,8 +2040,10 @@ input UserCreateWithoutDosenInput {
 }
 
 input UserCreateWithoutMahasiswaInput {
+  gambar: String
   email: String!
   password: String!
+  passwordKasih: String
   permissions: UserCreatepermissionsInput
   admin: AdminCreateOneWithoutUserInput
   dosen: DosenCreateOneWithoutUserInput
@@ -2042,8 +2053,10 @@ input UserCreateWithoutMahasiswaInput {
 }
 
 input UserCreateWithoutPengawasInput {
+  gambar: String
   email: String!
   password: String!
+  passwordKasih: String
   permissions: UserCreatepermissionsInput
   admin: AdminCreateOneWithoutUserInput
   mahasiswa: MahasiswaCreateOneWithoutUserInput
@@ -2060,10 +2073,14 @@ type UserEdge {
 enum UserOrderByInput {
   id_ASC
   id_DESC
+  gambar_ASC
+  gambar_DESC
   email_ASC
   email_DESC
   password_ASC
   password_DESC
+  passwordKasih_ASC
+  passwordKasih_DESC
   resetToken_ASC
   resetToken_DESC
   resetTokenExpiry_ASC
@@ -2076,8 +2093,10 @@ enum UserOrderByInput {
 
 type UserPreviousValues {
   id: ID!
+  gambar: String
   email: String!
   password: String!
+  passwordKasih: String
   permissions: [Permission!]!
   resetToken: String
   resetTokenExpiry: String
@@ -2102,8 +2121,10 @@ input UserSubscriptionWhereInput {
 }
 
 input UserUpdateInput {
+  gambar: String
   email: String
   password: String
+  passwordKasih: String
   permissions: UserUpdatepermissionsInput
   admin: AdminUpdateOneWithoutUserInput
   mahasiswa: MahasiswaUpdateOneWithoutUserInput
@@ -2146,8 +2167,10 @@ input UserUpdatepermissionsInput {
 }
 
 input UserUpdateWithoutAdminDataInput {
+  gambar: String
   email: String
   password: String
+  passwordKasih: String
   permissions: UserUpdatepermissionsInput
   mahasiswa: MahasiswaUpdateOneWithoutUserInput
   dosen: DosenUpdateOneWithoutUserInput
@@ -2157,8 +2180,10 @@ input UserUpdateWithoutAdminDataInput {
 }
 
 input UserUpdateWithoutDosenDataInput {
+  gambar: String
   email: String
   password: String
+  passwordKasih: String
   permissions: UserUpdatepermissionsInput
   admin: AdminUpdateOneWithoutUserInput
   mahasiswa: MahasiswaUpdateOneWithoutUserInput
@@ -2168,8 +2193,10 @@ input UserUpdateWithoutDosenDataInput {
 }
 
 input UserUpdateWithoutMahasiswaDataInput {
+  gambar: String
   email: String
   password: String
+  passwordKasih: String
   permissions: UserUpdatepermissionsInput
   admin: AdminUpdateOneWithoutUserInput
   dosen: DosenUpdateOneWithoutUserInput
@@ -2179,8 +2206,10 @@ input UserUpdateWithoutMahasiswaDataInput {
 }
 
 input UserUpdateWithoutPengawasDataInput {
+  gambar: String
   email: String
   password: String
+  passwordKasih: String
   permissions: UserUpdatepermissionsInput
   admin: AdminUpdateOneWithoutUserInput
   mahasiswa: MahasiswaUpdateOneWithoutUserInput
@@ -2224,6 +2253,20 @@ input UserWhereInput {
   id_not_starts_with: ID
   id_ends_with: ID
   id_not_ends_with: ID
+  gambar: String
+  gambar_not: String
+  gambar_in: [String!]
+  gambar_not_in: [String!]
+  gambar_lt: String
+  gambar_lte: String
+  gambar_gt: String
+  gambar_gte: String
+  gambar_contains: String
+  gambar_not_contains: String
+  gambar_starts_with: String
+  gambar_not_starts_with: String
+  gambar_ends_with: String
+  gambar_not_ends_with: String
   email: String
   email_not: String
   email_in: [String!]
@@ -2252,6 +2295,20 @@ input UserWhereInput {
   password_not_starts_with: String
   password_ends_with: String
   password_not_ends_with: String
+  passwordKasih: String
+  passwordKasih_not: String
+  passwordKasih_in: [String!]
+  passwordKasih_not_in: [String!]
+  passwordKasih_lt: String
+  passwordKasih_lte: String
+  passwordKasih_gt: String
+  passwordKasih_gte: String
+  passwordKasih_contains: String
+  passwordKasih_not_contains: String
+  passwordKasih_starts_with: String
+  passwordKasih_not_starts_with: String
+  passwordKasih_ends_with: String
+  passwordKasih_not_ends_with: String
   admin: AdminWhereInput
   mahasiswa: MahasiswaWhereInput
   dosen: DosenWhereInput

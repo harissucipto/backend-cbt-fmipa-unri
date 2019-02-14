@@ -608,10 +608,14 @@ export type MataKuliahOrderByInput =
 export type UserOrderByInput =
   | "id_ASC"
   | "id_DESC"
+  | "gambar_ASC"
+  | "gambar_DESC"
   | "email_ASC"
   | "email_DESC"
   | "password_ASC"
   | "password_DESC"
+  | "passwordKasih_ASC"
+  | "passwordKasih_DESC"
   | "resetToken_ASC"
   | "resetToken_DESC"
   | "resetTokenExpiry_ASC"
@@ -748,8 +752,10 @@ export interface JawabanCreateInput {
 }
 
 export interface UserUpdateWithoutPengawasDataInput {
+  gambar?: String;
   email?: String;
   password?: String;
+  passwordKasih?: String;
   permissions?: UserUpdatepermissionsInput;
   admin?: AdminUpdateOneWithoutUserInput;
   mahasiswa?: MahasiswaUpdateOneWithoutUserInput;
@@ -823,8 +829,10 @@ export interface MahasiswaSubscriptionWhereInput {
 }
 
 export interface UserCreateWithoutAdminInput {
+  gambar?: String;
   email: String;
   password: String;
+  passwordKasih?: String;
   permissions?: UserCreatepermissionsInput;
   mahasiswa?: MahasiswaCreateOneWithoutUserInput;
   dosen?: DosenCreateOneWithoutUserInput;
@@ -966,8 +974,10 @@ export interface DosenCreateWithoutUserInput {
 }
 
 export interface UserCreateInput {
+  gambar?: String;
   email: String;
   password: String;
+  passwordKasih?: String;
   permissions?: UserCreatepermissionsInput;
   admin?: AdminCreateOneWithoutUserInput;
   mahasiswa?: MahasiswaCreateOneWithoutUserInput;
@@ -1121,8 +1131,10 @@ export interface MataKuliahWhereInput {
 }
 
 export interface UserUpdateWithoutAdminDataInput {
+  gambar?: String;
   email?: String;
   password?: String;
+  passwordKasih?: String;
   permissions?: UserUpdatepermissionsInput;
   mahasiswa?: MahasiswaUpdateOneWithoutUserInput;
   dosen?: DosenUpdateOneWithoutUserInput;
@@ -1193,6 +1205,20 @@ export interface UserWhereInput {
   id_not_starts_with?: ID_Input;
   id_ends_with?: ID_Input;
   id_not_ends_with?: ID_Input;
+  gambar?: String;
+  gambar_not?: String;
+  gambar_in?: String[] | String;
+  gambar_not_in?: String[] | String;
+  gambar_lt?: String;
+  gambar_lte?: String;
+  gambar_gt?: String;
+  gambar_gte?: String;
+  gambar_contains?: String;
+  gambar_not_contains?: String;
+  gambar_starts_with?: String;
+  gambar_not_starts_with?: String;
+  gambar_ends_with?: String;
+  gambar_not_ends_with?: String;
   email?: String;
   email_not?: String;
   email_in?: String[] | String;
@@ -1221,6 +1247,20 @@ export interface UserWhereInput {
   password_not_starts_with?: String;
   password_ends_with?: String;
   password_not_ends_with?: String;
+  passwordKasih?: String;
+  passwordKasih_not?: String;
+  passwordKasih_in?: String[] | String;
+  passwordKasih_not_in?: String[] | String;
+  passwordKasih_lt?: String;
+  passwordKasih_lte?: String;
+  passwordKasih_gt?: String;
+  passwordKasih_gte?: String;
+  passwordKasih_contains?: String;
+  passwordKasih_not_contains?: String;
+  passwordKasih_starts_with?: String;
+  passwordKasih_not_starts_with?: String;
+  passwordKasih_ends_with?: String;
+  passwordKasih_not_ends_with?: String;
   admin?: AdminWhereInput;
   mahasiswa?: MahasiswaWhereInput;
   dosen?: DosenWhereInput;
@@ -1421,8 +1461,10 @@ export interface SoalMahasiswaUpdateInput {
 }
 
 export interface UserCreateWithoutDosenInput {
+  gambar?: String;
   email: String;
   password: String;
+  passwordKasih?: String;
   permissions?: UserCreatepermissionsInput;
   admin?: AdminCreateOneWithoutUserInput;
   mahasiswa?: MahasiswaCreateOneWithoutUserInput;
@@ -1449,8 +1491,10 @@ export interface MahasiswaCreateOneInput {
 }
 
 export interface UserCreateWithoutPengawasInput {
+  gambar?: String;
   email: String;
   password: String;
+  passwordKasih?: String;
   permissions?: UserCreatepermissionsInput;
   admin?: AdminCreateOneWithoutUserInput;
   mahasiswa?: MahasiswaCreateOneWithoutUserInput;
@@ -1553,8 +1597,10 @@ export interface JawabanUpdateManyInput {
 }
 
 export interface UserUpdateWithoutDosenDataInput {
+  gambar?: String;
   email?: String;
   password?: String;
+  passwordKasih?: String;
   permissions?: UserUpdatepermissionsInput;
   admin?: AdminUpdateOneWithoutUserInput;
   mahasiswa?: MahasiswaUpdateOneWithoutUserInput;
@@ -1588,6 +1634,7 @@ export interface AdminUpdateWithoutUserDataInput {
 
 export type DosenWhereUniqueInput = AtLeastOne<{
   id: ID_Input;
+  nip?: String;
 }>;
 
 export interface AdminUpsertWithoutUserInput {
@@ -1972,8 +2019,10 @@ export interface MahasiswaCreateManyInput {
 }
 
 export interface UserUpdateInput {
+  gambar?: String;
   email?: String;
   password?: String;
+  passwordKasih?: String;
   permissions?: UserUpdatepermissionsInput;
   admin?: AdminUpdateOneWithoutUserInput;
   mahasiswa?: MahasiswaUpdateOneWithoutUserInput;
@@ -2055,8 +2104,10 @@ export interface KelasUpdateDataInput {
 }
 
 export interface UserCreateWithoutMahasiswaInput {
+  gambar?: String;
   email: String;
   password: String;
+  passwordKasih?: String;
   permissions?: UserCreatepermissionsInput;
   admin?: AdminCreateOneWithoutUserInput;
   dosen?: DosenCreateOneWithoutUserInput;
@@ -2200,8 +2251,10 @@ export interface PilihanGandaCreateManyInput {
 }
 
 export interface UserUpdateWithoutMahasiswaDataInput {
+  gambar?: String;
   email?: String;
   password?: String;
+  passwordKasih?: String;
   permissions?: UserUpdatepermissionsInput;
   admin?: AdminUpdateOneWithoutUserInput;
   dosen?: DosenUpdateOneWithoutUserInput;
@@ -2273,8 +2326,10 @@ export interface NodeNode {
 
 export interface UserPreviousValuesNode {
   id: ID_Output;
+  gambar?: String;
   email: String;
   password: String;
+  passwordKasih?: String;
   permissions: Permission[];
   resetToken?: String;
   resetTokenExpiry?: String;
@@ -2284,8 +2339,10 @@ export interface UserPreviousValues
   extends Promise<UserPreviousValuesNode>,
     Fragmentable {
   id: () => Promise<ID_Output>;
+  gambar: () => Promise<String>;
   email: () => Promise<String>;
   password: () => Promise<String>;
+  passwordKasih: () => Promise<String>;
   permissions: () => Promise<Permission[]>;
   resetToken: () => Promise<String>;
   resetTokenExpiry: () => Promise<String>;
@@ -2295,8 +2352,10 @@ export interface UserPreviousValuesSubscription
   extends Promise<AsyncIterator<UserPreviousValuesNode>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
+  gambar: () => Promise<AsyncIterator<String>>;
   email: () => Promise<AsyncIterator<String>>;
   password: () => Promise<AsyncIterator<String>>;
+  passwordKasih: () => Promise<AsyncIterator<String>>;
   permissions: () => Promise<AsyncIterator<Permission[]>>;
   resetToken: () => Promise<AsyncIterator<String>>;
   resetTokenExpiry: () => Promise<AsyncIterator<String>>;
@@ -2576,8 +2635,10 @@ export interface AdminSubscription
 
 export interface UserNode {
   id: ID_Output;
+  gambar?: String;
   email: String;
   password: String;
+  passwordKasih?: String;
   permissions: Permission[];
   resetToken?: String;
   resetTokenExpiry?: String;
@@ -2585,8 +2646,10 @@ export interface UserNode {
 
 export interface User extends Promise<UserNode>, Fragmentable {
   id: () => Promise<ID_Output>;
+  gambar: () => Promise<String>;
   email: () => Promise<String>;
   password: () => Promise<String>;
+  passwordKasih: () => Promise<String>;
   permissions: () => Promise<Permission[]>;
   admin: <T = Admin>() => T;
   mahasiswa: <T = Mahasiswa>() => T;
@@ -2600,8 +2663,10 @@ export interface UserSubscription
   extends Promise<AsyncIterator<UserNode>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
+  gambar: () => Promise<AsyncIterator<String>>;
   email: () => Promise<AsyncIterator<String>>;
   password: () => Promise<AsyncIterator<String>>;
+  passwordKasih: () => Promise<AsyncIterator<String>>;
   permissions: () => Promise<AsyncIterator<Permission[]>>;
   admin: <T = AdminSubscription>() => T;
   mahasiswa: <T = MahasiswaSubscription>() => T;
