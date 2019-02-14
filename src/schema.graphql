@@ -1,5 +1,4 @@
 # import * from 'generated/prisma.graphql'
-
 type SuccessMessage {
   message: String
 }
@@ -33,12 +32,22 @@ input DosenBaruInput {
 type Query {
   pertanyaan: String!
   me: User
+  dosens(
+    where: DosenWhereInput
+    orderBy: DosenOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [Dosen!]!
 }
 
 type User {
   id: ID!
   email: String!
   permissions: [Permission!]!
+  passwordKasih: String!
   admin: Admin
   mahasiswa: Mahasiswa
   dosen: Dosen
