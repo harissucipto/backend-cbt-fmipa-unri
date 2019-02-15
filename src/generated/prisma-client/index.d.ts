@@ -635,7 +635,7 @@ export type KelasOrderByInput =
   | "updatedAt_ASC"
   | "updatedAt_DESC";
 
-export type Permission = "USER" | "ADMIN" | "DOSEN" | "MAHASISWA";
+export type Permission = "USER" | "ADMIN" | "DOSEN" | "MAHASISWA" | "PENGAWAS";
 
 export type JawabanOrderByInput =
   | "id_ASC"

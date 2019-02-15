@@ -20,6 +20,9 @@ type Mutation {
     id: ID!
   ): User!
   deleteMahasiswa(id: ID!): Mahasiswa!
+  addPengawas(user: UserBaruInput, pengawas: PengawasBaruInput): User!
+  updatePengawas(user: UserInput, pengawas: PengawasBaruInput, id: ID!): User!
+  deletePengawas(id: ID!): Pengawas!
 }
 
 type Query {
@@ -45,6 +48,16 @@ type Query {
     last: Int
   ): [Mahasiswa!]!
   mahasiswa(id: ID!): Mahasiswa!
+  pengawass(
+    where: DosenWhereInput
+    orderBy: DosenOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [Pengawas!]!
+  pengawas(id: ID!): Pengawas!
 }
 
 type User {

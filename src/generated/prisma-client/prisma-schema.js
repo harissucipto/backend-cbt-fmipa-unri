@@ -1380,6 +1380,7 @@ enum Permission {
   ADMIN
   DOSEN
   MAHASISWA
+  PENGAWAS
 }
 
 type Pertanyaan {

@@ -105,6 +105,7 @@ const mutations = {
 
     return updateInfo;
   },
+  // dosen query
   async addDosen(parent, args, ctx, info) {
     // 1. login  punya hak akses dan query user login tersebut
 
@@ -298,7 +299,111 @@ const mutations = {
           ...args.user,
           mahasiswa: {
             update: {
-              ...args.dosen,
+              ...args.mahasiswa,
+            },
+          },
+        },
+      },
+      info,
+    );
+
+    // 4. return data
+
+    return updateInfo;
+  },
+
+  // mahasiswa query
+
+  async addPengawas(parent, args, ctx, info) {
+    // 1. login  punya hak akses dan query user login tersebut
+
+    const { userId } = ctx.request;
+    if (!userId) throw new Error('Kamu Harus Login dahulu, untuk melakukan aksi ini');
+    const currentUser = await ctx.db.query.user(
+      { where: { id: userId } },
+      `{
+        id
+        permissions
+      }`,
+    );
+
+    // 2. cek hak akses untuk menambah akun
+    hasPermission(currentUser, ['ADMIN']);
+
+    // \3. kelola password
+    const password = await bcrypt.hash(args.user.password, 10);
+
+    const pengawas = await ctx.db.mutation.createUser(
+      {
+        data: {
+          ...args.user,
+          password,
+          passwordKasih: args.user.password,
+          permissions: { set: ['USER', 'PENGAWAS'] },
+          pengawas: {
+            create: {
+              ...args.pengawas,
+            },
+          },
+        },
+      },
+      info,
+    );
+
+    // 4. return data
+
+    return pengawas;
+  },
+
+  async deletePengawas(parent, args, ctx, info) {
+    const where = { id: args.id };
+    // 1. find the item
+    const item = await ctx.db.query.pengawas({ where }, '{ id  user { id }}');
+    // 2. Check if they own that item, or have the permissions
+    const ownsItem = item.user.id === ctx.request.userId;
+    const hasPermissions = ctx.request.user.permissions.some(permission =>
+      ['ADMIN'].includes(permission));
+
+    if (!ownsItem && !hasPermissions) {
+      throw new Error("You don't have permission to do that!");
+    }
+
+    // // 3. Delete it!
+    await ctx.db.mutation.deletePengawas({ where }, info);
+    await ctx.db.mutation.deleteUser(
+      {
+        where: {
+          id: item.user.id,
+        },
+      },
+      '{id}',
+    );
+    return item;
+  },
+
+  async updatePengawas(parent, args, ctx, info) {
+    const where = { id: args.id };
+    // 1. find the item
+    const item = await ctx.db.query.pengawas({ where }, '{ id  user { id }}');
+    // 2. Check if they own that item, or have the permissions
+    const ownsItem = item.user.id === ctx.request.userId;
+    const hasPermissions = ctx.request.user.permissions.some(permission =>
+      ['ADMIN'].includes(permission));
+
+    if (!ownsItem && !hasPermissions) {
+      throw new Error("You don't have permission to do that!");
+    }
+
+    const updateInfo = await ctx.db.mutation.updateUser(
+      {
+        where: {
+          id: item.user.id,
+        },
+        data: {
+          ...args.user,
+          pengawas: {
+            update: {
+              ...args.pengawas,
             },
           },
         },
