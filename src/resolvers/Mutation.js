@@ -312,7 +312,7 @@ const mutations = {
     return updateInfo;
   },
 
-  // mahasiswa query
+  // Pengawas iswa query
 
   async addPengawas(parent, args, ctx, info) {
     // 1. login  punya hak akses dan query user login tersebut
@@ -414,6 +414,87 @@ const mutations = {
     // 4. return data
 
     return updateInfo;
+  },
+
+  // Matakuliah query
+
+  async addMataKuliah(parent, args, ctx, info) {
+    // 1. login  punya hak akses dan query user login tersebut
+
+    console.log(args);
+    const { userId } = ctx.request;
+    if (!userId) throw new Error('Kamu Harus Login dahulu, untuk melakukan aksi ini');
+    const currentUser = await ctx.db.query.user(
+      { where: { id: userId } },
+      `{
+        id
+        permissions
+      }`,
+    );
+
+    // 2. cek hak akses untuk menambah akun
+    hasPermission(currentUser, ['ADMIN']);
+
+    const mataKuliah = await ctx.db.mutation.createMataKuliah(
+      {
+        data: {
+          ...args.mataKuliah,
+        },
+      },
+      info,
+    );
+
+    // 4. return data
+
+    return mataKuliah;
+  },
+
+  async deleteMataKuliah(parent, args, ctx, info) {
+    const where = { id: args.id };
+    // 1. login  punya hak akses dan query user login tersebut
+
+    const { userId } = ctx.request;
+    if (!userId) throw new Error('Kamu Harus Login dahulu, untuk melakukan aksi ini');
+    const currentUser = await ctx.db.query.user(
+      { where: { id: userId } },
+      `{
+        id
+        permissions
+      }`,
+    );
+
+    // 2. cek hak akses untuk menambah akun
+    hasPermission(currentUser, ['ADMIN']);
+
+    // // 3. Delete it!
+    return ctx.db.mutation.deleteMataKuliah({ where }, info);
+  },
+
+  async updateMataKuliah(parent, args, ctx, info) {
+    const where = { id: args.id };
+
+    const { userId } = ctx.request;
+    if (!userId) throw new Error('Kamu Harus Login dahulu, untuk melakukan aksi ini');
+    const currentUser = await ctx.db.query.user(
+      { where: { id: userId } },
+      `{
+        id
+        permissions
+      }`,
+    );
+
+    // 2. cek hak akses untuk menambah akun
+    hasPermission(currentUser, ['ADMIN']);
+
+    return ctx.db.mutation.updateMataKuliah(
+      {
+        where,
+        data: {
+          ...args.mataKuliah,
+        },
+      },
+      info,
+    );
   },
 };
 

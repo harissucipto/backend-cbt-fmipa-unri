@@ -137,6 +137,44 @@ const Query = {
 
     return pengawas;
   },
+  async mataKuliahs(parent, args, ctx, info) {
+    // 1. Check if they are logged in
+    if (!ctx.request.userId) {
+      throw new Error('You must be logged in!');
+    }
+    // 2. Check if the user has the permissions to query all the users
+    hasPermission(ctx.request.user, ['ADMIN']);
+
+    // 3. if they do, query all the dosens!
+    return ctx.db.query.mataKuliahs(args, info);
+  },
+
+  async mataKuliah(parent, args, ctx, info) {
+    // 1. chek hak akses dan login
+    if (!ctx.request.userId) {
+      throw new Error('You must be logged in!');
+    }
+    // 1.2 hak akses bagi admin dan yang punya akun
+    const hasPermissions = ctx.request.user.permissions.some(permission =>
+      ['ADMIN'].includes(permission));
+
+    const mataKuliah = await ctx.db.query.mataKuliah(
+      {
+        where: { id: args.id },
+      },
+      info,
+    );
+
+    if (!mataKuliah) {
+      throw new Error('ID matakuliah not valid');
+    }
+
+    if (!hasPermissions) {
+      throw new Error('You dont have permission to do that');
+    }
+
+    return mataKuliah;
+  },
 };
 
 module.exports = Query;

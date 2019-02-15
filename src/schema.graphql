@@ -23,6 +23,9 @@ type Mutation {
   addPengawas(user: UserBaruInput, pengawas: PengawasBaruInput): User!
   updatePengawas(user: UserInput, pengawas: PengawasBaruInput, id: ID!): User!
   deletePengawas(id: ID!): Pengawas!
+  addMataKuliah(mataKuliah: MataKuliahBaruInput!): MataKuliah!
+  updateMataKuliah(mataKuliah: MataKuliahBaruInput!, id: ID!): MataKuliah!
+  deleteMataKuliah(id: ID!): MataKuliah!
 }
 
 type Query {
@@ -39,8 +42,8 @@ type Query {
   ): [Dosen!]!
   dosen(id: ID!): Dosen!
   mahasiswas(
-    where: DosenWhereInput
-    orderBy: DosenOrderByInput
+    where: MahasiswaWhereInput
+    orderBy: MahasiswaOrderByInput
     skip: Int
     after: String
     before: String
@@ -49,8 +52,8 @@ type Query {
   ): [Mahasiswa!]!
   mahasiswa(id: ID!): Mahasiswa!
   pengawass(
-    where: DosenWhereInput
-    orderBy: DosenOrderByInput
+    where: PengawasWhereInput
+    orderBy: PengawasOrderByInput
     skip: Int
     after: String
     before: String
@@ -58,6 +61,16 @@ type Query {
     last: Int
   ): [Pengawas!]!
   pengawas(id: ID!): Pengawas!
+  mataKuliahs(
+    where: MataKuliahWhereInput
+    orderBy: MataKuliahOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [MataKuliah!]!
+  mataKuliah(id: ID!): MataKuliah!
 }
 
 type User {

@@ -24,3 +24,8 @@ input MahasiswaBaruInput {
 input PengawasBaruInput {
   nama: String!
 }
+
+input MataKuliahBaruInput {
+  nama: String!
+  kode: String!
+}
