@@ -32,7 +32,6 @@ const mutations = {
     // hash the password
     const password = await bcrypt.hash(args.password, 10);
     // create user in the database
-    console.log(args);
     const [user] = await ctx.db.mutation.createUser(
       {
         data: {
@@ -88,7 +87,7 @@ const mutations = {
     const updateInfo = await ctx.db.mutation.updateUser(
       {
         where: {
-          id: 'cjs0ncg9r00gd07186gzlv2e9',
+          id: user.id,
         },
         data: {
           ...args.user,
@@ -108,7 +107,7 @@ const mutations = {
   },
   async addDosen(parent, args, ctx, info) {
     // 1. login  punya hak akses dan query user login tersebut
-    console.log('ini');
+
     const { userId } = ctx.request;
     if (!userId) throw new Error('Kamu Harus Login dahulu, untuk melakukan aksi ini');
     const currentUser = await ctx.db.query.user(
@@ -171,6 +170,44 @@ const mutations = {
       '{id}',
     );
     return item;
+  },
+
+  async updateDosen(parent, args, ctx, info) {
+    const where = { id: args.id };
+    // 1. find the item
+    const item = await ctx.db.query.dosen({ where }, '{ id  user { id }}');
+    // 2. Check if they own that item, or have the permissions
+    const ownsItem = item.user.id === ctx.request.userId;
+    const hasPermissions = ctx.request.user.permissions.some(permission =>
+      ['ADMIN'].includes(permission));
+
+    if (!ownsItem && !hasPermissions) {
+      throw new Error("You don't have permission to do that!");
+    }
+
+    // // 3. Delete it!
+    console.log(args, 'ini args');
+
+    const updateInfo = await ctx.db.mutation.updateUser(
+      {
+        where: {
+          id: item.user.id,
+        },
+        data: {
+          ...args.user,
+          dosen: {
+            update: {
+              ...args.dosen,
+            },
+          },
+        },
+      },
+      info,
+    );
+
+    // 4. return data
+
+    return updateInfo;
   },
 };
 

@@ -32,8 +32,6 @@ const Query = {
     if (!ctx.request.userId) {
       throw new Error('You must be logged in!');
     }
-
-    console.log(args.id, 'id dosen');
     // 1.2 hak akses bagi admin dan yang punya akun
     const hasPermissions = ctx.request.user.permissions.some(permission =>
       ['ADMIN'].includes(permission));
