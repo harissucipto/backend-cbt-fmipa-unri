@@ -1,0 +1,22 @@
+input UserInput {
+  email: String
+}
+
+input AdminInput {
+  nama: String
+}
+
+input UserBaruInput {
+  email: String!
+  password: String!
+}
+
+input DosenBaruInput {
+  nama: String!
+  nip: String!
+}
+
+input MahasiswaBaruInput {
+  nama: String!
+  nim: String!
+}

@@ -1,4 +1,6 @@
 # import * from 'generated/prisma.graphql'
+# import  * from './input.graphql'
+
 type SuccessMessage {
   message: String
 }
@@ -11,24 +13,13 @@ type Mutation {
   addDosen(user: UserBaruInput, dosen: DosenBaruInput): User!
   updateDosen(user: UserInput, dosen: DosenBaruInput, id: ID!): User!
   deleteDosen(id: ID!): Dosen!
-}
-
-input UserInput {
-  email: String
-}
-
-input AdminInput {
-  nama: String
-}
-
-input UserBaruInput {
-  email: String!
-  password: String!
-}
-
-input DosenBaruInput {
-  nama: String!
-  nip: String!
+  addMahasiswa(user: UserBaruInput, mahasiswa: MahasiswaBaruInput): User!
+  updateMahasiswa(
+    user: UserInput
+    mahasiswa: MahasiswaBaruInput
+    id: ID!
+  ): User!
+  deleteMahasiswa(id: ID!): Mahasiswa!
 }
 
 type Query {
@@ -44,6 +35,16 @@ type Query {
     last: Int
   ): [Dosen!]!
   dosen(id: ID!): Dosen!
+  mahasiswas(
+    where: DosenWhereInput
+    orderBy: DosenOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [Mahasiswa!]!
+  mahasiswa(id: ID!): Mahasiswa!
 }
 
 type User {

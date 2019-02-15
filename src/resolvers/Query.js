@@ -55,6 +55,47 @@ const Query = {
 
     return dosen;
   },
+
+  async mahasiswas(parent, args, ctx, info) {
+    // 1. Check if they are logged in
+    if (!ctx.request.userId) {
+      throw new Error('You must be logged in!');
+    }
+    // 2. Check if the user has the permissions to query all the users
+    hasPermission(ctx.request.user, ['ADMIN']);
+
+    // 3. if they do, query all the dosens!
+    return ctx.db.query.mahasiswas(args, info);
+  },
+
+  async mahasiswa(parent, args, ctx, info) {
+    // 1. chek hak akses dan login
+    if (!ctx.request.userId) {
+      throw new Error('You must be logged in!');
+    }
+    // 1.2 hak akses bagi admin dan yang punya akun
+    const hasPermissions = ctx.request.user.permissions.some(permission =>
+      ['ADMIN'].includes(permission));
+
+    const mahasiswa = await ctx.db.query.mahasiswa(
+      {
+        where: { id: args.id },
+      },
+      info,
+    );
+
+    if (!mahasiswa) {
+      throw new Error('ID Mahasiswa not valid');
+    }
+
+    const ownMahasiswa = mahasiswa.id === args.id;
+
+    if (!(hasPermissions || ownMahasiswa)) {
+      throw new Error('You dont have permission to do that');
+    }
+
+    return mahasiswa;
+  },
 };
 
 module.exports = Query;
