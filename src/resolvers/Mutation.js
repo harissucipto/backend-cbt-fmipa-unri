@@ -62,7 +62,7 @@ const mutations = {
 
   async updateAdmin(parent, args, ctx, info) {
     // 1. login  punya hak akses dan query user login tersebut
-    const { userId } = ctx.request;
+    const { userId } = ctx.request; // salah disini ini untuk perbandingakn argumen jadi bukan ini
     if (!userId) throw new Error('Kamu Harus Login dahulu, untuk melakukan aksi ini');
     const user = await ctx.db.query.user(
       { where: { id: userId } },
@@ -184,9 +184,6 @@ const mutations = {
     if (!ownsItem && !hasPermissions) {
       throw new Error("You don't have permission to do that!");
     }
-
-    // // 3. Delete it!
-    console.log(args, 'ini args');
 
     const updateInfo = await ctx.db.mutation.updateUser(
       {
