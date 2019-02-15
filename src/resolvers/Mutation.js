@@ -131,7 +131,7 @@ const mutations = {
           ...args.user,
           password,
           passwordKasih: args.user.password,
-          permissions: { set: ['USER'] },
+          permissions: { set: ['USER', 'DOSEN'] },
           dosen: {
             create: {
               ...args.dosen,

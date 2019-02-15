@@ -42,6 +42,7 @@ type Query {
     first: Int
     last: Int
   ): [Dosen!]!
+  dosen(id: ID!): Dosen!
 }
 
 type User {
