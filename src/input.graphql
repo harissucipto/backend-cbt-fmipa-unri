@@ -29,3 +29,8 @@ input MataKuliahBaruInput {
   nama: String!
   kode: String!
 }
+
+input KelasBaruInput {
+  tahunAjaran: String!
+  nama: String!
+}

@@ -31,6 +31,7 @@ type Mahasiswa {
   id: ID! @unique
   nim: String! @unique
   nama: String!
+  kelas: [Kelas!]
   user: User!
 }
 
@@ -57,8 +58,10 @@ type MataKuliah {
 
 type Kelas {
   id: ID! @unique
+  nama: String!
   tahunAjaran: String!
   mataKuliah: MataKuliah!
+  dosen: Dosen!
   listMahasiswa: [Mahasiswa]!
   createdAt: DateTime!
   updatedAt: DateTime!

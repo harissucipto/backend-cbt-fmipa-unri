@@ -26,6 +26,14 @@ type Mutation {
   addMataKuliah(mataKuliah: MataKuliahBaruInput!): MataKuliah!
   updateMataKuliah(mataKuliah: MataKuliahBaruInput!, id: ID!): MataKuliah!
   deleteMataKuliah(id: ID!): MataKuliah!
+  addKelas(
+    kelas: KelasBaruInput!
+    idDosen: [ID!]
+    idMahasiswa: ID!
+    idMataKuliah: ID!
+  ): Kelas!
+  updateKelas(kelas: KelasBaruInput!, id: ID!): Kelas!
+  deleteKelas(id: ID!): Kelas!
 }
 
 type Query {
@@ -71,6 +79,16 @@ type Query {
     last: Int
   ): [MataKuliah!]!
   mataKuliah(id: ID!): MataKuliah!
+  kelases(
+    where: MataKuliahWhereInput
+    orderBy: MataKuliahOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [Kelas!]!
+  kelas(id: ID!): Kelas!
 }
 
 type User {

@@ -421,7 +421,6 @@ const mutations = {
   async addMataKuliah(parent, args, ctx, info) {
     // 1. login  punya hak akses dan query user login tersebut
 
-    console.log(args);
     const { userId } = ctx.request;
     if (!userId) throw new Error('Kamu Harus Login dahulu, untuk melakukan aksi ini');
     const currentUser = await ctx.db.query.user(
@@ -491,6 +490,100 @@ const mutations = {
         where,
         data: {
           ...args.mataKuliah,
+        },
+      },
+      info,
+    );
+  },
+
+  // Kelas query
+
+  async addKelas(parent, args, ctx, info) {
+    // 1. login  punya hak akses dan query user login tersebut
+
+    console.log(args);
+    const { userId } = ctx.request;
+    if (!userId) throw new Error('Kamu Harus Login dahulu, untuk melakukan aksi ini');
+    const currentUser = await ctx.db.query.user(
+      { where: { id: userId } },
+      `{
+        id
+        permissions
+      }`,
+    );
+
+    // 2. cek hak akses untuk menambah akun
+    hasPermission(currentUser, ['ADMIN']);
+
+    const kelas = await ctx.db.mutation.createKelas(
+      {
+        data: {
+          ...args.kelas,
+          mataKuliah: {
+            connect: {
+              id: args.idMataKuliah,
+            },
+          },
+          dosen: {
+            connect: {
+              id: args.idDosen,
+            },
+          },
+          listMahasiswa: {
+            connect: args.mahasiswa,
+          },
+        },
+      },
+      info,
+    );
+
+    // 4. return data
+
+    return kelas;
+  },
+
+  async deleteKelas(parent, args, ctx, info) {
+    const where = { id: args.id };
+    // 1. login  punya hak akses dan query user login tersebut
+
+    const { userId } = ctx.request;
+    if (!userId) throw new Error('Kamu Harus Login dahulu, untuk melakukan aksi ini');
+    const currentUser = await ctx.db.query.user(
+      { where: { id: userId } },
+      `{
+        id
+        permissions
+      }`,
+    );
+
+    // 2. cek hak akses untuk menambah akun
+    hasPermission(currentUser, ['ADMIN']);
+
+    // // 3. Delete it!
+    return ctx.db.mutation.deleteKelas({ where }, info);
+  },
+
+  async updateKelas(parent, args, ctx, info) {
+    const where = { id: args.id };
+
+    const { userId } = ctx.request;
+    if (!userId) throw new Error('Kamu Harus Login dahulu, untuk melakukan aksi ini');
+    const currentUser = await ctx.db.query.user(
+      { where: { id: userId } },
+      `{
+        id
+        permissions
+      }`,
+    );
+
+    // 2. cek hak akses untuk menambah akun
+    hasPermission(currentUser, ['ADMIN']);
+
+    return ctx.db.mutation.updateKelas(
+      {
+        where,
+        data: {
+          ...args.kelas,
         },
       },
       info,

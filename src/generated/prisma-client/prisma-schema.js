@@ -203,6 +203,11 @@ input DosenCreateInput {
   user: UserCreateOneWithoutDosenInput!
 }
 
+input DosenCreateOneInput {
+  create: DosenCreateInput
+  connect: DosenWhereUniqueInput
+}
+
 input DosenCreateOneWithoutUserInput {
   create: DosenCreateWithoutUserInput
   connect: DosenWhereUniqueInput
@@ -255,10 +260,23 @@ input DosenSubscriptionWhereInput {
   NOT: [DosenSubscriptionWhereInput!]
 }
 
+input DosenUpdateDataInput {
+  nip: String
+  nama: String
+  user: UserUpdateOneRequiredWithoutDosenInput
+}
+
 input DosenUpdateInput {
   nip: String
   nama: String
   user: UserUpdateOneRequiredWithoutDosenInput
+}
+
+input DosenUpdateOneRequiredInput {
+  create: DosenCreateInput
+  update: DosenUpdateDataInput
+  upsert: DosenUpsertNestedInput
+  connect: DosenWhereUniqueInput
 }
 
 input DosenUpdateOneWithoutUserInput {
@@ -273,6 +291,11 @@ input DosenUpdateOneWithoutUserInput {
 input DosenUpdateWithoutUserDataInput {
   nip: String
   nama: String
+}
+
+input DosenUpsertNestedInput {
+  update: DosenUpdateDataInput!
+  create: DosenCreateInput!
 }
 
 input DosenUpsertWithoutUserInput {
@@ -622,8 +645,10 @@ input JawabanWhereUniqueInput {
 
 type Kelas {
   id: ID!
+  nama: String!
   tahunAjaran: String!
   mataKuliah: MataKuliah!
+  dosen: Dosen!
   listMahasiswa(where: MahasiswaWhereInput, orderBy: MahasiswaOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Mahasiswa!]
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -636,14 +661,28 @@ type KelasConnection {
 }
 
 input KelasCreateInput {
+  nama: String!
   tahunAjaran: String!
   mataKuliah: MataKuliahCreateOneInput!
-  listMahasiswa: MahasiswaCreateManyInput
+  dosen: DosenCreateOneInput!
+  listMahasiswa: MahasiswaCreateManyWithoutKelasInput
+}
+
+input KelasCreateManyWithoutListMahasiswaInput {
+  create: [KelasCreateWithoutListMahasiswaInput!]
+  connect: [KelasWhereUniqueInput!]
 }
 
 input KelasCreateOneInput {
   create: KelasCreateInput
   connect: KelasWhereUniqueInput
+}
+
+input KelasCreateWithoutListMahasiswaInput {
+  nama: String!
+  tahunAjaran: String!
+  mataKuliah: MataKuliahCreateOneInput!
+  dosen: DosenCreateOneInput!
 }
 
 type KelasEdge {
@@ -654,6 +693,8 @@ type KelasEdge {
 enum KelasOrderByInput {
   id_ASC
   id_DESC
+  nama_ASC
+  nama_DESC
   tahunAjaran_ASC
   tahunAjaran_DESC
   createdAt_ASC
@@ -664,6 +705,7 @@ enum KelasOrderByInput {
 
 type KelasPreviousValues {
   id: ID!
+  nama: String!
   tahunAjaran: String!
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -688,15 +730,28 @@ input KelasSubscriptionWhereInput {
 }
 
 input KelasUpdateDataInput {
+  nama: String
   tahunAjaran: String
   mataKuliah: MataKuliahUpdateOneRequiredInput
-  listMahasiswa: MahasiswaUpdateManyInput
+  dosen: DosenUpdateOneRequiredInput
+  listMahasiswa: MahasiswaUpdateManyWithoutKelasInput
 }
 
 input KelasUpdateInput {
+  nama: String
   tahunAjaran: String
   mataKuliah: MataKuliahUpdateOneRequiredInput
-  listMahasiswa: MahasiswaUpdateManyInput
+  dosen: DosenUpdateOneRequiredInput
+  listMahasiswa: MahasiswaUpdateManyWithoutKelasInput
+}
+
+input KelasUpdateManyWithoutListMahasiswaInput {
+  create: [KelasCreateWithoutListMahasiswaInput!]
+  delete: [KelasWhereUniqueInput!]
+  connect: [KelasWhereUniqueInput!]
+  disconnect: [KelasWhereUniqueInput!]
+  update: [KelasUpdateWithWhereUniqueWithoutListMahasiswaInput!]
+  upsert: [KelasUpsertWithWhereUniqueWithoutListMahasiswaInput!]
 }
 
 input KelasUpdateOneRequiredInput {
@@ -706,9 +761,27 @@ input KelasUpdateOneRequiredInput {
   connect: KelasWhereUniqueInput
 }
 
+input KelasUpdateWithoutListMahasiswaDataInput {
+  nama: String
+  tahunAjaran: String
+  mataKuliah: MataKuliahUpdateOneRequiredInput
+  dosen: DosenUpdateOneRequiredInput
+}
+
+input KelasUpdateWithWhereUniqueWithoutListMahasiswaInput {
+  where: KelasWhereUniqueInput!
+  data: KelasUpdateWithoutListMahasiswaDataInput!
+}
+
 input KelasUpsertNestedInput {
   update: KelasUpdateDataInput!
   create: KelasCreateInput!
+}
+
+input KelasUpsertWithWhereUniqueWithoutListMahasiswaInput {
+  where: KelasWhereUniqueInput!
+  update: KelasUpdateWithoutListMahasiswaDataInput!
+  create: KelasCreateWithoutListMahasiswaInput!
 }
 
 input KelasWhereInput {
@@ -726,6 +799,20 @@ input KelasWhereInput {
   id_not_starts_with: ID
   id_ends_with: ID
   id_not_ends_with: ID
+  nama: String
+  nama_not: String
+  nama_in: [String!]
+  nama_not_in: [String!]
+  nama_lt: String
+  nama_lte: String
+  nama_gt: String
+  nama_gte: String
+  nama_contains: String
+  nama_not_contains: String
+  nama_starts_with: String
+  nama_not_starts_with: String
+  nama_ends_with: String
+  nama_not_ends_with: String
   tahunAjaran: String
   tahunAjaran_not: String
   tahunAjaran_in: [String!]
@@ -741,6 +828,7 @@ input KelasWhereInput {
   tahunAjaran_ends_with: String
   tahunAjaran_not_ends_with: String
   mataKuliah: MataKuliahWhereInput
+  dosen: DosenWhereInput
   listMahasiswa_every: MahasiswaWhereInput
   listMahasiswa_some: MahasiswaWhereInput
   listMahasiswa_none: MahasiswaWhereInput
@@ -775,6 +863,7 @@ type Mahasiswa {
   id: ID!
   nim: String!
   nama: String!
+  kelas(where: KelasWhereInput, orderBy: KelasOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Kelas!]
   user: User!
 }
 
@@ -787,11 +876,12 @@ type MahasiswaConnection {
 input MahasiswaCreateInput {
   nim: String!
   nama: String!
+  kelas: KelasCreateManyWithoutListMahasiswaInput
   user: UserCreateOneWithoutMahasiswaInput!
 }
 
-input MahasiswaCreateManyInput {
-  create: [MahasiswaCreateInput!]
+input MahasiswaCreateManyWithoutKelasInput {
+  create: [MahasiswaCreateWithoutKelasInput!]
   connect: [MahasiswaWhereUniqueInput!]
 }
 
@@ -805,9 +895,16 @@ input MahasiswaCreateOneWithoutUserInput {
   connect: MahasiswaWhereUniqueInput
 }
 
+input MahasiswaCreateWithoutKelasInput {
+  nim: String!
+  nama: String!
+  user: UserCreateOneWithoutMahasiswaInput!
+}
+
 input MahasiswaCreateWithoutUserInput {
   nim: String!
   nama: String!
+  kelas: KelasCreateManyWithoutListMahasiswaInput
 }
 
 type MahasiswaEdge {
@@ -855,22 +952,24 @@ input MahasiswaSubscriptionWhereInput {
 input MahasiswaUpdateDataInput {
   nim: String
   nama: String
+  kelas: KelasUpdateManyWithoutListMahasiswaInput
   user: UserUpdateOneRequiredWithoutMahasiswaInput
 }
 
 input MahasiswaUpdateInput {
   nim: String
   nama: String
+  kelas: KelasUpdateManyWithoutListMahasiswaInput
   user: UserUpdateOneRequiredWithoutMahasiswaInput
 }
 
-input MahasiswaUpdateManyInput {
-  create: [MahasiswaCreateInput!]
+input MahasiswaUpdateManyWithoutKelasInput {
+  create: [MahasiswaCreateWithoutKelasInput!]
   delete: [MahasiswaWhereUniqueInput!]
   connect: [MahasiswaWhereUniqueInput!]
   disconnect: [MahasiswaWhereUniqueInput!]
-  update: [MahasiswaUpdateWithWhereUniqueNestedInput!]
-  upsert: [MahasiswaUpsertWithWhereUniqueNestedInput!]
+  update: [MahasiswaUpdateWithWhereUniqueWithoutKelasInput!]
+  upsert: [MahasiswaUpsertWithWhereUniqueWithoutKelasInput!]
 }
 
 input MahasiswaUpdateOneRequiredInput {
@@ -889,14 +988,21 @@ input MahasiswaUpdateOneWithoutUserInput {
   connect: MahasiswaWhereUniqueInput
 }
 
+input MahasiswaUpdateWithoutKelasDataInput {
+  nim: String
+  nama: String
+  user: UserUpdateOneRequiredWithoutMahasiswaInput
+}
+
 input MahasiswaUpdateWithoutUserDataInput {
   nim: String
   nama: String
+  kelas: KelasUpdateManyWithoutListMahasiswaInput
 }
 
-input MahasiswaUpdateWithWhereUniqueNestedInput {
+input MahasiswaUpdateWithWhereUniqueWithoutKelasInput {
   where: MahasiswaWhereUniqueInput!
-  data: MahasiswaUpdateDataInput!
+  data: MahasiswaUpdateWithoutKelasDataInput!
 }
 
 input MahasiswaUpsertNestedInput {
@@ -909,10 +1015,10 @@ input MahasiswaUpsertWithoutUserInput {
   create: MahasiswaCreateWithoutUserInput!
 }
 
-input MahasiswaUpsertWithWhereUniqueNestedInput {
+input MahasiswaUpsertWithWhereUniqueWithoutKelasInput {
   where: MahasiswaWhereUniqueInput!
-  update: MahasiswaUpdateDataInput!
-  create: MahasiswaCreateInput!
+  update: MahasiswaUpdateWithoutKelasDataInput!
+  create: MahasiswaCreateWithoutKelasInput!
 }
 
 input MahasiswaWhereInput {
@@ -958,6 +1064,9 @@ input MahasiswaWhereInput {
   nama_not_starts_with: String
   nama_ends_with: String
   nama_not_ends_with: String
+  kelas_every: KelasWhereInput
+  kelas_some: KelasWhereInput
+  kelas_none: KelasWhereInput
   user: UserWhereInput
   AND: [MahasiswaWhereInput!]
   OR: [MahasiswaWhereInput!]
