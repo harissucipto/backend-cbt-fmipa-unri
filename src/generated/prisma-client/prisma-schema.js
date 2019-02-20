@@ -663,13 +663,18 @@ type KelasConnection {
 input KelasCreateInput {
   nama: String!
   tahunAjaran: String!
-  mataKuliah: MataKuliahCreateOneInput!
+  mataKuliah: MataKuliahCreateOneWithoutKelasesInput!
   dosen: DosenCreateOneInput!
   listMahasiswa: MahasiswaCreateManyWithoutKelasInput
 }
 
 input KelasCreateManyWithoutListMahasiswaInput {
   create: [KelasCreateWithoutListMahasiswaInput!]
+  connect: [KelasWhereUniqueInput!]
+}
+
+input KelasCreateManyWithoutMataKuliahInput {
+  create: [KelasCreateWithoutMataKuliahInput!]
   connect: [KelasWhereUniqueInput!]
 }
 
@@ -681,8 +686,15 @@ input KelasCreateOneInput {
 input KelasCreateWithoutListMahasiswaInput {
   nama: String!
   tahunAjaran: String!
-  mataKuliah: MataKuliahCreateOneInput!
+  mataKuliah: MataKuliahCreateOneWithoutKelasesInput!
   dosen: DosenCreateOneInput!
+}
+
+input KelasCreateWithoutMataKuliahInput {
+  nama: String!
+  tahunAjaran: String!
+  dosen: DosenCreateOneInput!
+  listMahasiswa: MahasiswaCreateManyWithoutKelasInput
 }
 
 type KelasEdge {
@@ -732,7 +744,7 @@ input KelasSubscriptionWhereInput {
 input KelasUpdateDataInput {
   nama: String
   tahunAjaran: String
-  mataKuliah: MataKuliahUpdateOneRequiredInput
+  mataKuliah: MataKuliahUpdateOneRequiredWithoutKelasesInput
   dosen: DosenUpdateOneRequiredInput
   listMahasiswa: MahasiswaUpdateManyWithoutKelasInput
 }
@@ -740,7 +752,7 @@ input KelasUpdateDataInput {
 input KelasUpdateInput {
   nama: String
   tahunAjaran: String
-  mataKuliah: MataKuliahUpdateOneRequiredInput
+  mataKuliah: MataKuliahUpdateOneRequiredWithoutKelasesInput
   dosen: DosenUpdateOneRequiredInput
   listMahasiswa: MahasiswaUpdateManyWithoutKelasInput
 }
@@ -754,6 +766,15 @@ input KelasUpdateManyWithoutListMahasiswaInput {
   upsert: [KelasUpsertWithWhereUniqueWithoutListMahasiswaInput!]
 }
 
+input KelasUpdateManyWithoutMataKuliahInput {
+  create: [KelasCreateWithoutMataKuliahInput!]
+  delete: [KelasWhereUniqueInput!]
+  connect: [KelasWhereUniqueInput!]
+  disconnect: [KelasWhereUniqueInput!]
+  update: [KelasUpdateWithWhereUniqueWithoutMataKuliahInput!]
+  upsert: [KelasUpsertWithWhereUniqueWithoutMataKuliahInput!]
+}
+
 input KelasUpdateOneRequiredInput {
   create: KelasCreateInput
   update: KelasUpdateDataInput
@@ -764,13 +785,25 @@ input KelasUpdateOneRequiredInput {
 input KelasUpdateWithoutListMahasiswaDataInput {
   nama: String
   tahunAjaran: String
-  mataKuliah: MataKuliahUpdateOneRequiredInput
+  mataKuliah: MataKuliahUpdateOneRequiredWithoutKelasesInput
   dosen: DosenUpdateOneRequiredInput
+}
+
+input KelasUpdateWithoutMataKuliahDataInput {
+  nama: String
+  tahunAjaran: String
+  dosen: DosenUpdateOneRequiredInput
+  listMahasiswa: MahasiswaUpdateManyWithoutKelasInput
 }
 
 input KelasUpdateWithWhereUniqueWithoutListMahasiswaInput {
   where: KelasWhereUniqueInput!
   data: KelasUpdateWithoutListMahasiswaDataInput!
+}
+
+input KelasUpdateWithWhereUniqueWithoutMataKuliahInput {
+  where: KelasWhereUniqueInput!
+  data: KelasUpdateWithoutMataKuliahDataInput!
 }
 
 input KelasUpsertNestedInput {
@@ -782,6 +815,12 @@ input KelasUpsertWithWhereUniqueWithoutListMahasiswaInput {
   where: KelasWhereUniqueInput!
   update: KelasUpdateWithoutListMahasiswaDataInput!
   create: KelasCreateWithoutListMahasiswaInput!
+}
+
+input KelasUpsertWithWhereUniqueWithoutMataKuliahInput {
+  where: KelasWhereUniqueInput!
+  update: KelasUpdateWithoutMataKuliahDataInput!
+  create: KelasCreateWithoutMataKuliahInput!
 }
 
 input KelasWhereInput {
@@ -864,6 +903,7 @@ type Mahasiswa {
   nim: String!
   nama: String!
   kelas(where: KelasWhereInput, orderBy: KelasOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Kelas!]
+  mataKuliah(where: MataKuliahWhereInput, orderBy: MataKuliahOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [MataKuliah!]
   user: User!
 }
 
@@ -877,6 +917,7 @@ input MahasiswaCreateInput {
   nim: String!
   nama: String!
   kelas: KelasCreateManyWithoutListMahasiswaInput
+  mataKuliah: MataKuliahCreateManyInput
   user: UserCreateOneWithoutMahasiswaInput!
 }
 
@@ -898,6 +939,7 @@ input MahasiswaCreateOneWithoutUserInput {
 input MahasiswaCreateWithoutKelasInput {
   nim: String!
   nama: String!
+  mataKuliah: MataKuliahCreateManyInput
   user: UserCreateOneWithoutMahasiswaInput!
 }
 
@@ -905,6 +947,7 @@ input MahasiswaCreateWithoutUserInput {
   nim: String!
   nama: String!
   kelas: KelasCreateManyWithoutListMahasiswaInput
+  mataKuliah: MataKuliahCreateManyInput
 }
 
 type MahasiswaEdge {
@@ -953,6 +996,7 @@ input MahasiswaUpdateDataInput {
   nim: String
   nama: String
   kelas: KelasUpdateManyWithoutListMahasiswaInput
+  mataKuliah: MataKuliahUpdateManyInput
   user: UserUpdateOneRequiredWithoutMahasiswaInput
 }
 
@@ -960,6 +1004,7 @@ input MahasiswaUpdateInput {
   nim: String
   nama: String
   kelas: KelasUpdateManyWithoutListMahasiswaInput
+  mataKuliah: MataKuliahUpdateManyInput
   user: UserUpdateOneRequiredWithoutMahasiswaInput
 }
 
@@ -991,6 +1036,7 @@ input MahasiswaUpdateOneWithoutUserInput {
 input MahasiswaUpdateWithoutKelasDataInput {
   nim: String
   nama: String
+  mataKuliah: MataKuliahUpdateManyInput
   user: UserUpdateOneRequiredWithoutMahasiswaInput
 }
 
@@ -998,6 +1044,7 @@ input MahasiswaUpdateWithoutUserDataInput {
   nim: String
   nama: String
   kelas: KelasUpdateManyWithoutListMahasiswaInput
+  mataKuliah: MataKuliahUpdateManyInput
 }
 
 input MahasiswaUpdateWithWhereUniqueWithoutKelasInput {
@@ -1067,6 +1114,9 @@ input MahasiswaWhereInput {
   kelas_every: KelasWhereInput
   kelas_some: KelasWhereInput
   kelas_none: KelasWhereInput
+  mataKuliah_every: MataKuliahWhereInput
+  mataKuliah_some: MataKuliahWhereInput
+  mataKuliah_none: MataKuliahWhereInput
   user: UserWhereInput
   AND: [MahasiswaWhereInput!]
   OR: [MahasiswaWhereInput!]
@@ -1082,6 +1132,7 @@ type MataKuliah {
   id: ID!
   kode: String!
   nama: String!
+  kelases(where: KelasWhereInput, orderBy: KelasOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Kelas!]
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -1095,11 +1146,22 @@ type MataKuliahConnection {
 input MataKuliahCreateInput {
   kode: String!
   nama: String!
+  kelases: KelasCreateManyWithoutMataKuliahInput
 }
 
-input MataKuliahCreateOneInput {
-  create: MataKuliahCreateInput
+input MataKuliahCreateManyInput {
+  create: [MataKuliahCreateInput!]
+  connect: [MataKuliahWhereUniqueInput!]
+}
+
+input MataKuliahCreateOneWithoutKelasesInput {
+  create: MataKuliahCreateWithoutKelasesInput
   connect: MataKuliahWhereUniqueInput
+}
+
+input MataKuliahCreateWithoutKelasesInput {
+  kode: String!
+  nama: String!
 }
 
 type MataKuliahEdge {
@@ -1149,21 +1211,48 @@ input MataKuliahSubscriptionWhereInput {
 input MataKuliahUpdateDataInput {
   kode: String
   nama: String
+  kelases: KelasUpdateManyWithoutMataKuliahInput
 }
 
 input MataKuliahUpdateInput {
   kode: String
   nama: String
+  kelases: KelasUpdateManyWithoutMataKuliahInput
 }
 
-input MataKuliahUpdateOneRequiredInput {
-  create: MataKuliahCreateInput
-  update: MataKuliahUpdateDataInput
-  upsert: MataKuliahUpsertNestedInput
+input MataKuliahUpdateManyInput {
+  create: [MataKuliahCreateInput!]
+  delete: [MataKuliahWhereUniqueInput!]
+  connect: [MataKuliahWhereUniqueInput!]
+  disconnect: [MataKuliahWhereUniqueInput!]
+  update: [MataKuliahUpdateWithWhereUniqueNestedInput!]
+  upsert: [MataKuliahUpsertWithWhereUniqueNestedInput!]
+}
+
+input MataKuliahUpdateOneRequiredWithoutKelasesInput {
+  create: MataKuliahCreateWithoutKelasesInput
+  update: MataKuliahUpdateWithoutKelasesDataInput
+  upsert: MataKuliahUpsertWithoutKelasesInput
   connect: MataKuliahWhereUniqueInput
 }
 
-input MataKuliahUpsertNestedInput {
+input MataKuliahUpdateWithoutKelasesDataInput {
+  kode: String
+  nama: String
+}
+
+input MataKuliahUpdateWithWhereUniqueNestedInput {
+  where: MataKuliahWhereUniqueInput!
+  data: MataKuliahUpdateDataInput!
+}
+
+input MataKuliahUpsertWithoutKelasesInput {
+  update: MataKuliahUpdateWithoutKelasesDataInput!
+  create: MataKuliahCreateWithoutKelasesInput!
+}
+
+input MataKuliahUpsertWithWhereUniqueNestedInput {
+  where: MataKuliahWhereUniqueInput!
   update: MataKuliahUpdateDataInput!
   create: MataKuliahCreateInput!
 }
@@ -1211,6 +1300,9 @@ input MataKuliahWhereInput {
   nama_not_starts_with: String
   nama_ends_with: String
   nama_not_ends_with: String
+  kelases_every: KelasWhereInput
+  kelases_some: KelasWhereInput
+  kelases_none: KelasWhereInput
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]
