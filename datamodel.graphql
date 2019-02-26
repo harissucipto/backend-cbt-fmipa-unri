@@ -16,7 +16,6 @@ type User {
   admin: Admin
   mahasiswa: Mahasiswa
   dosen: Dosen
-  pengawas: Pengawas
   resetToken: String
   resetTokenExpiry: String
 }
@@ -43,12 +42,6 @@ type Dosen {
   user: User!
 }
 
-type Pengawas {
-  id: ID! @unique
-  nama: String!
-  user: User!
-}
-
 type MataKuliah {
   id: ID! @unique
   kode: String! @unique
@@ -65,49 +58,6 @@ type Kelas {
   mataKuliah: MataKuliah!
   dosen: Dosen!
   listMahasiswa: [Mahasiswa!]
-  createdAt: DateTime!
-  updatedAt: DateTime!
-}
-
-type Jawaban {
-  id: ID! @unique
-  isi: String!
-  gambar: String
-  pertanyaan: Pertanyaan!
-  kebenaran: Boolean! @default(value: false)
-}
-
-type Pertanyaan {
-  id: ID! @unique
-  isi: String!
-  gambar: [String!]
-}
-
-type PilihanGanda {
-  id: ID! @unique
-  pertanyaan: Pertanyaan!
-  jawaban: [Jawaban!]!
-}
-
-type JawabanMahasiswa {
-  id: ID! @unique
-  JawabanSoal: Jawaban!
-}
-
-type SoalMahasiswa {
-  id: ID! @unique
-  mahasiswa: Mahasiswa!
-  listSoal: [PilihanGanda!]!
-  listJawaban: [JawabanMahasiswa!]!
-}
-
-type Ujian {
-  id: ID! @unique
-  Kelas: Kelas!
-  pengawas: Pengawas!
-  listSoal: [SoalMahasiswa!]!
-  tanggalPelaksanaan: DateTime!
-  tokenUjian: String!
   createdAt: DateTime!
   updatedAt: DateTime!
 }
