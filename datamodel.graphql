@@ -51,6 +51,8 @@ type Dosen {
   nip: String! @unique
   nama: String!
   user: User!
+  jurusan: Jurusan!
+  prodi: [Prodi!]!
 }
 
 type MataKuliah {
