@@ -75,4 +75,5 @@ type Kelas {
   dosen: Dosen!
   mataKuliah: MataKuliah!
   nama: String!
+  mahasiswas: [Mahasiswa!]
 }
