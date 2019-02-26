@@ -97,46 +97,6 @@ const Query = {
     return mahasiswa;
   },
 
-  async pengawass(parent, args, ctx, info) {
-    // 1. Check if they are logged in
-    if (!ctx.request.userId) {
-      throw new Error('You must be logged in!');
-    }
-    // 2. Check if the user has the permissions to query all the users
-    hasPermission(ctx.request.user, ['ADMIN']);
-
-    // 3. if they do, query all the dosens!
-    return ctx.db.query.pengawases(args, info);
-  },
-
-  async pengawas(parent, args, ctx, info) {
-    // 1. chek hak akses dan login
-    if (!ctx.request.userId) {
-      throw new Error('You must be logged in!');
-    }
-    // 1.2 hak akses bagi admin dan yang punya akun
-    const hasPermissions = ctx.request.user.permissions.some(permission =>
-      ['ADMIN'].includes(permission));
-
-    const pengawas = await ctx.db.query.pengawas(
-      {
-        where: { id: args.id },
-      },
-      info,
-    );
-
-    if (!pengawas) {
-      throw new Error('ID Pengawas not valid');
-    }
-
-    const ownPengawas = pengawas.id === args.id;
-
-    if (!(hasPermissions || ownPengawas)) {
-      throw new Error('You dont have permission to do that');
-    }
-
-    return pengawas;
-  },
   async mataKuliahs(parent, args, ctx, info) {
     // 1. Check if they are logged in
     if (!ctx.request.userId) {

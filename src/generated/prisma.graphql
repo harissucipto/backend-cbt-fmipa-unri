@@ -133,11 +133,7 @@ type AggregateDosen {
   count: Int!
 }
 
-type AggregateJawaban {
-  count: Int!
-}
-
-type AggregateJawabanMahasiswa {
+type AggregateJurusan {
   count: Int!
 }
 
@@ -153,23 +149,7 @@ type AggregateMataKuliah {
   count: Int!
 }
 
-type AggregatePengawas {
-  count: Int!
-}
-
-type AggregatePertanyaan {
-  count: Int!
-}
-
-type AggregatePilihanGanda {
-  count: Int!
-}
-
-type AggregateSoalMahasiswa {
-  count: Int!
-}
-
-type AggregateUjian {
+type AggregateProdi {
   count: Int!
 }
 
@@ -181,13 +161,15 @@ type BatchPayload {
   count: Long!
 }
 
-scalar DateTime
-
 type Dosen {
   id: ID!
   nip: String!
   nama: String!
   user: User!
+  jurusan: Jurusan!
+  prodi(where: ProdiWhereInput, orderBy: ProdiOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Prodi!]
+  mataKuliahs(where: MataKuliahWhereInput, orderBy: MataKuliahOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [MataKuliah!]
+  kelases(where: KelasWhereInput, orderBy: KelasOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Kelas!]
 }
 
 type DosenConnection {
@@ -200,10 +182,19 @@ input DosenCreateInput {
   nip: String!
   nama: String!
   user: UserCreateOneWithoutDosenInput!
+  jurusan: JurusanCreateOneInput!
+  prodi: ProdiCreateManyInput
+  mataKuliahs: MataKuliahCreateManyWithoutDosensInput
+  kelases: KelasCreateManyWithoutDosenInput
 }
 
-input DosenCreateOneInput {
-  create: DosenCreateInput
+input DosenCreateManyWithoutMataKuliahsInput {
+  create: [DosenCreateWithoutMataKuliahsInput!]
+  connect: [DosenWhereUniqueInput!]
+}
+
+input DosenCreateOneWithoutKelasesInput {
+  create: DosenCreateWithoutKelasesInput
   connect: DosenWhereUniqueInput
 }
 
@@ -212,9 +203,31 @@ input DosenCreateOneWithoutUserInput {
   connect: DosenWhereUniqueInput
 }
 
+input DosenCreateWithoutKelasesInput {
+  nip: String!
+  nama: String!
+  user: UserCreateOneWithoutDosenInput!
+  jurusan: JurusanCreateOneInput!
+  prodi: ProdiCreateManyInput
+  mataKuliahs: MataKuliahCreateManyWithoutDosensInput
+}
+
+input DosenCreateWithoutMataKuliahsInput {
+  nip: String!
+  nama: String!
+  user: UserCreateOneWithoutDosenInput!
+  jurusan: JurusanCreateOneInput!
+  prodi: ProdiCreateManyInput
+  kelases: KelasCreateManyWithoutDosenInput
+}
+
 input DosenCreateWithoutUserInput {
   nip: String!
   nama: String!
+  jurusan: JurusanCreateOneInput!
+  prodi: ProdiCreateManyInput
+  mataKuliahs: MataKuliahCreateManyWithoutDosensInput
+  kelases: KelasCreateManyWithoutDosenInput
 }
 
 type DosenEdge {
@@ -259,22 +272,29 @@ input DosenSubscriptionWhereInput {
   NOT: [DosenSubscriptionWhereInput!]
 }
 
-input DosenUpdateDataInput {
-  nip: String
-  nama: String
-  user: UserUpdateOneRequiredWithoutDosenInput
-}
-
 input DosenUpdateInput {
   nip: String
   nama: String
   user: UserUpdateOneRequiredWithoutDosenInput
+  jurusan: JurusanUpdateOneRequiredInput
+  prodi: ProdiUpdateManyInput
+  mataKuliahs: MataKuliahUpdateManyWithoutDosensInput
+  kelases: KelasUpdateManyWithoutDosenInput
 }
 
-input DosenUpdateOneRequiredInput {
-  create: DosenCreateInput
-  update: DosenUpdateDataInput
-  upsert: DosenUpsertNestedInput
+input DosenUpdateManyWithoutMataKuliahsInput {
+  create: [DosenCreateWithoutMataKuliahsInput!]
+  delete: [DosenWhereUniqueInput!]
+  connect: [DosenWhereUniqueInput!]
+  disconnect: [DosenWhereUniqueInput!]
+  update: [DosenUpdateWithWhereUniqueWithoutMataKuliahsInput!]
+  upsert: [DosenUpsertWithWhereUniqueWithoutMataKuliahsInput!]
+}
+
+input DosenUpdateOneRequiredWithoutKelasesInput {
+  create: DosenCreateWithoutKelasesInput
+  update: DosenUpdateWithoutKelasesDataInput
+  upsert: DosenUpsertWithoutKelasesInput
   connect: DosenWhereUniqueInput
 }
 
@@ -287,19 +307,52 @@ input DosenUpdateOneWithoutUserInput {
   connect: DosenWhereUniqueInput
 }
 
+input DosenUpdateWithoutKelasesDataInput {
+  nip: String
+  nama: String
+  user: UserUpdateOneRequiredWithoutDosenInput
+  jurusan: JurusanUpdateOneRequiredInput
+  prodi: ProdiUpdateManyInput
+  mataKuliahs: MataKuliahUpdateManyWithoutDosensInput
+}
+
+input DosenUpdateWithoutMataKuliahsDataInput {
+  nip: String
+  nama: String
+  user: UserUpdateOneRequiredWithoutDosenInput
+  jurusan: JurusanUpdateOneRequiredInput
+  prodi: ProdiUpdateManyInput
+  kelases: KelasUpdateManyWithoutDosenInput
+}
+
 input DosenUpdateWithoutUserDataInput {
   nip: String
   nama: String
+  jurusan: JurusanUpdateOneRequiredInput
+  prodi: ProdiUpdateManyInput
+  mataKuliahs: MataKuliahUpdateManyWithoutDosensInput
+  kelases: KelasUpdateManyWithoutDosenInput
 }
 
-input DosenUpsertNestedInput {
-  update: DosenUpdateDataInput!
-  create: DosenCreateInput!
+input DosenUpdateWithWhereUniqueWithoutMataKuliahsInput {
+  where: DosenWhereUniqueInput!
+  data: DosenUpdateWithoutMataKuliahsDataInput!
+}
+
+input DosenUpsertWithoutKelasesInput {
+  update: DosenUpdateWithoutKelasesDataInput!
+  create: DosenCreateWithoutKelasesInput!
 }
 
 input DosenUpsertWithoutUserInput {
   update: DosenUpdateWithoutUserDataInput!
   create: DosenCreateWithoutUserInput!
+}
+
+input DosenUpsertWithWhereUniqueWithoutMataKuliahsInput {
+  where: DosenWhereUniqueInput!
+  update: DosenUpdateWithoutMataKuliahsDataInput!
+  create: DosenCreateWithoutMataKuliahsInput!
 }
 
 input DosenWhereInput {
@@ -346,6 +399,16 @@ input DosenWhereInput {
   nama_ends_with: String
   nama_not_ends_with: String
   user: UserWhereInput
+  jurusan: JurusanWhereInput
+  prodi_every: ProdiWhereInput
+  prodi_some: ProdiWhereInput
+  prodi_none: ProdiWhereInput
+  mataKuliahs_every: MataKuliahWhereInput
+  mataKuliahs_some: MataKuliahWhereInput
+  mataKuliahs_none: MataKuliahWhereInput
+  kelases_every: KelasWhereInput
+  kelases_some: KelasWhereInput
+  kelases_none: KelasWhereInput
   AND: [DosenWhereInput!]
   OR: [DosenWhereInput!]
   NOT: [DosenWhereInput!]
@@ -356,473 +419,115 @@ input DosenWhereUniqueInput {
   nip: String
 }
 
-type Jawaban {
+type Jurusan {
   id: ID!
-  isi: String!
-  gambar: String
-  pertanyaan: Pertanyaan!
-  kebenaran: Boolean!
+  nama: String!
+  prodis(where: ProdiWhereInput, orderBy: ProdiOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Prodi!]
 }
 
-type JawabanConnection {
+type JurusanConnection {
   pageInfo: PageInfo!
-  edges: [JawabanEdge]!
-  aggregate: AggregateJawaban!
+  edges: [JurusanEdge]!
+  aggregate: AggregateJurusan!
 }
 
-input JawabanCreateInput {
-  isi: String!
-  gambar: String
-  pertanyaan: PertanyaanCreateOneInput!
-  kebenaran: Boolean
+input JurusanCreateInput {
+  nama: String!
+  prodis: ProdiCreateManyWithoutJurusanInput
 }
 
-input JawabanCreateManyInput {
-  create: [JawabanCreateInput!]
-  connect: [JawabanWhereUniqueInput!]
+input JurusanCreateOneInput {
+  create: JurusanCreateInput
+  connect: JurusanWhereUniqueInput
 }
 
-input JawabanCreateOneInput {
-  create: JawabanCreateInput
-  connect: JawabanWhereUniqueInput
+input JurusanCreateOneWithoutProdisInput {
+  create: JurusanCreateWithoutProdisInput
+  connect: JurusanWhereUniqueInput
 }
 
-type JawabanEdge {
-  node: Jawaban!
+input JurusanCreateWithoutProdisInput {
+  nama: String!
+}
+
+type JurusanEdge {
+  node: Jurusan!
   cursor: String!
 }
 
-type JawabanMahasiswa {
-  id: ID!
-  JawabanSoal: Jawaban!
-}
-
-type JawabanMahasiswaConnection {
-  pageInfo: PageInfo!
-  edges: [JawabanMahasiswaEdge]!
-  aggregate: AggregateJawabanMahasiswa!
-}
-
-input JawabanMahasiswaCreateInput {
-  JawabanSoal: JawabanCreateOneInput!
-}
-
-input JawabanMahasiswaCreateManyInput {
-  create: [JawabanMahasiswaCreateInput!]
-  connect: [JawabanMahasiswaWhereUniqueInput!]
-}
-
-type JawabanMahasiswaEdge {
-  node: JawabanMahasiswa!
-  cursor: String!
-}
-
-enum JawabanMahasiswaOrderByInput {
-  id_ASC
-  id_DESC
-  createdAt_ASC
-  createdAt_DESC
-  updatedAt_ASC
-  updatedAt_DESC
-}
-
-type JawabanMahasiswaPreviousValues {
-  id: ID!
-}
-
-type JawabanMahasiswaSubscriptionPayload {
-  mutation: MutationType!
-  node: JawabanMahasiswa
-  updatedFields: [String!]
-  previousValues: JawabanMahasiswaPreviousValues
-}
-
-input JawabanMahasiswaSubscriptionWhereInput {
-  mutation_in: [MutationType!]
-  updatedFields_contains: String
-  updatedFields_contains_every: [String!]
-  updatedFields_contains_some: [String!]
-  node: JawabanMahasiswaWhereInput
-  AND: [JawabanMahasiswaSubscriptionWhereInput!]
-  OR: [JawabanMahasiswaSubscriptionWhereInput!]
-  NOT: [JawabanMahasiswaSubscriptionWhereInput!]
-}
-
-input JawabanMahasiswaUpdateDataInput {
-  JawabanSoal: JawabanUpdateOneRequiredInput
-}
-
-input JawabanMahasiswaUpdateInput {
-  JawabanSoal: JawabanUpdateOneRequiredInput
-}
-
-input JawabanMahasiswaUpdateManyInput {
-  create: [JawabanMahasiswaCreateInput!]
-  delete: [JawabanMahasiswaWhereUniqueInput!]
-  connect: [JawabanMahasiswaWhereUniqueInput!]
-  disconnect: [JawabanMahasiswaWhereUniqueInput!]
-  update: [JawabanMahasiswaUpdateWithWhereUniqueNestedInput!]
-  upsert: [JawabanMahasiswaUpsertWithWhereUniqueNestedInput!]
-}
-
-input JawabanMahasiswaUpdateWithWhereUniqueNestedInput {
-  where: JawabanMahasiswaWhereUniqueInput!
-  data: JawabanMahasiswaUpdateDataInput!
-}
-
-input JawabanMahasiswaUpsertWithWhereUniqueNestedInput {
-  where: JawabanMahasiswaWhereUniqueInput!
-  update: JawabanMahasiswaUpdateDataInput!
-  create: JawabanMahasiswaCreateInput!
-}
-
-input JawabanMahasiswaWhereInput {
-  id: ID
-  id_not: ID
-  id_in: [ID!]
-  id_not_in: [ID!]
-  id_lt: ID
-  id_lte: ID
-  id_gt: ID
-  id_gte: ID
-  id_contains: ID
-  id_not_contains: ID
-  id_starts_with: ID
-  id_not_starts_with: ID
-  id_ends_with: ID
-  id_not_ends_with: ID
-  JawabanSoal: JawabanWhereInput
-  AND: [JawabanMahasiswaWhereInput!]
-  OR: [JawabanMahasiswaWhereInput!]
-  NOT: [JawabanMahasiswaWhereInput!]
-}
-
-input JawabanMahasiswaWhereUniqueInput {
-  id: ID
-}
-
-enum JawabanOrderByInput {
-  id_ASC
-  id_DESC
-  isi_ASC
-  isi_DESC
-  gambar_ASC
-  gambar_DESC
-  kebenaran_ASC
-  kebenaran_DESC
-  createdAt_ASC
-  createdAt_DESC
-  updatedAt_ASC
-  updatedAt_DESC
-}
-
-type JawabanPreviousValues {
-  id: ID!
-  isi: String!
-  gambar: String
-  kebenaran: Boolean!
-}
-
-type JawabanSubscriptionPayload {
-  mutation: MutationType!
-  node: Jawaban
-  updatedFields: [String!]
-  previousValues: JawabanPreviousValues
-}
-
-input JawabanSubscriptionWhereInput {
-  mutation_in: [MutationType!]
-  updatedFields_contains: String
-  updatedFields_contains_every: [String!]
-  updatedFields_contains_some: [String!]
-  node: JawabanWhereInput
-  AND: [JawabanSubscriptionWhereInput!]
-  OR: [JawabanSubscriptionWhereInput!]
-  NOT: [JawabanSubscriptionWhereInput!]
-}
-
-input JawabanUpdateDataInput {
-  isi: String
-  gambar: String
-  pertanyaan: PertanyaanUpdateOneRequiredInput
-  kebenaran: Boolean
-}
-
-input JawabanUpdateInput {
-  isi: String
-  gambar: String
-  pertanyaan: PertanyaanUpdateOneRequiredInput
-  kebenaran: Boolean
-}
-
-input JawabanUpdateManyInput {
-  create: [JawabanCreateInput!]
-  delete: [JawabanWhereUniqueInput!]
-  connect: [JawabanWhereUniqueInput!]
-  disconnect: [JawabanWhereUniqueInput!]
-  update: [JawabanUpdateWithWhereUniqueNestedInput!]
-  upsert: [JawabanUpsertWithWhereUniqueNestedInput!]
-}
-
-input JawabanUpdateOneRequiredInput {
-  create: JawabanCreateInput
-  update: JawabanUpdateDataInput
-  upsert: JawabanUpsertNestedInput
-  connect: JawabanWhereUniqueInput
-}
-
-input JawabanUpdateWithWhereUniqueNestedInput {
-  where: JawabanWhereUniqueInput!
-  data: JawabanUpdateDataInput!
-}
-
-input JawabanUpsertNestedInput {
-  update: JawabanUpdateDataInput!
-  create: JawabanCreateInput!
-}
-
-input JawabanUpsertWithWhereUniqueNestedInput {
-  where: JawabanWhereUniqueInput!
-  update: JawabanUpdateDataInput!
-  create: JawabanCreateInput!
-}
-
-input JawabanWhereInput {
-  id: ID
-  id_not: ID
-  id_in: [ID!]
-  id_not_in: [ID!]
-  id_lt: ID
-  id_lte: ID
-  id_gt: ID
-  id_gte: ID
-  id_contains: ID
-  id_not_contains: ID
-  id_starts_with: ID
-  id_not_starts_with: ID
-  id_ends_with: ID
-  id_not_ends_with: ID
-  isi: String
-  isi_not: String
-  isi_in: [String!]
-  isi_not_in: [String!]
-  isi_lt: String
-  isi_lte: String
-  isi_gt: String
-  isi_gte: String
-  isi_contains: String
-  isi_not_contains: String
-  isi_starts_with: String
-  isi_not_starts_with: String
-  isi_ends_with: String
-  isi_not_ends_with: String
-  gambar: String
-  gambar_not: String
-  gambar_in: [String!]
-  gambar_not_in: [String!]
-  gambar_lt: String
-  gambar_lte: String
-  gambar_gt: String
-  gambar_gte: String
-  gambar_contains: String
-  gambar_not_contains: String
-  gambar_starts_with: String
-  gambar_not_starts_with: String
-  gambar_ends_with: String
-  gambar_not_ends_with: String
-  pertanyaan: PertanyaanWhereInput
-  kebenaran: Boolean
-  kebenaran_not: Boolean
-  AND: [JawabanWhereInput!]
-  OR: [JawabanWhereInput!]
-  NOT: [JawabanWhereInput!]
-}
-
-input JawabanWhereUniqueInput {
-  id: ID
-}
-
-type Kelas {
-  id: ID!
-  nama: String!
-  tahunAjaran: String!
-  mataKuliah: MataKuliah!
-  dosen: Dosen!
-  listMahasiswa(where: MahasiswaWhereInput, orderBy: MahasiswaOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Mahasiswa!]
-  createdAt: DateTime!
-  updatedAt: DateTime!
-}
-
-type KelasConnection {
-  pageInfo: PageInfo!
-  edges: [KelasEdge]!
-  aggregate: AggregateKelas!
-}
-
-input KelasCreateInput {
-  nama: String!
-  tahunAjaran: String!
-  mataKuliah: MataKuliahCreateOneWithoutKelasesInput!
-  dosen: DosenCreateOneInput!
-  listMahasiswa: MahasiswaCreateManyWithoutKelasInput
-}
-
-input KelasCreateManyWithoutListMahasiswaInput {
-  create: [KelasCreateWithoutListMahasiswaInput!]
-  connect: [KelasWhereUniqueInput!]
-}
-
-input KelasCreateManyWithoutMataKuliahInput {
-  create: [KelasCreateWithoutMataKuliahInput!]
-  connect: [KelasWhereUniqueInput!]
-}
-
-input KelasCreateOneInput {
-  create: KelasCreateInput
-  connect: KelasWhereUniqueInput
-}
-
-input KelasCreateWithoutListMahasiswaInput {
-  nama: String!
-  tahunAjaran: String!
-  mataKuliah: MataKuliahCreateOneWithoutKelasesInput!
-  dosen: DosenCreateOneInput!
-}
-
-input KelasCreateWithoutMataKuliahInput {
-  nama: String!
-  tahunAjaran: String!
-  dosen: DosenCreateOneInput!
-  listMahasiswa: MahasiswaCreateManyWithoutKelasInput
-}
-
-type KelasEdge {
-  node: Kelas!
-  cursor: String!
-}
-
-enum KelasOrderByInput {
+enum JurusanOrderByInput {
   id_ASC
   id_DESC
   nama_ASC
   nama_DESC
-  tahunAjaran_ASC
-  tahunAjaran_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
   updatedAt_DESC
 }
 
-type KelasPreviousValues {
+type JurusanPreviousValues {
   id: ID!
   nama: String!
-  tahunAjaran: String!
-  createdAt: DateTime!
-  updatedAt: DateTime!
 }
 
-type KelasSubscriptionPayload {
+type JurusanSubscriptionPayload {
   mutation: MutationType!
-  node: Kelas
+  node: Jurusan
   updatedFields: [String!]
-  previousValues: KelasPreviousValues
+  previousValues: JurusanPreviousValues
 }
 
-input KelasSubscriptionWhereInput {
+input JurusanSubscriptionWhereInput {
   mutation_in: [MutationType!]
   updatedFields_contains: String
   updatedFields_contains_every: [String!]
   updatedFields_contains_some: [String!]
-  node: KelasWhereInput
-  AND: [KelasSubscriptionWhereInput!]
-  OR: [KelasSubscriptionWhereInput!]
-  NOT: [KelasSubscriptionWhereInput!]
+  node: JurusanWhereInput
+  AND: [JurusanSubscriptionWhereInput!]
+  OR: [JurusanSubscriptionWhereInput!]
+  NOT: [JurusanSubscriptionWhereInput!]
 }
 
-input KelasUpdateDataInput {
+input JurusanUpdateDataInput {
   nama: String
-  tahunAjaran: String
-  mataKuliah: MataKuliahUpdateOneRequiredWithoutKelasesInput
-  dosen: DosenUpdateOneRequiredInput
-  listMahasiswa: MahasiswaUpdateManyWithoutKelasInput
+  prodis: ProdiUpdateManyWithoutJurusanInput
 }
 
-input KelasUpdateInput {
+input JurusanUpdateInput {
   nama: String
-  tahunAjaran: String
-  mataKuliah: MataKuliahUpdateOneRequiredWithoutKelasesInput
-  dosen: DosenUpdateOneRequiredInput
-  listMahasiswa: MahasiswaUpdateManyWithoutKelasInput
+  prodis: ProdiUpdateManyWithoutJurusanInput
 }
 
-input KelasUpdateManyWithoutListMahasiswaInput {
-  create: [KelasCreateWithoutListMahasiswaInput!]
-  delete: [KelasWhereUniqueInput!]
-  connect: [KelasWhereUniqueInput!]
-  disconnect: [KelasWhereUniqueInput!]
-  update: [KelasUpdateWithWhereUniqueWithoutListMahasiswaInput!]
-  upsert: [KelasUpsertWithWhereUniqueWithoutListMahasiswaInput!]
+input JurusanUpdateOneRequiredInput {
+  create: JurusanCreateInput
+  update: JurusanUpdateDataInput
+  upsert: JurusanUpsertNestedInput
+  connect: JurusanWhereUniqueInput
 }
 
-input KelasUpdateManyWithoutMataKuliahInput {
-  create: [KelasCreateWithoutMataKuliahInput!]
-  delete: [KelasWhereUniqueInput!]
-  connect: [KelasWhereUniqueInput!]
-  disconnect: [KelasWhereUniqueInput!]
-  update: [KelasUpdateWithWhereUniqueWithoutMataKuliahInput!]
-  upsert: [KelasUpsertWithWhereUniqueWithoutMataKuliahInput!]
+input JurusanUpdateOneRequiredWithoutProdisInput {
+  create: JurusanCreateWithoutProdisInput
+  update: JurusanUpdateWithoutProdisDataInput
+  upsert: JurusanUpsertWithoutProdisInput
+  connect: JurusanWhereUniqueInput
 }
 
-input KelasUpdateOneRequiredInput {
-  create: KelasCreateInput
-  update: KelasUpdateDataInput
-  upsert: KelasUpsertNestedInput
-  connect: KelasWhereUniqueInput
-}
-
-input KelasUpdateWithoutListMahasiswaDataInput {
+input JurusanUpdateWithoutProdisDataInput {
   nama: String
-  tahunAjaran: String
-  mataKuliah: MataKuliahUpdateOneRequiredWithoutKelasesInput
-  dosen: DosenUpdateOneRequiredInput
 }
 
-input KelasUpdateWithoutMataKuliahDataInput {
-  nama: String
-  tahunAjaran: String
-  dosen: DosenUpdateOneRequiredInput
-  listMahasiswa: MahasiswaUpdateManyWithoutKelasInput
+input JurusanUpsertNestedInput {
+  update: JurusanUpdateDataInput!
+  create: JurusanCreateInput!
 }
 
-input KelasUpdateWithWhereUniqueWithoutListMahasiswaInput {
-  where: KelasWhereUniqueInput!
-  data: KelasUpdateWithoutListMahasiswaDataInput!
+input JurusanUpsertWithoutProdisInput {
+  update: JurusanUpdateWithoutProdisDataInput!
+  create: JurusanCreateWithoutProdisInput!
 }
 
-input KelasUpdateWithWhereUniqueWithoutMataKuliahInput {
-  where: KelasWhereUniqueInput!
-  data: KelasUpdateWithoutMataKuliahDataInput!
-}
-
-input KelasUpsertNestedInput {
-  update: KelasUpdateDataInput!
-  create: KelasCreateInput!
-}
-
-input KelasUpsertWithWhereUniqueWithoutListMahasiswaInput {
-  where: KelasWhereUniqueInput!
-  update: KelasUpdateWithoutListMahasiswaDataInput!
-  create: KelasCreateWithoutListMahasiswaInput!
-}
-
-input KelasUpsertWithWhereUniqueWithoutMataKuliahInput {
-  where: KelasWhereUniqueInput!
-  update: KelasUpdateWithoutMataKuliahDataInput!
-  create: KelasCreateWithoutMataKuliahInput!
-}
-
-input KelasWhereInput {
+input JurusanWhereInput {
   id: ID
   id_not: ID
   id_in: [ID!]
@@ -851,41 +556,250 @@ input KelasWhereInput {
   nama_not_starts_with: String
   nama_ends_with: String
   nama_not_ends_with: String
-  tahunAjaran: String
-  tahunAjaran_not: String
-  tahunAjaran_in: [String!]
-  tahunAjaran_not_in: [String!]
-  tahunAjaran_lt: String
-  tahunAjaran_lte: String
-  tahunAjaran_gt: String
-  tahunAjaran_gte: String
-  tahunAjaran_contains: String
-  tahunAjaran_not_contains: String
-  tahunAjaran_starts_with: String
-  tahunAjaran_not_starts_with: String
-  tahunAjaran_ends_with: String
-  tahunAjaran_not_ends_with: String
-  mataKuliah: MataKuliahWhereInput
+  prodis_every: ProdiWhereInput
+  prodis_some: ProdiWhereInput
+  prodis_none: ProdiWhereInput
+  AND: [JurusanWhereInput!]
+  OR: [JurusanWhereInput!]
+  NOT: [JurusanWhereInput!]
+}
+
+input JurusanWhereUniqueInput {
+  id: ID
+}
+
+type Kelas {
+  id: ID!
+  jurusan: Jurusan!
+  prodi: Prodi!
+  dosen: Dosen!
+  mataKuliah: MataKuliah!
+  nama: String!
+  mahasiswas(where: MahasiswaWhereInput, orderBy: MahasiswaOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Mahasiswa!]
+}
+
+type KelasConnection {
+  pageInfo: PageInfo!
+  edges: [KelasEdge]!
+  aggregate: AggregateKelas!
+}
+
+input KelasCreateInput {
+  jurusan: JurusanCreateOneInput!
+  prodi: ProdiCreateOneInput!
+  dosen: DosenCreateOneWithoutKelasesInput!
+  mataKuliah: MataKuliahCreateOneWithoutKelasesInput!
+  nama: String!
+  mahasiswas: MahasiswaCreateManyWithoutKelasesInput
+}
+
+input KelasCreateManyWithoutDosenInput {
+  create: [KelasCreateWithoutDosenInput!]
+  connect: [KelasWhereUniqueInput!]
+}
+
+input KelasCreateManyWithoutMahasiswasInput {
+  create: [KelasCreateWithoutMahasiswasInput!]
+  connect: [KelasWhereUniqueInput!]
+}
+
+input KelasCreateManyWithoutMataKuliahInput {
+  create: [KelasCreateWithoutMataKuliahInput!]
+  connect: [KelasWhereUniqueInput!]
+}
+
+input KelasCreateWithoutDosenInput {
+  jurusan: JurusanCreateOneInput!
+  prodi: ProdiCreateOneInput!
+  mataKuliah: MataKuliahCreateOneWithoutKelasesInput!
+  nama: String!
+  mahasiswas: MahasiswaCreateManyWithoutKelasesInput
+}
+
+input KelasCreateWithoutMahasiswasInput {
+  jurusan: JurusanCreateOneInput!
+  prodi: ProdiCreateOneInput!
+  dosen: DosenCreateOneWithoutKelasesInput!
+  mataKuliah: MataKuliahCreateOneWithoutKelasesInput!
+  nama: String!
+}
+
+input KelasCreateWithoutMataKuliahInput {
+  jurusan: JurusanCreateOneInput!
+  prodi: ProdiCreateOneInput!
+  dosen: DosenCreateOneWithoutKelasesInput!
+  nama: String!
+  mahasiswas: MahasiswaCreateManyWithoutKelasesInput
+}
+
+type KelasEdge {
+  node: Kelas!
+  cursor: String!
+}
+
+enum KelasOrderByInput {
+  id_ASC
+  id_DESC
+  nama_ASC
+  nama_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type KelasPreviousValues {
+  id: ID!
+  nama: String!
+}
+
+type KelasSubscriptionPayload {
+  mutation: MutationType!
+  node: Kelas
+  updatedFields: [String!]
+  previousValues: KelasPreviousValues
+}
+
+input KelasSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: KelasWhereInput
+  AND: [KelasSubscriptionWhereInput!]
+  OR: [KelasSubscriptionWhereInput!]
+  NOT: [KelasSubscriptionWhereInput!]
+}
+
+input KelasUpdateInput {
+  jurusan: JurusanUpdateOneRequiredInput
+  prodi: ProdiUpdateOneRequiredInput
+  dosen: DosenUpdateOneRequiredWithoutKelasesInput
+  mataKuliah: MataKuliahUpdateOneRequiredWithoutKelasesInput
+  nama: String
+  mahasiswas: MahasiswaUpdateManyWithoutKelasesInput
+}
+
+input KelasUpdateManyWithoutDosenInput {
+  create: [KelasCreateWithoutDosenInput!]
+  delete: [KelasWhereUniqueInput!]
+  connect: [KelasWhereUniqueInput!]
+  disconnect: [KelasWhereUniqueInput!]
+  update: [KelasUpdateWithWhereUniqueWithoutDosenInput!]
+  upsert: [KelasUpsertWithWhereUniqueWithoutDosenInput!]
+}
+
+input KelasUpdateManyWithoutMahasiswasInput {
+  create: [KelasCreateWithoutMahasiswasInput!]
+  delete: [KelasWhereUniqueInput!]
+  connect: [KelasWhereUniqueInput!]
+  disconnect: [KelasWhereUniqueInput!]
+  update: [KelasUpdateWithWhereUniqueWithoutMahasiswasInput!]
+  upsert: [KelasUpsertWithWhereUniqueWithoutMahasiswasInput!]
+}
+
+input KelasUpdateManyWithoutMataKuliahInput {
+  create: [KelasCreateWithoutMataKuliahInput!]
+  delete: [KelasWhereUniqueInput!]
+  connect: [KelasWhereUniqueInput!]
+  disconnect: [KelasWhereUniqueInput!]
+  update: [KelasUpdateWithWhereUniqueWithoutMataKuliahInput!]
+  upsert: [KelasUpsertWithWhereUniqueWithoutMataKuliahInput!]
+}
+
+input KelasUpdateWithoutDosenDataInput {
+  jurusan: JurusanUpdateOneRequiredInput
+  prodi: ProdiUpdateOneRequiredInput
+  mataKuliah: MataKuliahUpdateOneRequiredWithoutKelasesInput
+  nama: String
+  mahasiswas: MahasiswaUpdateManyWithoutKelasesInput
+}
+
+input KelasUpdateWithoutMahasiswasDataInput {
+  jurusan: JurusanUpdateOneRequiredInput
+  prodi: ProdiUpdateOneRequiredInput
+  dosen: DosenUpdateOneRequiredWithoutKelasesInput
+  mataKuliah: MataKuliahUpdateOneRequiredWithoutKelasesInput
+  nama: String
+}
+
+input KelasUpdateWithoutMataKuliahDataInput {
+  jurusan: JurusanUpdateOneRequiredInput
+  prodi: ProdiUpdateOneRequiredInput
+  dosen: DosenUpdateOneRequiredWithoutKelasesInput
+  nama: String
+  mahasiswas: MahasiswaUpdateManyWithoutKelasesInput
+}
+
+input KelasUpdateWithWhereUniqueWithoutDosenInput {
+  where: KelasWhereUniqueInput!
+  data: KelasUpdateWithoutDosenDataInput!
+}
+
+input KelasUpdateWithWhereUniqueWithoutMahasiswasInput {
+  where: KelasWhereUniqueInput!
+  data: KelasUpdateWithoutMahasiswasDataInput!
+}
+
+input KelasUpdateWithWhereUniqueWithoutMataKuliahInput {
+  where: KelasWhereUniqueInput!
+  data: KelasUpdateWithoutMataKuliahDataInput!
+}
+
+input KelasUpsertWithWhereUniqueWithoutDosenInput {
+  where: KelasWhereUniqueInput!
+  update: KelasUpdateWithoutDosenDataInput!
+  create: KelasCreateWithoutDosenInput!
+}
+
+input KelasUpsertWithWhereUniqueWithoutMahasiswasInput {
+  where: KelasWhereUniqueInput!
+  update: KelasUpdateWithoutMahasiswasDataInput!
+  create: KelasCreateWithoutMahasiswasInput!
+}
+
+input KelasUpsertWithWhereUniqueWithoutMataKuliahInput {
+  where: KelasWhereUniqueInput!
+  update: KelasUpdateWithoutMataKuliahDataInput!
+  create: KelasCreateWithoutMataKuliahInput!
+}
+
+input KelasWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  jurusan: JurusanWhereInput
+  prodi: ProdiWhereInput
   dosen: DosenWhereInput
-  listMahasiswa_every: MahasiswaWhereInput
-  listMahasiswa_some: MahasiswaWhereInput
-  listMahasiswa_none: MahasiswaWhereInput
-  createdAt: DateTime
-  createdAt_not: DateTime
-  createdAt_in: [DateTime!]
-  createdAt_not_in: [DateTime!]
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  updatedAt: DateTime
-  updatedAt_not: DateTime
-  updatedAt_in: [DateTime!]
-  updatedAt_not_in: [DateTime!]
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
+  mataKuliah: MataKuliahWhereInput
+  nama: String
+  nama_not: String
+  nama_in: [String!]
+  nama_not_in: [String!]
+  nama_lt: String
+  nama_lte: String
+  nama_gt: String
+  nama_gte: String
+  nama_contains: String
+  nama_not_contains: String
+  nama_starts_with: String
+  nama_not_starts_with: String
+  nama_ends_with: String
+  nama_not_ends_with: String
+  mahasiswas_every: MahasiswaWhereInput
+  mahasiswas_some: MahasiswaWhereInput
+  mahasiswas_none: MahasiswaWhereInput
   AND: [KelasWhereInput!]
   OR: [KelasWhereInput!]
   NOT: [KelasWhereInput!]
@@ -901,9 +815,10 @@ type Mahasiswa {
   id: ID!
   nim: String!
   nama: String!
-  kelas(where: KelasWhereInput, orderBy: KelasOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Kelas!]
-  mataKuliah(where: MataKuliahWhereInput, orderBy: MataKuliahOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [MataKuliah!]
+  jurusan: Jurusan!
+  prodi: Prodi!
   user: User!
+  kelases(where: KelasWhereInput, orderBy: KelasOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Kelas!]
 }
 
 type MahasiswaConnection {
@@ -915,19 +830,15 @@ type MahasiswaConnection {
 input MahasiswaCreateInput {
   nim: String!
   nama: String!
-  kelas: KelasCreateManyWithoutListMahasiswaInput
-  mataKuliah: MataKuliahCreateManyInput
+  jurusan: JurusanCreateOneInput!
+  prodi: ProdiCreateOneInput!
   user: UserCreateOneWithoutMahasiswaInput!
+  kelases: KelasCreateManyWithoutMahasiswasInput
 }
 
-input MahasiswaCreateManyWithoutKelasInput {
-  create: [MahasiswaCreateWithoutKelasInput!]
+input MahasiswaCreateManyWithoutKelasesInput {
+  create: [MahasiswaCreateWithoutKelasesInput!]
   connect: [MahasiswaWhereUniqueInput!]
-}
-
-input MahasiswaCreateOneInput {
-  create: MahasiswaCreateInput
-  connect: MahasiswaWhereUniqueInput
 }
 
 input MahasiswaCreateOneWithoutUserInput {
@@ -935,18 +846,20 @@ input MahasiswaCreateOneWithoutUserInput {
   connect: MahasiswaWhereUniqueInput
 }
 
-input MahasiswaCreateWithoutKelasInput {
+input MahasiswaCreateWithoutKelasesInput {
   nim: String!
   nama: String!
-  mataKuliah: MataKuliahCreateManyInput
+  jurusan: JurusanCreateOneInput!
+  prodi: ProdiCreateOneInput!
   user: UserCreateOneWithoutMahasiswaInput!
 }
 
 input MahasiswaCreateWithoutUserInput {
   nim: String!
   nama: String!
-  kelas: KelasCreateManyWithoutListMahasiswaInput
-  mataKuliah: MataKuliahCreateManyInput
+  jurusan: JurusanCreateOneInput!
+  prodi: ProdiCreateOneInput!
+  kelases: KelasCreateManyWithoutMahasiswasInput
 }
 
 type MahasiswaEdge {
@@ -991,36 +904,22 @@ input MahasiswaSubscriptionWhereInput {
   NOT: [MahasiswaSubscriptionWhereInput!]
 }
 
-input MahasiswaUpdateDataInput {
-  nim: String
-  nama: String
-  kelas: KelasUpdateManyWithoutListMahasiswaInput
-  mataKuliah: MataKuliahUpdateManyInput
-  user: UserUpdateOneRequiredWithoutMahasiswaInput
-}
-
 input MahasiswaUpdateInput {
   nim: String
   nama: String
-  kelas: KelasUpdateManyWithoutListMahasiswaInput
-  mataKuliah: MataKuliahUpdateManyInput
+  jurusan: JurusanUpdateOneRequiredInput
+  prodi: ProdiUpdateOneRequiredInput
   user: UserUpdateOneRequiredWithoutMahasiswaInput
+  kelases: KelasUpdateManyWithoutMahasiswasInput
 }
 
-input MahasiswaUpdateManyWithoutKelasInput {
-  create: [MahasiswaCreateWithoutKelasInput!]
+input MahasiswaUpdateManyWithoutKelasesInput {
+  create: [MahasiswaCreateWithoutKelasesInput!]
   delete: [MahasiswaWhereUniqueInput!]
   connect: [MahasiswaWhereUniqueInput!]
   disconnect: [MahasiswaWhereUniqueInput!]
-  update: [MahasiswaUpdateWithWhereUniqueWithoutKelasInput!]
-  upsert: [MahasiswaUpsertWithWhereUniqueWithoutKelasInput!]
-}
-
-input MahasiswaUpdateOneRequiredInput {
-  create: MahasiswaCreateInput
-  update: MahasiswaUpdateDataInput
-  upsert: MahasiswaUpsertNestedInput
-  connect: MahasiswaWhereUniqueInput
+  update: [MahasiswaUpdateWithWhereUniqueWithoutKelasesInput!]
+  upsert: [MahasiswaUpsertWithWhereUniqueWithoutKelasesInput!]
 }
 
 input MahasiswaUpdateOneWithoutUserInput {
@@ -1032,28 +931,25 @@ input MahasiswaUpdateOneWithoutUserInput {
   connect: MahasiswaWhereUniqueInput
 }
 
-input MahasiswaUpdateWithoutKelasDataInput {
+input MahasiswaUpdateWithoutKelasesDataInput {
   nim: String
   nama: String
-  mataKuliah: MataKuliahUpdateManyInput
+  jurusan: JurusanUpdateOneRequiredInput
+  prodi: ProdiUpdateOneRequiredInput
   user: UserUpdateOneRequiredWithoutMahasiswaInput
 }
 
 input MahasiswaUpdateWithoutUserDataInput {
   nim: String
   nama: String
-  kelas: KelasUpdateManyWithoutListMahasiswaInput
-  mataKuliah: MataKuliahUpdateManyInput
+  jurusan: JurusanUpdateOneRequiredInput
+  prodi: ProdiUpdateOneRequiredInput
+  kelases: KelasUpdateManyWithoutMahasiswasInput
 }
 
-input MahasiswaUpdateWithWhereUniqueWithoutKelasInput {
+input MahasiswaUpdateWithWhereUniqueWithoutKelasesInput {
   where: MahasiswaWhereUniqueInput!
-  data: MahasiswaUpdateWithoutKelasDataInput!
-}
-
-input MahasiswaUpsertNestedInput {
-  update: MahasiswaUpdateDataInput!
-  create: MahasiswaCreateInput!
+  data: MahasiswaUpdateWithoutKelasesDataInput!
 }
 
 input MahasiswaUpsertWithoutUserInput {
@@ -1061,10 +957,10 @@ input MahasiswaUpsertWithoutUserInput {
   create: MahasiswaCreateWithoutUserInput!
 }
 
-input MahasiswaUpsertWithWhereUniqueWithoutKelasInput {
+input MahasiswaUpsertWithWhereUniqueWithoutKelasesInput {
   where: MahasiswaWhereUniqueInput!
-  update: MahasiswaUpdateWithoutKelasDataInput!
-  create: MahasiswaCreateWithoutKelasInput!
+  update: MahasiswaUpdateWithoutKelasesDataInput!
+  create: MahasiswaCreateWithoutKelasesInput!
 }
 
 input MahasiswaWhereInput {
@@ -1110,13 +1006,12 @@ input MahasiswaWhereInput {
   nama_not_starts_with: String
   nama_ends_with: String
   nama_not_ends_with: String
-  kelas_every: KelasWhereInput
-  kelas_some: KelasWhereInput
-  kelas_none: KelasWhereInput
-  mataKuliah_every: MataKuliahWhereInput
-  mataKuliah_some: MataKuliahWhereInput
-  mataKuliah_none: MataKuliahWhereInput
+  jurusan: JurusanWhereInput
+  prodi: ProdiWhereInput
   user: UserWhereInput
+  kelases_every: KelasWhereInput
+  kelases_some: KelasWhereInput
+  kelases_none: KelasWhereInput
   AND: [MahasiswaWhereInput!]
   OR: [MahasiswaWhereInput!]
   NOT: [MahasiswaWhereInput!]
@@ -1131,9 +1026,10 @@ type MataKuliah {
   id: ID!
   kode: String!
   nama: String!
+  jurusan: Jurusan!
+  prodi: Prodi!
+  dosens(where: DosenWhereInput, orderBy: DosenOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Dosen!]
   kelases(where: KelasWhereInput, orderBy: KelasOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Kelas!]
-  createdAt: DateTime!
-  updatedAt: DateTime!
 }
 
 type MataKuliahConnection {
@@ -1145,11 +1041,14 @@ type MataKuliahConnection {
 input MataKuliahCreateInput {
   kode: String!
   nama: String!
+  jurusan: JurusanCreateOneInput!
+  prodi: ProdiCreateOneInput!
+  dosens: DosenCreateManyWithoutMataKuliahsInput
   kelases: KelasCreateManyWithoutMataKuliahInput
 }
 
-input MataKuliahCreateManyInput {
-  create: [MataKuliahCreateInput!]
+input MataKuliahCreateManyWithoutDosensInput {
+  create: [MataKuliahCreateWithoutDosensInput!]
   connect: [MataKuliahWhereUniqueInput!]
 }
 
@@ -1158,9 +1057,20 @@ input MataKuliahCreateOneWithoutKelasesInput {
   connect: MataKuliahWhereUniqueInput
 }
 
+input MataKuliahCreateWithoutDosensInput {
+  kode: String!
+  nama: String!
+  jurusan: JurusanCreateOneInput!
+  prodi: ProdiCreateOneInput!
+  kelases: KelasCreateManyWithoutMataKuliahInput
+}
+
 input MataKuliahCreateWithoutKelasesInput {
   kode: String!
   nama: String!
+  jurusan: JurusanCreateOneInput!
+  prodi: ProdiCreateOneInput!
+  dosens: DosenCreateManyWithoutMataKuliahsInput
 }
 
 type MataKuliahEdge {
@@ -1185,8 +1095,6 @@ type MataKuliahPreviousValues {
   id: ID!
   kode: String!
   nama: String!
-  createdAt: DateTime!
-  updatedAt: DateTime!
 }
 
 type MataKuliahSubscriptionPayload {
@@ -1207,25 +1115,22 @@ input MataKuliahSubscriptionWhereInput {
   NOT: [MataKuliahSubscriptionWhereInput!]
 }
 
-input MataKuliahUpdateDataInput {
-  kode: String
-  nama: String
-  kelases: KelasUpdateManyWithoutMataKuliahInput
-}
-
 input MataKuliahUpdateInput {
   kode: String
   nama: String
+  jurusan: JurusanUpdateOneRequiredInput
+  prodi: ProdiUpdateOneRequiredInput
+  dosens: DosenUpdateManyWithoutMataKuliahsInput
   kelases: KelasUpdateManyWithoutMataKuliahInput
 }
 
-input MataKuliahUpdateManyInput {
-  create: [MataKuliahCreateInput!]
+input MataKuliahUpdateManyWithoutDosensInput {
+  create: [MataKuliahCreateWithoutDosensInput!]
   delete: [MataKuliahWhereUniqueInput!]
   connect: [MataKuliahWhereUniqueInput!]
   disconnect: [MataKuliahWhereUniqueInput!]
-  update: [MataKuliahUpdateWithWhereUniqueNestedInput!]
-  upsert: [MataKuliahUpsertWithWhereUniqueNestedInput!]
+  update: [MataKuliahUpdateWithWhereUniqueWithoutDosensInput!]
+  upsert: [MataKuliahUpsertWithWhereUniqueWithoutDosensInput!]
 }
 
 input MataKuliahUpdateOneRequiredWithoutKelasesInput {
@@ -1235,14 +1140,25 @@ input MataKuliahUpdateOneRequiredWithoutKelasesInput {
   connect: MataKuliahWhereUniqueInput
 }
 
+input MataKuliahUpdateWithoutDosensDataInput {
+  kode: String
+  nama: String
+  jurusan: JurusanUpdateOneRequiredInput
+  prodi: ProdiUpdateOneRequiredInput
+  kelases: KelasUpdateManyWithoutMataKuliahInput
+}
+
 input MataKuliahUpdateWithoutKelasesDataInput {
   kode: String
   nama: String
+  jurusan: JurusanUpdateOneRequiredInput
+  prodi: ProdiUpdateOneRequiredInput
+  dosens: DosenUpdateManyWithoutMataKuliahsInput
 }
 
-input MataKuliahUpdateWithWhereUniqueNestedInput {
+input MataKuliahUpdateWithWhereUniqueWithoutDosensInput {
   where: MataKuliahWhereUniqueInput!
-  data: MataKuliahUpdateDataInput!
+  data: MataKuliahUpdateWithoutDosensDataInput!
 }
 
 input MataKuliahUpsertWithoutKelasesInput {
@@ -1250,10 +1166,10 @@ input MataKuliahUpsertWithoutKelasesInput {
   create: MataKuliahCreateWithoutKelasesInput!
 }
 
-input MataKuliahUpsertWithWhereUniqueNestedInput {
+input MataKuliahUpsertWithWhereUniqueWithoutDosensInput {
   where: MataKuliahWhereUniqueInput!
-  update: MataKuliahUpdateDataInput!
-  create: MataKuliahCreateInput!
+  update: MataKuliahUpdateWithoutDosensDataInput!
+  create: MataKuliahCreateWithoutDosensInput!
 }
 
 input MataKuliahWhereInput {
@@ -1299,25 +1215,14 @@ input MataKuliahWhereInput {
   nama_not_starts_with: String
   nama_ends_with: String
   nama_not_ends_with: String
+  jurusan: JurusanWhereInput
+  prodi: ProdiWhereInput
+  dosens_every: DosenWhereInput
+  dosens_some: DosenWhereInput
+  dosens_none: DosenWhereInput
   kelases_every: KelasWhereInput
   kelases_some: KelasWhereInput
   kelases_none: KelasWhereInput
-  createdAt: DateTime
-  createdAt_not: DateTime
-  createdAt_in: [DateTime!]
-  createdAt_not_in: [DateTime!]
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  updatedAt: DateTime
-  updatedAt_not: DateTime
-  updatedAt_in: [DateTime!]
-  updatedAt_not_in: [DateTime!]
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
   AND: [MataKuliahWhereInput!]
   OR: [MataKuliahWhereInput!]
   NOT: [MataKuliahWhereInput!]
@@ -1341,18 +1246,12 @@ type Mutation {
   upsertDosen(where: DosenWhereUniqueInput!, create: DosenCreateInput!, update: DosenUpdateInput!): Dosen!
   deleteDosen(where: DosenWhereUniqueInput!): Dosen
   deleteManyDosens(where: DosenWhereInput): BatchPayload!
-  createJawaban(data: JawabanCreateInput!): Jawaban!
-  updateJawaban(data: JawabanUpdateInput!, where: JawabanWhereUniqueInput!): Jawaban
-  updateManyJawabans(data: JawabanUpdateInput!, where: JawabanWhereInput): BatchPayload!
-  upsertJawaban(where: JawabanWhereUniqueInput!, create: JawabanCreateInput!, update: JawabanUpdateInput!): Jawaban!
-  deleteJawaban(where: JawabanWhereUniqueInput!): Jawaban
-  deleteManyJawabans(where: JawabanWhereInput): BatchPayload!
-  createJawabanMahasiswa(data: JawabanMahasiswaCreateInput!): JawabanMahasiswa!
-  updateJawabanMahasiswa(data: JawabanMahasiswaUpdateInput!, where: JawabanMahasiswaWhereUniqueInput!): JawabanMahasiswa
-  updateManyJawabanMahasiswas(data: JawabanMahasiswaUpdateInput!, where: JawabanMahasiswaWhereInput): BatchPayload!
-  upsertJawabanMahasiswa(where: JawabanMahasiswaWhereUniqueInput!, create: JawabanMahasiswaCreateInput!, update: JawabanMahasiswaUpdateInput!): JawabanMahasiswa!
-  deleteJawabanMahasiswa(where: JawabanMahasiswaWhereUniqueInput!): JawabanMahasiswa
-  deleteManyJawabanMahasiswas(where: JawabanMahasiswaWhereInput): BatchPayload!
+  createJurusan(data: JurusanCreateInput!): Jurusan!
+  updateJurusan(data: JurusanUpdateInput!, where: JurusanWhereUniqueInput!): Jurusan
+  updateManyJurusans(data: JurusanUpdateInput!, where: JurusanWhereInput): BatchPayload!
+  upsertJurusan(where: JurusanWhereUniqueInput!, create: JurusanCreateInput!, update: JurusanUpdateInput!): Jurusan!
+  deleteJurusan(where: JurusanWhereUniqueInput!): Jurusan
+  deleteManyJurusans(where: JurusanWhereInput): BatchPayload!
   createKelas(data: KelasCreateInput!): Kelas!
   updateKelas(data: KelasUpdateInput!, where: KelasWhereUniqueInput!): Kelas
   updateManyKelases(data: KelasUpdateInput!, where: KelasWhereInput): BatchPayload!
@@ -1371,36 +1270,12 @@ type Mutation {
   upsertMataKuliah(where: MataKuliahWhereUniqueInput!, create: MataKuliahCreateInput!, update: MataKuliahUpdateInput!): MataKuliah!
   deleteMataKuliah(where: MataKuliahWhereUniqueInput!): MataKuliah
   deleteManyMataKuliahs(where: MataKuliahWhereInput): BatchPayload!
-  createPengawas(data: PengawasCreateInput!): Pengawas!
-  updatePengawas(data: PengawasUpdateInput!, where: PengawasWhereUniqueInput!): Pengawas
-  updateManyPengawases(data: PengawasUpdateInput!, where: PengawasWhereInput): BatchPayload!
-  upsertPengawas(where: PengawasWhereUniqueInput!, create: PengawasCreateInput!, update: PengawasUpdateInput!): Pengawas!
-  deletePengawas(where: PengawasWhereUniqueInput!): Pengawas
-  deleteManyPengawases(where: PengawasWhereInput): BatchPayload!
-  createPertanyaan(data: PertanyaanCreateInput!): Pertanyaan!
-  updatePertanyaan(data: PertanyaanUpdateInput!, where: PertanyaanWhereUniqueInput!): Pertanyaan
-  updateManyPertanyaans(data: PertanyaanUpdateInput!, where: PertanyaanWhereInput): BatchPayload!
-  upsertPertanyaan(where: PertanyaanWhereUniqueInput!, create: PertanyaanCreateInput!, update: PertanyaanUpdateInput!): Pertanyaan!
-  deletePertanyaan(where: PertanyaanWhereUniqueInput!): Pertanyaan
-  deleteManyPertanyaans(where: PertanyaanWhereInput): BatchPayload!
-  createPilihanGanda(data: PilihanGandaCreateInput!): PilihanGanda!
-  updatePilihanGanda(data: PilihanGandaUpdateInput!, where: PilihanGandaWhereUniqueInput!): PilihanGanda
-  updateManyPilihanGandas(data: PilihanGandaUpdateInput!, where: PilihanGandaWhereInput): BatchPayload!
-  upsertPilihanGanda(where: PilihanGandaWhereUniqueInput!, create: PilihanGandaCreateInput!, update: PilihanGandaUpdateInput!): PilihanGanda!
-  deletePilihanGanda(where: PilihanGandaWhereUniqueInput!): PilihanGanda
-  deleteManyPilihanGandas(where: PilihanGandaWhereInput): BatchPayload!
-  createSoalMahasiswa(data: SoalMahasiswaCreateInput!): SoalMahasiswa!
-  updateSoalMahasiswa(data: SoalMahasiswaUpdateInput!, where: SoalMahasiswaWhereUniqueInput!): SoalMahasiswa
-  updateManySoalMahasiswas(data: SoalMahasiswaUpdateInput!, where: SoalMahasiswaWhereInput): BatchPayload!
-  upsertSoalMahasiswa(where: SoalMahasiswaWhereUniqueInput!, create: SoalMahasiswaCreateInput!, update: SoalMahasiswaUpdateInput!): SoalMahasiswa!
-  deleteSoalMahasiswa(where: SoalMahasiswaWhereUniqueInput!): SoalMahasiswa
-  deleteManySoalMahasiswas(where: SoalMahasiswaWhereInput): BatchPayload!
-  createUjian(data: UjianCreateInput!): Ujian!
-  updateUjian(data: UjianUpdateInput!, where: UjianWhereUniqueInput!): Ujian
-  updateManyUjians(data: UjianUpdateInput!, where: UjianWhereInput): BatchPayload!
-  upsertUjian(where: UjianWhereUniqueInput!, create: UjianCreateInput!, update: UjianUpdateInput!): Ujian!
-  deleteUjian(where: UjianWhereUniqueInput!): Ujian
-  deleteManyUjians(where: UjianWhereInput): BatchPayload!
+  createProdi(data: ProdiCreateInput!): Prodi!
+  updateProdi(data: ProdiUpdateInput!, where: ProdiWhereUniqueInput!): Prodi
+  updateManyProdis(data: ProdiUpdateInput!, where: ProdiWhereInput): BatchPayload!
+  upsertProdi(where: ProdiWhereUniqueInput!, create: ProdiCreateInput!, update: ProdiUpdateInput!): Prodi!
+  deleteProdi(where: ProdiWhereUniqueInput!): Prodi
+  deleteManyProdis(where: ProdiWhereInput): BatchPayload!
   createUser(data: UserCreateInput!): User!
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
   updateManyUsers(data: UserUpdateInput!, where: UserWhereInput): BatchPayload!
@@ -1426,43 +1301,56 @@ type PageInfo {
   endCursor: String
 }
 
-type Pengawas {
+enum Permission {
+  USER
+  ADMIN
+  DOSEN
+  MAHASISWA
+  PENGAWAS
+}
+
+type Prodi {
   id: ID!
+  jurusan: Jurusan!
   nama: String!
-  user: User!
 }
 
-type PengawasConnection {
+type ProdiConnection {
   pageInfo: PageInfo!
-  edges: [PengawasEdge]!
-  aggregate: AggregatePengawas!
+  edges: [ProdiEdge]!
+  aggregate: AggregateProdi!
 }
 
-input PengawasCreateInput {
-  nama: String!
-  user: UserCreateOneWithoutPengawasInput!
-}
-
-input PengawasCreateOneInput {
-  create: PengawasCreateInput
-  connect: PengawasWhereUniqueInput
-}
-
-input PengawasCreateOneWithoutUserInput {
-  create: PengawasCreateWithoutUserInput
-  connect: PengawasWhereUniqueInput
-}
-
-input PengawasCreateWithoutUserInput {
+input ProdiCreateInput {
+  jurusan: JurusanCreateOneWithoutProdisInput!
   nama: String!
 }
 
-type PengawasEdge {
-  node: Pengawas!
+input ProdiCreateManyInput {
+  create: [ProdiCreateInput!]
+  connect: [ProdiWhereUniqueInput!]
+}
+
+input ProdiCreateManyWithoutJurusanInput {
+  create: [ProdiCreateWithoutJurusanInput!]
+  connect: [ProdiWhereUniqueInput!]
+}
+
+input ProdiCreateOneInput {
+  create: ProdiCreateInput
+  connect: ProdiWhereUniqueInput
+}
+
+input ProdiCreateWithoutJurusanInput {
+  nama: String!
+}
+
+type ProdiEdge {
+  node: Prodi!
   cursor: String!
 }
 
-enum PengawasOrderByInput {
+enum ProdiOrderByInput {
   id_ASC
   id_DESC
   nama_ASC
@@ -1473,70 +1361,96 @@ enum PengawasOrderByInput {
   updatedAt_DESC
 }
 
-type PengawasPreviousValues {
+type ProdiPreviousValues {
   id: ID!
   nama: String!
 }
 
-type PengawasSubscriptionPayload {
+type ProdiSubscriptionPayload {
   mutation: MutationType!
-  node: Pengawas
+  node: Prodi
   updatedFields: [String!]
-  previousValues: PengawasPreviousValues
+  previousValues: ProdiPreviousValues
 }
 
-input PengawasSubscriptionWhereInput {
+input ProdiSubscriptionWhereInput {
   mutation_in: [MutationType!]
   updatedFields_contains: String
   updatedFields_contains_every: [String!]
   updatedFields_contains_some: [String!]
-  node: PengawasWhereInput
-  AND: [PengawasSubscriptionWhereInput!]
-  OR: [PengawasSubscriptionWhereInput!]
-  NOT: [PengawasSubscriptionWhereInput!]
+  node: ProdiWhereInput
+  AND: [ProdiSubscriptionWhereInput!]
+  OR: [ProdiSubscriptionWhereInput!]
+  NOT: [ProdiSubscriptionWhereInput!]
 }
 
-input PengawasUpdateDataInput {
-  nama: String
-  user: UserUpdateOneRequiredWithoutPengawasInput
-}
-
-input PengawasUpdateInput {
-  nama: String
-  user: UserUpdateOneRequiredWithoutPengawasInput
-}
-
-input PengawasUpdateOneRequiredInput {
-  create: PengawasCreateInput
-  update: PengawasUpdateDataInput
-  upsert: PengawasUpsertNestedInput
-  connect: PengawasWhereUniqueInput
-}
-
-input PengawasUpdateOneWithoutUserInput {
-  create: PengawasCreateWithoutUserInput
-  update: PengawasUpdateWithoutUserDataInput
-  upsert: PengawasUpsertWithoutUserInput
-  delete: Boolean
-  disconnect: Boolean
-  connect: PengawasWhereUniqueInput
-}
-
-input PengawasUpdateWithoutUserDataInput {
+input ProdiUpdateDataInput {
+  jurusan: JurusanUpdateOneRequiredWithoutProdisInput
   nama: String
 }
 
-input PengawasUpsertNestedInput {
-  update: PengawasUpdateDataInput!
-  create: PengawasCreateInput!
+input ProdiUpdateInput {
+  jurusan: JurusanUpdateOneRequiredWithoutProdisInput
+  nama: String
 }
 
-input PengawasUpsertWithoutUserInput {
-  update: PengawasUpdateWithoutUserDataInput!
-  create: PengawasCreateWithoutUserInput!
+input ProdiUpdateManyInput {
+  create: [ProdiCreateInput!]
+  delete: [ProdiWhereUniqueInput!]
+  connect: [ProdiWhereUniqueInput!]
+  disconnect: [ProdiWhereUniqueInput!]
+  update: [ProdiUpdateWithWhereUniqueNestedInput!]
+  upsert: [ProdiUpsertWithWhereUniqueNestedInput!]
 }
 
-input PengawasWhereInput {
+input ProdiUpdateManyWithoutJurusanInput {
+  create: [ProdiCreateWithoutJurusanInput!]
+  delete: [ProdiWhereUniqueInput!]
+  connect: [ProdiWhereUniqueInput!]
+  disconnect: [ProdiWhereUniqueInput!]
+  update: [ProdiUpdateWithWhereUniqueWithoutJurusanInput!]
+  upsert: [ProdiUpsertWithWhereUniqueWithoutJurusanInput!]
+}
+
+input ProdiUpdateOneRequiredInput {
+  create: ProdiCreateInput
+  update: ProdiUpdateDataInput
+  upsert: ProdiUpsertNestedInput
+  connect: ProdiWhereUniqueInput
+}
+
+input ProdiUpdateWithoutJurusanDataInput {
+  nama: String
+}
+
+input ProdiUpdateWithWhereUniqueNestedInput {
+  where: ProdiWhereUniqueInput!
+  data: ProdiUpdateDataInput!
+}
+
+input ProdiUpdateWithWhereUniqueWithoutJurusanInput {
+  where: ProdiWhereUniqueInput!
+  data: ProdiUpdateWithoutJurusanDataInput!
+}
+
+input ProdiUpsertNestedInput {
+  update: ProdiUpdateDataInput!
+  create: ProdiCreateInput!
+}
+
+input ProdiUpsertWithWhereUniqueNestedInput {
+  where: ProdiWhereUniqueInput!
+  update: ProdiUpdateDataInput!
+  create: ProdiCreateInput!
+}
+
+input ProdiUpsertWithWhereUniqueWithoutJurusanInput {
+  where: ProdiWhereUniqueInput!
+  update: ProdiUpdateWithoutJurusanDataInput!
+  create: ProdiCreateWithoutJurusanInput!
+}
+
+input ProdiWhereInput {
   id: ID
   id_not: ID
   id_in: [ID!]
@@ -1551,6 +1465,7 @@ input PengawasWhereInput {
   id_not_starts_with: ID
   id_ends_with: ID
   id_not_ends_with: ID
+  jurusan: JurusanWhereInput
   nama: String
   nama_not: String
   nama_in: [String!]
@@ -1565,267 +1480,12 @@ input PengawasWhereInput {
   nama_not_starts_with: String
   nama_ends_with: String
   nama_not_ends_with: String
-  user: UserWhereInput
-  AND: [PengawasWhereInput!]
-  OR: [PengawasWhereInput!]
-  NOT: [PengawasWhereInput!]
+  AND: [ProdiWhereInput!]
+  OR: [ProdiWhereInput!]
+  NOT: [ProdiWhereInput!]
 }
 
-input PengawasWhereUniqueInput {
-  id: ID
-}
-
-enum Permission {
-  USER
-  ADMIN
-  DOSEN
-  MAHASISWA
-  PENGAWAS
-}
-
-type Pertanyaan {
-  id: ID!
-  isi: String!
-  gambar: [String!]!
-}
-
-type PertanyaanConnection {
-  pageInfo: PageInfo!
-  edges: [PertanyaanEdge]!
-  aggregate: AggregatePertanyaan!
-}
-
-input PertanyaanCreategambarInput {
-  set: [String!]
-}
-
-input PertanyaanCreateInput {
-  isi: String!
-  gambar: PertanyaanCreategambarInput
-}
-
-input PertanyaanCreateOneInput {
-  create: PertanyaanCreateInput
-  connect: PertanyaanWhereUniqueInput
-}
-
-type PertanyaanEdge {
-  node: Pertanyaan!
-  cursor: String!
-}
-
-enum PertanyaanOrderByInput {
-  id_ASC
-  id_DESC
-  isi_ASC
-  isi_DESC
-  createdAt_ASC
-  createdAt_DESC
-  updatedAt_ASC
-  updatedAt_DESC
-}
-
-type PertanyaanPreviousValues {
-  id: ID!
-  isi: String!
-  gambar: [String!]!
-}
-
-type PertanyaanSubscriptionPayload {
-  mutation: MutationType!
-  node: Pertanyaan
-  updatedFields: [String!]
-  previousValues: PertanyaanPreviousValues
-}
-
-input PertanyaanSubscriptionWhereInput {
-  mutation_in: [MutationType!]
-  updatedFields_contains: String
-  updatedFields_contains_every: [String!]
-  updatedFields_contains_some: [String!]
-  node: PertanyaanWhereInput
-  AND: [PertanyaanSubscriptionWhereInput!]
-  OR: [PertanyaanSubscriptionWhereInput!]
-  NOT: [PertanyaanSubscriptionWhereInput!]
-}
-
-input PertanyaanUpdateDataInput {
-  isi: String
-  gambar: PertanyaanUpdategambarInput
-}
-
-input PertanyaanUpdategambarInput {
-  set: [String!]
-}
-
-input PertanyaanUpdateInput {
-  isi: String
-  gambar: PertanyaanUpdategambarInput
-}
-
-input PertanyaanUpdateOneRequiredInput {
-  create: PertanyaanCreateInput
-  update: PertanyaanUpdateDataInput
-  upsert: PertanyaanUpsertNestedInput
-  connect: PertanyaanWhereUniqueInput
-}
-
-input PertanyaanUpsertNestedInput {
-  update: PertanyaanUpdateDataInput!
-  create: PertanyaanCreateInput!
-}
-
-input PertanyaanWhereInput {
-  id: ID
-  id_not: ID
-  id_in: [ID!]
-  id_not_in: [ID!]
-  id_lt: ID
-  id_lte: ID
-  id_gt: ID
-  id_gte: ID
-  id_contains: ID
-  id_not_contains: ID
-  id_starts_with: ID
-  id_not_starts_with: ID
-  id_ends_with: ID
-  id_not_ends_with: ID
-  isi: String
-  isi_not: String
-  isi_in: [String!]
-  isi_not_in: [String!]
-  isi_lt: String
-  isi_lte: String
-  isi_gt: String
-  isi_gte: String
-  isi_contains: String
-  isi_not_contains: String
-  isi_starts_with: String
-  isi_not_starts_with: String
-  isi_ends_with: String
-  isi_not_ends_with: String
-  AND: [PertanyaanWhereInput!]
-  OR: [PertanyaanWhereInput!]
-  NOT: [PertanyaanWhereInput!]
-}
-
-input PertanyaanWhereUniqueInput {
-  id: ID
-}
-
-type PilihanGanda {
-  id: ID!
-  pertanyaan: Pertanyaan!
-  jawaban(where: JawabanWhereInput, orderBy: JawabanOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Jawaban!]
-}
-
-type PilihanGandaConnection {
-  pageInfo: PageInfo!
-  edges: [PilihanGandaEdge]!
-  aggregate: AggregatePilihanGanda!
-}
-
-input PilihanGandaCreateInput {
-  pertanyaan: PertanyaanCreateOneInput!
-  jawaban: JawabanCreateManyInput
-}
-
-input PilihanGandaCreateManyInput {
-  create: [PilihanGandaCreateInput!]
-  connect: [PilihanGandaWhereUniqueInput!]
-}
-
-type PilihanGandaEdge {
-  node: PilihanGanda!
-  cursor: String!
-}
-
-enum PilihanGandaOrderByInput {
-  id_ASC
-  id_DESC
-  createdAt_ASC
-  createdAt_DESC
-  updatedAt_ASC
-  updatedAt_DESC
-}
-
-type PilihanGandaPreviousValues {
-  id: ID!
-}
-
-type PilihanGandaSubscriptionPayload {
-  mutation: MutationType!
-  node: PilihanGanda
-  updatedFields: [String!]
-  previousValues: PilihanGandaPreviousValues
-}
-
-input PilihanGandaSubscriptionWhereInput {
-  mutation_in: [MutationType!]
-  updatedFields_contains: String
-  updatedFields_contains_every: [String!]
-  updatedFields_contains_some: [String!]
-  node: PilihanGandaWhereInput
-  AND: [PilihanGandaSubscriptionWhereInput!]
-  OR: [PilihanGandaSubscriptionWhereInput!]
-  NOT: [PilihanGandaSubscriptionWhereInput!]
-}
-
-input PilihanGandaUpdateDataInput {
-  pertanyaan: PertanyaanUpdateOneRequiredInput
-  jawaban: JawabanUpdateManyInput
-}
-
-input PilihanGandaUpdateInput {
-  pertanyaan: PertanyaanUpdateOneRequiredInput
-  jawaban: JawabanUpdateManyInput
-}
-
-input PilihanGandaUpdateManyInput {
-  create: [PilihanGandaCreateInput!]
-  delete: [PilihanGandaWhereUniqueInput!]
-  connect: [PilihanGandaWhereUniqueInput!]
-  disconnect: [PilihanGandaWhereUniqueInput!]
-  update: [PilihanGandaUpdateWithWhereUniqueNestedInput!]
-  upsert: [PilihanGandaUpsertWithWhereUniqueNestedInput!]
-}
-
-input PilihanGandaUpdateWithWhereUniqueNestedInput {
-  where: PilihanGandaWhereUniqueInput!
-  data: PilihanGandaUpdateDataInput!
-}
-
-input PilihanGandaUpsertWithWhereUniqueNestedInput {
-  where: PilihanGandaWhereUniqueInput!
-  update: PilihanGandaUpdateDataInput!
-  create: PilihanGandaCreateInput!
-}
-
-input PilihanGandaWhereInput {
-  id: ID
-  id_not: ID
-  id_in: [ID!]
-  id_not_in: [ID!]
-  id_lt: ID
-  id_lte: ID
-  id_gt: ID
-  id_gte: ID
-  id_contains: ID
-  id_not_contains: ID
-  id_starts_with: ID
-  id_not_starts_with: ID
-  id_ends_with: ID
-  id_not_ends_with: ID
-  pertanyaan: PertanyaanWhereInput
-  jawaban_every: JawabanWhereInput
-  jawaban_some: JawabanWhereInput
-  jawaban_none: JawabanWhereInput
-  AND: [PilihanGandaWhereInput!]
-  OR: [PilihanGandaWhereInput!]
-  NOT: [PilihanGandaWhereInput!]
-}
-
-input PilihanGandaWhereUniqueInput {
+input ProdiWhereUniqueInput {
   id: ID
 }
 
@@ -1836,12 +1496,9 @@ type Query {
   dosen(where: DosenWhereUniqueInput!): Dosen
   dosens(where: DosenWhereInput, orderBy: DosenOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Dosen]!
   dosensConnection(where: DosenWhereInput, orderBy: DosenOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): DosenConnection!
-  jawaban(where: JawabanWhereUniqueInput!): Jawaban
-  jawabans(where: JawabanWhereInput, orderBy: JawabanOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Jawaban]!
-  jawabansConnection(where: JawabanWhereInput, orderBy: JawabanOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): JawabanConnection!
-  jawabanMahasiswa(where: JawabanMahasiswaWhereUniqueInput!): JawabanMahasiswa
-  jawabanMahasiswas(where: JawabanMahasiswaWhereInput, orderBy: JawabanMahasiswaOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [JawabanMahasiswa]!
-  jawabanMahasiswasConnection(where: JawabanMahasiswaWhereInput, orderBy: JawabanMahasiswaOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): JawabanMahasiswaConnection!
+  jurusan(where: JurusanWhereUniqueInput!): Jurusan
+  jurusans(where: JurusanWhereInput, orderBy: JurusanOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Jurusan]!
+  jurusansConnection(where: JurusanWhereInput, orderBy: JurusanOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): JurusanConnection!
   kelas(where: KelasWhereUniqueInput!): Kelas
   kelases(where: KelasWhereInput, orderBy: KelasOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Kelas]!
   kelasesConnection(where: KelasWhereInput, orderBy: KelasOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): KelasConnection!
@@ -1851,308 +1508,24 @@ type Query {
   mataKuliah(where: MataKuliahWhereUniqueInput!): MataKuliah
   mataKuliahs(where: MataKuliahWhereInput, orderBy: MataKuliahOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [MataKuliah]!
   mataKuliahsConnection(where: MataKuliahWhereInput, orderBy: MataKuliahOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): MataKuliahConnection!
-  pengawas(where: PengawasWhereUniqueInput!): Pengawas
-  pengawases(where: PengawasWhereInput, orderBy: PengawasOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Pengawas]!
-  pengawasesConnection(where: PengawasWhereInput, orderBy: PengawasOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): PengawasConnection!
-  pertanyaan(where: PertanyaanWhereUniqueInput!): Pertanyaan
-  pertanyaans(where: PertanyaanWhereInput, orderBy: PertanyaanOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Pertanyaan]!
-  pertanyaansConnection(where: PertanyaanWhereInput, orderBy: PertanyaanOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): PertanyaanConnection!
-  pilihanGanda(where: PilihanGandaWhereUniqueInput!): PilihanGanda
-  pilihanGandas(where: PilihanGandaWhereInput, orderBy: PilihanGandaOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [PilihanGanda]!
-  pilihanGandasConnection(where: PilihanGandaWhereInput, orderBy: PilihanGandaOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): PilihanGandaConnection!
-  soalMahasiswa(where: SoalMahasiswaWhereUniqueInput!): SoalMahasiswa
-  soalMahasiswas(where: SoalMahasiswaWhereInput, orderBy: SoalMahasiswaOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [SoalMahasiswa]!
-  soalMahasiswasConnection(where: SoalMahasiswaWhereInput, orderBy: SoalMahasiswaOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): SoalMahasiswaConnection!
-  ujian(where: UjianWhereUniqueInput!): Ujian
-  ujians(where: UjianWhereInput, orderBy: UjianOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Ujian]!
-  ujiansConnection(where: UjianWhereInput, orderBy: UjianOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UjianConnection!
+  prodi(where: ProdiWhereUniqueInput!): Prodi
+  prodis(where: ProdiWhereInput, orderBy: ProdiOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Prodi]!
+  prodisConnection(where: ProdiWhereInput, orderBy: ProdiOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ProdiConnection!
   user(where: UserWhereUniqueInput!): User
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
   node(id: ID!): Node
 }
 
-type SoalMahasiswa {
-  id: ID!
-  mahasiswa: Mahasiswa!
-  listSoal(where: PilihanGandaWhereInput, orderBy: PilihanGandaOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [PilihanGanda!]
-  listJawaban(where: JawabanMahasiswaWhereInput, orderBy: JawabanMahasiswaOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [JawabanMahasiswa!]
-}
-
-type SoalMahasiswaConnection {
-  pageInfo: PageInfo!
-  edges: [SoalMahasiswaEdge]!
-  aggregate: AggregateSoalMahasiswa!
-}
-
-input SoalMahasiswaCreateInput {
-  mahasiswa: MahasiswaCreateOneInput!
-  listSoal: PilihanGandaCreateManyInput
-  listJawaban: JawabanMahasiswaCreateManyInput
-}
-
-input SoalMahasiswaCreateManyInput {
-  create: [SoalMahasiswaCreateInput!]
-  connect: [SoalMahasiswaWhereUniqueInput!]
-}
-
-type SoalMahasiswaEdge {
-  node: SoalMahasiswa!
-  cursor: String!
-}
-
-enum SoalMahasiswaOrderByInput {
-  id_ASC
-  id_DESC
-  createdAt_ASC
-  createdAt_DESC
-  updatedAt_ASC
-  updatedAt_DESC
-}
-
-type SoalMahasiswaPreviousValues {
-  id: ID!
-}
-
-type SoalMahasiswaSubscriptionPayload {
-  mutation: MutationType!
-  node: SoalMahasiswa
-  updatedFields: [String!]
-  previousValues: SoalMahasiswaPreviousValues
-}
-
-input SoalMahasiswaSubscriptionWhereInput {
-  mutation_in: [MutationType!]
-  updatedFields_contains: String
-  updatedFields_contains_every: [String!]
-  updatedFields_contains_some: [String!]
-  node: SoalMahasiswaWhereInput
-  AND: [SoalMahasiswaSubscriptionWhereInput!]
-  OR: [SoalMahasiswaSubscriptionWhereInput!]
-  NOT: [SoalMahasiswaSubscriptionWhereInput!]
-}
-
-input SoalMahasiswaUpdateDataInput {
-  mahasiswa: MahasiswaUpdateOneRequiredInput
-  listSoal: PilihanGandaUpdateManyInput
-  listJawaban: JawabanMahasiswaUpdateManyInput
-}
-
-input SoalMahasiswaUpdateInput {
-  mahasiswa: MahasiswaUpdateOneRequiredInput
-  listSoal: PilihanGandaUpdateManyInput
-  listJawaban: JawabanMahasiswaUpdateManyInput
-}
-
-input SoalMahasiswaUpdateManyInput {
-  create: [SoalMahasiswaCreateInput!]
-  delete: [SoalMahasiswaWhereUniqueInput!]
-  connect: [SoalMahasiswaWhereUniqueInput!]
-  disconnect: [SoalMahasiswaWhereUniqueInput!]
-  update: [SoalMahasiswaUpdateWithWhereUniqueNestedInput!]
-  upsert: [SoalMahasiswaUpsertWithWhereUniqueNestedInput!]
-}
-
-input SoalMahasiswaUpdateWithWhereUniqueNestedInput {
-  where: SoalMahasiswaWhereUniqueInput!
-  data: SoalMahasiswaUpdateDataInput!
-}
-
-input SoalMahasiswaUpsertWithWhereUniqueNestedInput {
-  where: SoalMahasiswaWhereUniqueInput!
-  update: SoalMahasiswaUpdateDataInput!
-  create: SoalMahasiswaCreateInput!
-}
-
-input SoalMahasiswaWhereInput {
-  id: ID
-  id_not: ID
-  id_in: [ID!]
-  id_not_in: [ID!]
-  id_lt: ID
-  id_lte: ID
-  id_gt: ID
-  id_gte: ID
-  id_contains: ID
-  id_not_contains: ID
-  id_starts_with: ID
-  id_not_starts_with: ID
-  id_ends_with: ID
-  id_not_ends_with: ID
-  mahasiswa: MahasiswaWhereInput
-  listSoal_every: PilihanGandaWhereInput
-  listSoal_some: PilihanGandaWhereInput
-  listSoal_none: PilihanGandaWhereInput
-  listJawaban_every: JawabanMahasiswaWhereInput
-  listJawaban_some: JawabanMahasiswaWhereInput
-  listJawaban_none: JawabanMahasiswaWhereInput
-  AND: [SoalMahasiswaWhereInput!]
-  OR: [SoalMahasiswaWhereInput!]
-  NOT: [SoalMahasiswaWhereInput!]
-}
-
-input SoalMahasiswaWhereUniqueInput {
-  id: ID
-}
-
 type Subscription {
   admin(where: AdminSubscriptionWhereInput): AdminSubscriptionPayload
   dosen(where: DosenSubscriptionWhereInput): DosenSubscriptionPayload
-  jawaban(where: JawabanSubscriptionWhereInput): JawabanSubscriptionPayload
-  jawabanMahasiswa(where: JawabanMahasiswaSubscriptionWhereInput): JawabanMahasiswaSubscriptionPayload
+  jurusan(where: JurusanSubscriptionWhereInput): JurusanSubscriptionPayload
   kelas(where: KelasSubscriptionWhereInput): KelasSubscriptionPayload
   mahasiswa(where: MahasiswaSubscriptionWhereInput): MahasiswaSubscriptionPayload
   mataKuliah(where: MataKuliahSubscriptionWhereInput): MataKuliahSubscriptionPayload
-  pengawas(where: PengawasSubscriptionWhereInput): PengawasSubscriptionPayload
-  pertanyaan(where: PertanyaanSubscriptionWhereInput): PertanyaanSubscriptionPayload
-  pilihanGanda(where: PilihanGandaSubscriptionWhereInput): PilihanGandaSubscriptionPayload
-  soalMahasiswa(where: SoalMahasiswaSubscriptionWhereInput): SoalMahasiswaSubscriptionPayload
-  ujian(where: UjianSubscriptionWhereInput): UjianSubscriptionPayload
+  prodi(where: ProdiSubscriptionWhereInput): ProdiSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
-}
-
-type Ujian {
-  id: ID!
-  Kelas: Kelas!
-  pengawas: Pengawas!
-  listSoal(where: SoalMahasiswaWhereInput, orderBy: SoalMahasiswaOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [SoalMahasiswa!]
-  tanggalPelaksanaan: DateTime!
-  tokenUjian: String!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-}
-
-type UjianConnection {
-  pageInfo: PageInfo!
-  edges: [UjianEdge]!
-  aggregate: AggregateUjian!
-}
-
-input UjianCreateInput {
-  Kelas: KelasCreateOneInput!
-  pengawas: PengawasCreateOneInput!
-  listSoal: SoalMahasiswaCreateManyInput
-  tanggalPelaksanaan: DateTime!
-  tokenUjian: String!
-}
-
-type UjianEdge {
-  node: Ujian!
-  cursor: String!
-}
-
-enum UjianOrderByInput {
-  id_ASC
-  id_DESC
-  tanggalPelaksanaan_ASC
-  tanggalPelaksanaan_DESC
-  tokenUjian_ASC
-  tokenUjian_DESC
-  createdAt_ASC
-  createdAt_DESC
-  updatedAt_ASC
-  updatedAt_DESC
-}
-
-type UjianPreviousValues {
-  id: ID!
-  tanggalPelaksanaan: DateTime!
-  tokenUjian: String!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-}
-
-type UjianSubscriptionPayload {
-  mutation: MutationType!
-  node: Ujian
-  updatedFields: [String!]
-  previousValues: UjianPreviousValues
-}
-
-input UjianSubscriptionWhereInput {
-  mutation_in: [MutationType!]
-  updatedFields_contains: String
-  updatedFields_contains_every: [String!]
-  updatedFields_contains_some: [String!]
-  node: UjianWhereInput
-  AND: [UjianSubscriptionWhereInput!]
-  OR: [UjianSubscriptionWhereInput!]
-  NOT: [UjianSubscriptionWhereInput!]
-}
-
-input UjianUpdateInput {
-  Kelas: KelasUpdateOneRequiredInput
-  pengawas: PengawasUpdateOneRequiredInput
-  listSoal: SoalMahasiswaUpdateManyInput
-  tanggalPelaksanaan: DateTime
-  tokenUjian: String
-}
-
-input UjianWhereInput {
-  id: ID
-  id_not: ID
-  id_in: [ID!]
-  id_not_in: [ID!]
-  id_lt: ID
-  id_lte: ID
-  id_gt: ID
-  id_gte: ID
-  id_contains: ID
-  id_not_contains: ID
-  id_starts_with: ID
-  id_not_starts_with: ID
-  id_ends_with: ID
-  id_not_ends_with: ID
-  Kelas: KelasWhereInput
-  pengawas: PengawasWhereInput
-  listSoal_every: SoalMahasiswaWhereInput
-  listSoal_some: SoalMahasiswaWhereInput
-  listSoal_none: SoalMahasiswaWhereInput
-  tanggalPelaksanaan: DateTime
-  tanggalPelaksanaan_not: DateTime
-  tanggalPelaksanaan_in: [DateTime!]
-  tanggalPelaksanaan_not_in: [DateTime!]
-  tanggalPelaksanaan_lt: DateTime
-  tanggalPelaksanaan_lte: DateTime
-  tanggalPelaksanaan_gt: DateTime
-  tanggalPelaksanaan_gte: DateTime
-  tokenUjian: String
-  tokenUjian_not: String
-  tokenUjian_in: [String!]
-  tokenUjian_not_in: [String!]
-  tokenUjian_lt: String
-  tokenUjian_lte: String
-  tokenUjian_gt: String
-  tokenUjian_gte: String
-  tokenUjian_contains: String
-  tokenUjian_not_contains: String
-  tokenUjian_starts_with: String
-  tokenUjian_not_starts_with: String
-  tokenUjian_ends_with: String
-  tokenUjian_not_ends_with: String
-  createdAt: DateTime
-  createdAt_not: DateTime
-  createdAt_in: [DateTime!]
-  createdAt_not_in: [DateTime!]
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  updatedAt: DateTime
-  updatedAt_not: DateTime
-  updatedAt_in: [DateTime!]
-  updatedAt_not_in: [DateTime!]
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  AND: [UjianWhereInput!]
-  OR: [UjianWhereInput!]
-  NOT: [UjianWhereInput!]
-}
-
-input UjianWhereUniqueInput {
-  id: ID
 }
 
 type User {
@@ -2165,7 +1538,6 @@ type User {
   admin: Admin
   mahasiswa: Mahasiswa
   dosen: Dosen
-  pengawas: Pengawas
   resetToken: String
   resetTokenExpiry: String
 }
@@ -2185,7 +1557,6 @@ input UserCreateInput {
   admin: AdminCreateOneWithoutUserInput
   mahasiswa: MahasiswaCreateOneWithoutUserInput
   dosen: DosenCreateOneWithoutUserInput
-  pengawas: PengawasCreateOneWithoutUserInput
   resetToken: String
   resetTokenExpiry: String
 }
@@ -2205,11 +1576,6 @@ input UserCreateOneWithoutMahasiswaInput {
   connect: UserWhereUniqueInput
 }
 
-input UserCreateOneWithoutPengawasInput {
-  create: UserCreateWithoutPengawasInput
-  connect: UserWhereUniqueInput
-}
-
 input UserCreatepermissionsInput {
   set: [Permission!]
 }
@@ -2222,7 +1588,6 @@ input UserCreateWithoutAdminInput {
   permissions: UserCreatepermissionsInput
   mahasiswa: MahasiswaCreateOneWithoutUserInput
   dosen: DosenCreateOneWithoutUserInput
-  pengawas: PengawasCreateOneWithoutUserInput
   resetToken: String
   resetTokenExpiry: String
 }
@@ -2235,7 +1600,6 @@ input UserCreateWithoutDosenInput {
   permissions: UserCreatepermissionsInput
   admin: AdminCreateOneWithoutUserInput
   mahasiswa: MahasiswaCreateOneWithoutUserInput
-  pengawas: PengawasCreateOneWithoutUserInput
   resetToken: String
   resetTokenExpiry: String
 }
@@ -2247,20 +1611,6 @@ input UserCreateWithoutMahasiswaInput {
   passwordKasih: String
   permissions: UserCreatepermissionsInput
   admin: AdminCreateOneWithoutUserInput
-  dosen: DosenCreateOneWithoutUserInput
-  pengawas: PengawasCreateOneWithoutUserInput
-  resetToken: String
-  resetTokenExpiry: String
-}
-
-input UserCreateWithoutPengawasInput {
-  gambar: String
-  email: String!
-  password: String!
-  passwordKasih: String
-  permissions: UserCreatepermissionsInput
-  admin: AdminCreateOneWithoutUserInput
-  mahasiswa: MahasiswaCreateOneWithoutUserInput
   dosen: DosenCreateOneWithoutUserInput
   resetToken: String
   resetTokenExpiry: String
@@ -2330,7 +1680,6 @@ input UserUpdateInput {
   admin: AdminUpdateOneWithoutUserInput
   mahasiswa: MahasiswaUpdateOneWithoutUserInput
   dosen: DosenUpdateOneWithoutUserInput
-  pengawas: PengawasUpdateOneWithoutUserInput
   resetToken: String
   resetTokenExpiry: String
 }
@@ -2356,13 +1705,6 @@ input UserUpdateOneRequiredWithoutMahasiswaInput {
   connect: UserWhereUniqueInput
 }
 
-input UserUpdateOneRequiredWithoutPengawasInput {
-  create: UserCreateWithoutPengawasInput
-  update: UserUpdateWithoutPengawasDataInput
-  upsert: UserUpsertWithoutPengawasInput
-  connect: UserWhereUniqueInput
-}
-
 input UserUpdatepermissionsInput {
   set: [Permission!]
 }
@@ -2375,7 +1717,6 @@ input UserUpdateWithoutAdminDataInput {
   permissions: UserUpdatepermissionsInput
   mahasiswa: MahasiswaUpdateOneWithoutUserInput
   dosen: DosenUpdateOneWithoutUserInput
-  pengawas: PengawasUpdateOneWithoutUserInput
   resetToken: String
   resetTokenExpiry: String
 }
@@ -2388,7 +1729,6 @@ input UserUpdateWithoutDosenDataInput {
   permissions: UserUpdatepermissionsInput
   admin: AdminUpdateOneWithoutUserInput
   mahasiswa: MahasiswaUpdateOneWithoutUserInput
-  pengawas: PengawasUpdateOneWithoutUserInput
   resetToken: String
   resetTokenExpiry: String
 }
@@ -2400,20 +1740,6 @@ input UserUpdateWithoutMahasiswaDataInput {
   passwordKasih: String
   permissions: UserUpdatepermissionsInput
   admin: AdminUpdateOneWithoutUserInput
-  dosen: DosenUpdateOneWithoutUserInput
-  pengawas: PengawasUpdateOneWithoutUserInput
-  resetToken: String
-  resetTokenExpiry: String
-}
-
-input UserUpdateWithoutPengawasDataInput {
-  gambar: String
-  email: String
-  password: String
-  passwordKasih: String
-  permissions: UserUpdatepermissionsInput
-  admin: AdminUpdateOneWithoutUserInput
-  mahasiswa: MahasiswaUpdateOneWithoutUserInput
   dosen: DosenUpdateOneWithoutUserInput
   resetToken: String
   resetTokenExpiry: String
@@ -2432,11 +1758,6 @@ input UserUpsertWithoutDosenInput {
 input UserUpsertWithoutMahasiswaInput {
   update: UserUpdateWithoutMahasiswaDataInput!
   create: UserCreateWithoutMahasiswaInput!
-}
-
-input UserUpsertWithoutPengawasInput {
-  update: UserUpdateWithoutPengawasDataInput!
-  create: UserCreateWithoutPengawasInput!
 }
 
 input UserWhereInput {
@@ -2513,7 +1834,6 @@ input UserWhereInput {
   admin: AdminWhereInput
   mahasiswa: MahasiswaWhereInput
   dosen: DosenWhereInput
-  pengawas: PengawasWhereInput
   resetToken: String
   resetToken_not: String
   resetToken_in: [String!]
