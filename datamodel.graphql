@@ -41,6 +41,8 @@ type Mahasiswa {
   id: ID! @unique
   nim: String! @unique
   nama: String!
+  jurusan: Jurusan!
+  prodi: Prodi!
   kelas: [Kelas!]
   mataKuliah: [MataKuliah!]
   user: User!
