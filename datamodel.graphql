@@ -62,3 +62,12 @@ type MataKuliah {
   jurusan: Jurusan!
   prodi: Prodi!
 }
+
+type Kelas {
+  id: ID! @unique
+  jurusan: Jurusan!
+  prodi: Prodi!
+  dosen: Dosen!
+  mataKuliah: MataKuliah!
+  nama: String!
+}
