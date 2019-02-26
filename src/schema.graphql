@@ -26,12 +26,7 @@ type Mutation {
   addMataKuliah(mataKuliah: MataKuliahBaruInput!): MataKuliah!
   updateMataKuliah(mataKuliah: MataKuliahBaruInput!, id: ID!): MataKuliah!
   deleteMataKuliah(id: ID!): MataKuliah!
-  addKelas(
-    kelas: KelasBaruInput!
-    idDosen: [ID!]
-    idMahasiswa: ID!
-    idMataKuliah: ID!
-  ): Kelas!
+  addKelas(kelas: KelasBaruInput!, idDosen: ID!, idMataKuliah: ID!): Kelas!
   updateKelas(kelas: KelasBaruInput!, id: ID!): Kelas!
   deleteKelas(id: ID!): Kelas!
 }

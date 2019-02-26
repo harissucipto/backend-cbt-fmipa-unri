@@ -529,9 +529,6 @@ const mutations = {
               id: args.idDosen,
             },
           },
-          listMahasiswa: {
-            connect: args.mahasiswa,
-          },
         },
       },
       info,

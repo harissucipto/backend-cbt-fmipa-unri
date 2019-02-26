@@ -64,7 +64,7 @@ type Kelas {
   tahunAjaran: String!
   mataKuliah: MataKuliah!
   dosen: Dosen!
-  listMahasiswa: [Mahasiswa!]!
+  listMahasiswa: [Mahasiswa!]
   createdAt: DateTime!
   updatedAt: DateTime!
 }
