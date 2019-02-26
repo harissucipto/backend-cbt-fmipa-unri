@@ -29,7 +29,7 @@ type Admin {
 type Jurusan {
   id: ID! @unique
   nama: String!
-  prodi: [Prodi!]!
+  prodis: [Prodi!]!
 }
 
 type Prodi {
