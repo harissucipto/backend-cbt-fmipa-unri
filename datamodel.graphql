@@ -29,12 +29,13 @@ type Admin {
 type Jurusan {
   id: ID! @unique
   nama: String!
-  prodis: [Prodi!]!
+  prodis: [Prodi!]
 }
 
 type Prodi {
   id: ID! @unique
   jurusan: Jurusan!
+  nama: String!
 }
 
 type Mahasiswa {
