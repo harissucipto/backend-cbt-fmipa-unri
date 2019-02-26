@@ -26,6 +26,17 @@ type Admin {
   user: User!
 }
 
+type Jurusan {
+  id: ID! @unique
+  nama: String!
+  prodi: [Prodi!]!
+}
+
+type Prodi {
+  id: ID! @unique
+  jurusan: Jurusan!
+}
+
 type Mahasiswa {
   id: ID! @unique
   nim: String! @unique
