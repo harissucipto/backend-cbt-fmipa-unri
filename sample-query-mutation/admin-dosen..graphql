@@ -1,0 +1,179 @@
+query listAkunDosens {
+  dosens(
+    where: {
+      AND: [
+        { OR: [{ nama_contains: "" }, { nip_contains: "" }] }
+        { jurusan: { id: "cjslyh3if01d30718rl0ar8q2" } }
+        { prodi_some: { id_in: ["cjslyll1l01gj0718p8zqaaxa"] } }
+      ]
+    }
+    first: 2
+    skip: 0
+  ) {
+    id
+    nama
+    nip
+    user {
+      email
+      passwordKasih
+    }
+    jurusan {
+      nama
+    }
+    prodi {
+      nama
+    }
+  }
+}
+
+mutation tambahAkunDosen {
+  createUser(
+    data: {
+      email: "aidil@gmail.com"
+      password: "111"
+      passwordKasih: "111"
+      dosen: {
+        create: {
+          nama: "adil fitriansah"
+          nip: "1"
+          jurusan: { connect: { id: "cjslyh3if01d30718rl0ar8q2" } }
+          prodi: { connect: [{ id: "cjslyll1l01gj0718p8zqaaxa" }] }
+        }
+      }
+    }
+  ) {
+    id
+    dosen {
+      nama
+      nip
+    }
+  }
+}
+
+query profilDosen {
+  dosen(where: { id: "cjslz19m701pc07184r1a277j" }) {
+    user {
+      email
+      gambar
+    }
+    nama
+    nip
+    jurusan {
+      nama
+    }
+    prodi {
+      nama
+    }
+    id
+  }
+
+  mataKuliahs(where: { dosens_some: { id: "cjslz19m701pc07184r1a277j" } }) {
+    id
+    nama
+    kode
+    prodi {
+      id
+    }
+    jurusan {
+      nama
+    }
+  }
+
+  kelases(where: { dosen: { id: "cjslz19m701pc07184r1a277j" } }) {
+    id
+    nama
+    mataKuliah {
+      nama
+    }
+    prodi {
+      nama
+    }
+    jurusan {
+      nama
+    }
+  }
+}
+
+mutation tambahMKDosen {
+  updateDosen(
+    where: { id: "cjslz19m701pc07184r1a277j" }
+    data: { mataKuliahs: { connect: { id: "" } } }
+  ) {
+    mataKuliahs {
+      nama
+      id
+    }
+  }
+}
+
+mutation tambahKelasDosen {
+  updateDosen(
+    where: { id: "cjslz19m701pc07184r1a277j" }
+    data: { kelases: { connect: { id: "" } } }
+  ) {
+    kelases {
+      nama
+      id
+    }
+  }
+}
+
+mutation EditAkunDosen {
+  updateDosen(
+    where: { id: "cjslz19m701pc07184r1a277j" }
+    data: {
+      user: { update: { email: "aidil2@gmail.com" } }
+      nip: "21323"
+      nama: null
+    }
+  ) {
+    nama
+    user {
+      email
+    }
+  }
+}
+
+mutation resetPasswordDosen {
+  updateDosen(
+    where: { id: "cjslz19m701pc07184r1a277j" }
+    data: { user: { update: { password: "222" } } }
+  ) {
+    nama
+    user {
+      password
+    }
+  }
+}
+
+query cariMataKuliahDosen {
+  mataKuliahs(
+    where: {
+      AND: [
+        {
+          OR: [{ nama_contains: "" }, { kode_contains: "" }]
+          prodi: { id_in: ["cjslyh3if01d30718rl0ar8q2"] }
+        }
+      ]
+    }
+  ) {
+    id
+    nama
+  }
+}
+
+query cariKelasDosen {
+  kelases(
+    where: {
+      AND: [
+        {
+          OR: [{ nama_contains: "" }]
+          prodi: { id_in: ["cjslyh3if01d30718rl0ar8q2"] }
+        }
+      ]
+    }
+  ) {
+    id
+    nama
+  }
+}
