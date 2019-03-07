@@ -130,6 +130,10 @@ type AggregateAdmin {
   count: Int!
 }
 
+type AggregateAngkatan {
+  count: Int!
+}
+
 type AggregateDosen {
   count: Int!
 }
@@ -156,6 +160,124 @@ type AggregateProdi {
 
 type AggregateUser {
   count: Int!
+}
+
+type Angkatan {
+  id: ID!
+  nama: String!
+}
+
+type AngkatanConnection {
+  pageInfo: PageInfo!
+  edges: [AngkatanEdge]!
+  aggregate: AggregateAngkatan!
+}
+
+input AngkatanCreateInput {
+  nama: String!
+}
+
+input AngkatanCreateOneInput {
+  create: AngkatanCreateInput
+  connect: AngkatanWhereUniqueInput
+}
+
+type AngkatanEdge {
+  node: Angkatan!
+  cursor: String!
+}
+
+enum AngkatanOrderByInput {
+  id_ASC
+  id_DESC
+  nama_ASC
+  nama_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type AngkatanPreviousValues {
+  id: ID!
+  nama: String!
+}
+
+type AngkatanSubscriptionPayload {
+  mutation: MutationType!
+  node: Angkatan
+  updatedFields: [String!]
+  previousValues: AngkatanPreviousValues
+}
+
+input AngkatanSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: AngkatanWhereInput
+  AND: [AngkatanSubscriptionWhereInput!]
+  OR: [AngkatanSubscriptionWhereInput!]
+  NOT: [AngkatanSubscriptionWhereInput!]
+}
+
+input AngkatanUpdateDataInput {
+  nama: String
+}
+
+input AngkatanUpdateInput {
+  nama: String
+}
+
+input AngkatanUpdateOneRequiredInput {
+  create: AngkatanCreateInput
+  update: AngkatanUpdateDataInput
+  upsert: AngkatanUpsertNestedInput
+  connect: AngkatanWhereUniqueInput
+}
+
+input AngkatanUpsertNestedInput {
+  update: AngkatanUpdateDataInput!
+  create: AngkatanCreateInput!
+}
+
+input AngkatanWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  nama: String
+  nama_not: String
+  nama_in: [String!]
+  nama_not_in: [String!]
+  nama_lt: String
+  nama_lte: String
+  nama_gt: String
+  nama_gte: String
+  nama_contains: String
+  nama_not_contains: String
+  nama_starts_with: String
+  nama_not_starts_with: String
+  nama_ends_with: String
+  nama_not_ends_with: String
+  AND: [AngkatanWhereInput!]
+  OR: [AngkatanWhereInput!]
+  NOT: [AngkatanWhereInput!]
+}
+
+input AngkatanWhereUniqueInput {
+  id: ID
+  nama: String
 }
 
 type BatchPayload {
@@ -820,6 +942,7 @@ type Mahasiswa {
   prodi: Prodi!
   user: User!
   kelases(where: KelasWhereInput, orderBy: KelasOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Kelas!]
+  angkatan: Angkatan!
 }
 
 type MahasiswaConnection {
@@ -835,6 +958,7 @@ input MahasiswaCreateInput {
   prodi: ProdiCreateOneInput!
   user: UserCreateOneWithoutMahasiswaInput!
   kelases: KelasCreateManyWithoutMahasiswasInput
+  angkatan: AngkatanCreateOneInput!
 }
 
 input MahasiswaCreateManyWithoutKelasesInput {
@@ -853,6 +977,7 @@ input MahasiswaCreateWithoutKelasesInput {
   jurusan: JurusanCreateOneInput!
   prodi: ProdiCreateOneInput!
   user: UserCreateOneWithoutMahasiswaInput!
+  angkatan: AngkatanCreateOneInput!
 }
 
 input MahasiswaCreateWithoutUserInput {
@@ -861,6 +986,7 @@ input MahasiswaCreateWithoutUserInput {
   jurusan: JurusanCreateOneInput!
   prodi: ProdiCreateOneInput!
   kelases: KelasCreateManyWithoutMahasiswasInput
+  angkatan: AngkatanCreateOneInput!
 }
 
 type MahasiswaEdge {
@@ -912,6 +1038,7 @@ input MahasiswaUpdateInput {
   prodi: ProdiUpdateOneRequiredInput
   user: UserUpdateOneRequiredWithoutMahasiswaInput
   kelases: KelasUpdateManyWithoutMahasiswasInput
+  angkatan: AngkatanUpdateOneRequiredInput
 }
 
 input MahasiswaUpdateManyWithoutKelasesInput {
@@ -938,6 +1065,7 @@ input MahasiswaUpdateWithoutKelasesDataInput {
   jurusan: JurusanUpdateOneRequiredInput
   prodi: ProdiUpdateOneRequiredInput
   user: UserUpdateOneRequiredWithoutMahasiswaInput
+  angkatan: AngkatanUpdateOneRequiredInput
 }
 
 input MahasiswaUpdateWithoutUserDataInput {
@@ -946,6 +1074,7 @@ input MahasiswaUpdateWithoutUserDataInput {
   jurusan: JurusanUpdateOneRequiredInput
   prodi: ProdiUpdateOneRequiredInput
   kelases: KelasUpdateManyWithoutMahasiswasInput
+  angkatan: AngkatanUpdateOneRequiredInput
 }
 
 input MahasiswaUpdateWithWhereUniqueWithoutKelasesInput {
@@ -1013,6 +1142,7 @@ input MahasiswaWhereInput {
   kelases_every: KelasWhereInput
   kelases_some: KelasWhereInput
   kelases_none: KelasWhereInput
+  angkatan: AngkatanWhereInput
   AND: [MahasiswaWhereInput!]
   OR: [MahasiswaWhereInput!]
   NOT: [MahasiswaWhereInput!]
@@ -1241,6 +1371,12 @@ type Mutation {
   upsertAdmin(where: AdminWhereUniqueInput!, create: AdminCreateInput!, update: AdminUpdateInput!): Admin!
   deleteAdmin(where: AdminWhereUniqueInput!): Admin
   deleteManyAdmins(where: AdminWhereInput): BatchPayload!
+  createAngkatan(data: AngkatanCreateInput!): Angkatan!
+  updateAngkatan(data: AngkatanUpdateInput!, where: AngkatanWhereUniqueInput!): Angkatan
+  updateManyAngkatans(data: AngkatanUpdateInput!, where: AngkatanWhereInput): BatchPayload!
+  upsertAngkatan(where: AngkatanWhereUniqueInput!, create: AngkatanCreateInput!, update: AngkatanUpdateInput!): Angkatan!
+  deleteAngkatan(where: AngkatanWhereUniqueInput!): Angkatan
+  deleteManyAngkatans(where: AngkatanWhereInput): BatchPayload!
   createDosen(data: DosenCreateInput!): Dosen!
   updateDosen(data: DosenUpdateInput!, where: DosenWhereUniqueInput!): Dosen
   updateManyDosens(data: DosenUpdateInput!, where: DosenWhereInput): BatchPayload!
@@ -1494,6 +1630,9 @@ type Query {
   admin(where: AdminWhereUniqueInput!): Admin
   admins(where: AdminWhereInput, orderBy: AdminOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Admin]!
   adminsConnection(where: AdminWhereInput, orderBy: AdminOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): AdminConnection!
+  angkatan(where: AngkatanWhereUniqueInput!): Angkatan
+  angkatans(where: AngkatanWhereInput, orderBy: AngkatanOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Angkatan]!
+  angkatansConnection(where: AngkatanWhereInput, orderBy: AngkatanOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): AngkatanConnection!
   dosen(where: DosenWhereUniqueInput!): Dosen
   dosens(where: DosenWhereInput, orderBy: DosenOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Dosen]!
   dosensConnection(where: DosenWhereInput, orderBy: DosenOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): DosenConnection!
@@ -1520,6 +1659,7 @@ type Query {
 
 type Subscription {
   admin(where: AdminSubscriptionWhereInput): AdminSubscriptionPayload
+  angkatan(where: AngkatanSubscriptionWhereInput): AngkatanSubscriptionPayload
   dosen(where: DosenSubscriptionWhereInput): DosenSubscriptionPayload
   jurusan(where: JurusanSubscriptionWhereInput): JurusanSubscriptionPayload
   kelas(where: KelasSubscriptionWhereInput): KelasSubscriptionPayload

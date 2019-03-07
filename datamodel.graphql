@@ -38,14 +38,19 @@ type Prodi {
   nama: String!
 }
 
+type Angkatan {
+  id: ID! @unique
+  nama: String! @unique
+}
+
 type Mahasiswa {
   id: ID! @unique
   nim: String! @unique
   nama: String!
-  jurusan: Jurusan!
   prodi: Prodi!
   user: User!
   kelases: [Kelas!]
+  angkatan: Angkatan!
 }
 
 type Dosen {
@@ -53,7 +58,6 @@ type Dosen {
   nip: String! @unique
   nama: String!
   user: User!
-  jurusan: Jurusan!
   prodi: [Prodi!]!
   mataKuliahs: [MataKuliah!]
   kelases: [Kelas!]
@@ -63,7 +67,6 @@ type MataKuliah {
   id: ID! @unique
   kode: String! @unique
   nama: String!
-  jurusan: Jurusan!
   prodi: Prodi!
   dosens: [Dosen!]
   kelases: [Kelas!]
@@ -71,7 +74,6 @@ type MataKuliah {
 
 type Kelas {
   id: ID! @unique
-  jurusan: Jurusan!
   prodi: Prodi!
   dosen: Dosen!
   mataKuliah: MataKuliah!
