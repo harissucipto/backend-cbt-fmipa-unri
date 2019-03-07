@@ -105,6 +105,25 @@ const mutations = {
 
     return updateInfo;
   },
+
+  // update Password
+  async updatePassword(parent, args, ctx, info) {
+    // check if there is a current user ID
+    if (!ctx.request.userId) {
+      return null;
+    }
+    // hash the password
+    const password = await bcrypt.hash(args.password, 10);
+    // update the password to db
+    return ctx.db.mutation.updateUser({
+      where: {
+        id: ctx.request.userId,
+      },
+      data: {
+        password,
+      },
+    });
+  },
   // dosen query
   async addDosen(parent, args, ctx, info) {
     // 1. login  punya hak akses dan query user login tersebut

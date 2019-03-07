@@ -10,6 +10,7 @@ type Mutation {
   signin(email: String!, password: String!): User!
   signout: SuccessMessage
   updateAdmin(user: UserInput, admin: AdminInput): User!
+  updatePassword(password: String!): User!
   addDosen(user: UserBaruInput, dosen: DosenBaruInput): User!
   updateDosen(user: UserInput, dosen: DosenBaruInput, id: ID!): User!
   deleteDosen(id: ID!): Dosen!
@@ -32,6 +33,7 @@ type Mutation {
 type Query {
   pertanyaan: String!
   me: User
+  admin: User!
   dosens(
     where: DosenWhereInput
     orderBy: DosenOrderByInput
