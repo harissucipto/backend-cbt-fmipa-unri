@@ -12,7 +12,7 @@ type Mutation {
   updateAdmin(user: UserInput, admin: AdminInput): User!
   updatePassword(password: String!): User!
   addDosen(user: UserBaruInput, dosen: DosenBaruInput): User!
-  updateDosen(user: UserInput, dosen: DosenBaruInput, id: ID!): User!
+  updateDosen(data: DosenUpdateInput!, where: DosenWhereUniqueInput!): Dosen
   deleteDosen(id: ID!): Dosen!
   addMahasiswa(user: UserBaruInput, mahasiswa: MahasiswaBaruInput): User!
   updateMahasiswa(
@@ -28,6 +28,8 @@ type Mutation {
   addKelas(kelas: KelasBaruInput!, idDosen: ID!, idMataKuliah: ID!): Kelas!
   updateKelas(kelas: KelasBaruInput!, id: ID!): Kelas!
   deleteKelas(id: ID!): Kelas!
+
+  createUser(data: UserCreateInput!): User!
 }
 
 type Query {

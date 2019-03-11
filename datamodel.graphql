@@ -29,13 +29,13 @@ type Admin {
 type Jurusan {
   id: ID! @unique
   nama: String!
-  prodis: [Prodi!]
+  prodis: [Prodi!] @unique
 }
 
 type Prodi {
   id: ID! @unique
   jurusan: Jurusan!
-  nama: String!
+  nama: String! @unique
 }
 
 type Angkatan {
@@ -58,7 +58,7 @@ type Dosen {
   nip: String! @unique
   nama: String!
   user: User!
-  prodi: [Prodi!]!
+  prodi: Prodi!
   mataKuliahs: [MataKuliah!]
   kelases: [Kelas!]
 }
@@ -75,8 +75,8 @@ type MataKuliah {
 type Kelas {
   id: ID! @unique
   prodi: Prodi!
-  dosen: Dosen!
-  mataKuliah: MataKuliah!
+  dosen: Dosen
+  mataKuliah: MataKuliah
   nama: String!
   mahasiswas: [Mahasiswa!]
 }

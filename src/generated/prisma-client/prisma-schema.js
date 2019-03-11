@@ -289,8 +289,7 @@ type Dosen {
   nip: String!
   nama: String!
   user: User!
-  jurusan: Jurusan!
-  prodi(where: ProdiWhereInput, orderBy: ProdiOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Prodi!]
+  prodi: Prodi!
   mataKuliahs(where: MataKuliahWhereInput, orderBy: MataKuliahOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [MataKuliah!]
   kelases(where: KelasWhereInput, orderBy: KelasOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Kelas!]
 }
@@ -305,8 +304,7 @@ input DosenCreateInput {
   nip: String!
   nama: String!
   user: UserCreateOneWithoutDosenInput!
-  jurusan: JurusanCreateOneInput!
-  prodi: ProdiCreateManyInput
+  prodi: ProdiCreateOneInput!
   mataKuliahs: MataKuliahCreateManyWithoutDosensInput
   kelases: KelasCreateManyWithoutDosenInput
 }
@@ -330,8 +328,7 @@ input DosenCreateWithoutKelasesInput {
   nip: String!
   nama: String!
   user: UserCreateOneWithoutDosenInput!
-  jurusan: JurusanCreateOneInput!
-  prodi: ProdiCreateManyInput
+  prodi: ProdiCreateOneInput!
   mataKuliahs: MataKuliahCreateManyWithoutDosensInput
 }
 
@@ -339,16 +336,14 @@ input DosenCreateWithoutMataKuliahsInput {
   nip: String!
   nama: String!
   user: UserCreateOneWithoutDosenInput!
-  jurusan: JurusanCreateOneInput!
-  prodi: ProdiCreateManyInput
+  prodi: ProdiCreateOneInput!
   kelases: KelasCreateManyWithoutDosenInput
 }
 
 input DosenCreateWithoutUserInput {
   nip: String!
   nama: String!
-  jurusan: JurusanCreateOneInput!
-  prodi: ProdiCreateManyInput
+  prodi: ProdiCreateOneInput!
   mataKuliahs: MataKuliahCreateManyWithoutDosensInput
   kelases: KelasCreateManyWithoutDosenInput
 }
@@ -399,8 +394,7 @@ input DosenUpdateInput {
   nip: String
   nama: String
   user: UserUpdateOneRequiredWithoutDosenInput
-  jurusan: JurusanUpdateOneRequiredInput
-  prodi: ProdiUpdateManyInput
+  prodi: ProdiUpdateOneRequiredInput
   mataKuliahs: MataKuliahUpdateManyWithoutDosensInput
   kelases: KelasUpdateManyWithoutDosenInput
 }
@@ -414,10 +408,12 @@ input DosenUpdateManyWithoutMataKuliahsInput {
   upsert: [DosenUpsertWithWhereUniqueWithoutMataKuliahsInput!]
 }
 
-input DosenUpdateOneRequiredWithoutKelasesInput {
+input DosenUpdateOneWithoutKelasesInput {
   create: DosenCreateWithoutKelasesInput
   update: DosenUpdateWithoutKelasesDataInput
   upsert: DosenUpsertWithoutKelasesInput
+  delete: Boolean
+  disconnect: Boolean
   connect: DosenWhereUniqueInput
 }
 
@@ -434,8 +430,7 @@ input DosenUpdateWithoutKelasesDataInput {
   nip: String
   nama: String
   user: UserUpdateOneRequiredWithoutDosenInput
-  jurusan: JurusanUpdateOneRequiredInput
-  prodi: ProdiUpdateManyInput
+  prodi: ProdiUpdateOneRequiredInput
   mataKuliahs: MataKuliahUpdateManyWithoutDosensInput
 }
 
@@ -443,16 +438,14 @@ input DosenUpdateWithoutMataKuliahsDataInput {
   nip: String
   nama: String
   user: UserUpdateOneRequiredWithoutDosenInput
-  jurusan: JurusanUpdateOneRequiredInput
-  prodi: ProdiUpdateManyInput
+  prodi: ProdiUpdateOneRequiredInput
   kelases: KelasUpdateManyWithoutDosenInput
 }
 
 input DosenUpdateWithoutUserDataInput {
   nip: String
   nama: String
-  jurusan: JurusanUpdateOneRequiredInput
-  prodi: ProdiUpdateManyInput
+  prodi: ProdiUpdateOneRequiredInput
   mataKuliahs: MataKuliahUpdateManyWithoutDosensInput
   kelases: KelasUpdateManyWithoutDosenInput
 }
@@ -522,10 +515,7 @@ input DosenWhereInput {
   nama_ends_with: String
   nama_not_ends_with: String
   user: UserWhereInput
-  jurusan: JurusanWhereInput
-  prodi_every: ProdiWhereInput
-  prodi_some: ProdiWhereInput
-  prodi_none: ProdiWhereInput
+  prodi: ProdiWhereInput
   mataKuliahs_every: MataKuliahWhereInput
   mataKuliahs_some: MataKuliahWhereInput
   mataKuliahs_none: MataKuliahWhereInput
@@ -557,11 +547,6 @@ type JurusanConnection {
 input JurusanCreateInput {
   nama: String!
   prodis: ProdiCreateManyWithoutJurusanInput
-}
-
-input JurusanCreateOneInput {
-  create: JurusanCreateInput
-  connect: JurusanWhereUniqueInput
 }
 
 input JurusanCreateOneWithoutProdisInput {
@@ -612,21 +597,9 @@ input JurusanSubscriptionWhereInput {
   NOT: [JurusanSubscriptionWhereInput!]
 }
 
-input JurusanUpdateDataInput {
-  nama: String
-  prodis: ProdiUpdateManyWithoutJurusanInput
-}
-
 input JurusanUpdateInput {
   nama: String
   prodis: ProdiUpdateManyWithoutJurusanInput
-}
-
-input JurusanUpdateOneRequiredInput {
-  create: JurusanCreateInput
-  update: JurusanUpdateDataInput
-  upsert: JurusanUpsertNestedInput
-  connect: JurusanWhereUniqueInput
 }
 
 input JurusanUpdateOneRequiredWithoutProdisInput {
@@ -638,11 +611,6 @@ input JurusanUpdateOneRequiredWithoutProdisInput {
 
 input JurusanUpdateWithoutProdisDataInput {
   nama: String
-}
-
-input JurusanUpsertNestedInput {
-  update: JurusanUpdateDataInput!
-  create: JurusanCreateInput!
 }
 
 input JurusanUpsertWithoutProdisInput {
@@ -693,10 +661,9 @@ input JurusanWhereUniqueInput {
 
 type Kelas {
   id: ID!
-  jurusan: Jurusan!
   prodi: Prodi!
-  dosen: Dosen!
-  mataKuliah: MataKuliah!
+  dosen: Dosen
+  mataKuliah: MataKuliah
   nama: String!
   mahasiswas(where: MahasiswaWhereInput, orderBy: MahasiswaOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Mahasiswa!]
 }
@@ -708,10 +675,9 @@ type KelasConnection {
 }
 
 input KelasCreateInput {
-  jurusan: JurusanCreateOneInput!
   prodi: ProdiCreateOneInput!
-  dosen: DosenCreateOneWithoutKelasesInput!
-  mataKuliah: MataKuliahCreateOneWithoutKelasesInput!
+  dosen: DosenCreateOneWithoutKelasesInput
+  mataKuliah: MataKuliahCreateOneWithoutKelasesInput
   nama: String!
   mahasiswas: MahasiswaCreateManyWithoutKelasesInput
 }
@@ -732,25 +698,22 @@ input KelasCreateManyWithoutMataKuliahInput {
 }
 
 input KelasCreateWithoutDosenInput {
-  jurusan: JurusanCreateOneInput!
   prodi: ProdiCreateOneInput!
-  mataKuliah: MataKuliahCreateOneWithoutKelasesInput!
+  mataKuliah: MataKuliahCreateOneWithoutKelasesInput
   nama: String!
   mahasiswas: MahasiswaCreateManyWithoutKelasesInput
 }
 
 input KelasCreateWithoutMahasiswasInput {
-  jurusan: JurusanCreateOneInput!
   prodi: ProdiCreateOneInput!
-  dosen: DosenCreateOneWithoutKelasesInput!
-  mataKuliah: MataKuliahCreateOneWithoutKelasesInput!
+  dosen: DosenCreateOneWithoutKelasesInput
+  mataKuliah: MataKuliahCreateOneWithoutKelasesInput
   nama: String!
 }
 
 input KelasCreateWithoutMataKuliahInput {
-  jurusan: JurusanCreateOneInput!
   prodi: ProdiCreateOneInput!
-  dosen: DosenCreateOneWithoutKelasesInput!
+  dosen: DosenCreateOneWithoutKelasesInput
   nama: String!
   mahasiswas: MahasiswaCreateManyWithoutKelasesInput
 }
@@ -795,10 +758,9 @@ input KelasSubscriptionWhereInput {
 }
 
 input KelasUpdateInput {
-  jurusan: JurusanUpdateOneRequiredInput
   prodi: ProdiUpdateOneRequiredInput
-  dosen: DosenUpdateOneRequiredWithoutKelasesInput
-  mataKuliah: MataKuliahUpdateOneRequiredWithoutKelasesInput
+  dosen: DosenUpdateOneWithoutKelasesInput
+  mataKuliah: MataKuliahUpdateOneWithoutKelasesInput
   nama: String
   mahasiswas: MahasiswaUpdateManyWithoutKelasesInput
 }
@@ -831,25 +793,22 @@ input KelasUpdateManyWithoutMataKuliahInput {
 }
 
 input KelasUpdateWithoutDosenDataInput {
-  jurusan: JurusanUpdateOneRequiredInput
   prodi: ProdiUpdateOneRequiredInput
-  mataKuliah: MataKuliahUpdateOneRequiredWithoutKelasesInput
+  mataKuliah: MataKuliahUpdateOneWithoutKelasesInput
   nama: String
   mahasiswas: MahasiswaUpdateManyWithoutKelasesInput
 }
 
 input KelasUpdateWithoutMahasiswasDataInput {
-  jurusan: JurusanUpdateOneRequiredInput
   prodi: ProdiUpdateOneRequiredInput
-  dosen: DosenUpdateOneRequiredWithoutKelasesInput
-  mataKuliah: MataKuliahUpdateOneRequiredWithoutKelasesInput
+  dosen: DosenUpdateOneWithoutKelasesInput
+  mataKuliah: MataKuliahUpdateOneWithoutKelasesInput
   nama: String
 }
 
 input KelasUpdateWithoutMataKuliahDataInput {
-  jurusan: JurusanUpdateOneRequiredInput
   prodi: ProdiUpdateOneRequiredInput
-  dosen: DosenUpdateOneRequiredWithoutKelasesInput
+  dosen: DosenUpdateOneWithoutKelasesInput
   nama: String
   mahasiswas: MahasiswaUpdateManyWithoutKelasesInput
 }
@@ -902,7 +861,6 @@ input KelasWhereInput {
   id_not_starts_with: ID
   id_ends_with: ID
   id_not_ends_with: ID
-  jurusan: JurusanWhereInput
   prodi: ProdiWhereInput
   dosen: DosenWhereInput
   mataKuliah: MataKuliahWhereInput
@@ -938,7 +896,6 @@ type Mahasiswa {
   id: ID!
   nim: String!
   nama: String!
-  jurusan: Jurusan!
   prodi: Prodi!
   user: User!
   kelases(where: KelasWhereInput, orderBy: KelasOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Kelas!]
@@ -954,7 +911,6 @@ type MahasiswaConnection {
 input MahasiswaCreateInput {
   nim: String!
   nama: String!
-  jurusan: JurusanCreateOneInput!
   prodi: ProdiCreateOneInput!
   user: UserCreateOneWithoutMahasiswaInput!
   kelases: KelasCreateManyWithoutMahasiswasInput
@@ -974,7 +930,6 @@ input MahasiswaCreateOneWithoutUserInput {
 input MahasiswaCreateWithoutKelasesInput {
   nim: String!
   nama: String!
-  jurusan: JurusanCreateOneInput!
   prodi: ProdiCreateOneInput!
   user: UserCreateOneWithoutMahasiswaInput!
   angkatan: AngkatanCreateOneInput!
@@ -983,7 +938,6 @@ input MahasiswaCreateWithoutKelasesInput {
 input MahasiswaCreateWithoutUserInput {
   nim: String!
   nama: String!
-  jurusan: JurusanCreateOneInput!
   prodi: ProdiCreateOneInput!
   kelases: KelasCreateManyWithoutMahasiswasInput
   angkatan: AngkatanCreateOneInput!
@@ -1034,7 +988,6 @@ input MahasiswaSubscriptionWhereInput {
 input MahasiswaUpdateInput {
   nim: String
   nama: String
-  jurusan: JurusanUpdateOneRequiredInput
   prodi: ProdiUpdateOneRequiredInput
   user: UserUpdateOneRequiredWithoutMahasiswaInput
   kelases: KelasUpdateManyWithoutMahasiswasInput
@@ -1062,7 +1015,6 @@ input MahasiswaUpdateOneWithoutUserInput {
 input MahasiswaUpdateWithoutKelasesDataInput {
   nim: String
   nama: String
-  jurusan: JurusanUpdateOneRequiredInput
   prodi: ProdiUpdateOneRequiredInput
   user: UserUpdateOneRequiredWithoutMahasiswaInput
   angkatan: AngkatanUpdateOneRequiredInput
@@ -1071,7 +1023,6 @@ input MahasiswaUpdateWithoutKelasesDataInput {
 input MahasiswaUpdateWithoutUserDataInput {
   nim: String
   nama: String
-  jurusan: JurusanUpdateOneRequiredInput
   prodi: ProdiUpdateOneRequiredInput
   kelases: KelasUpdateManyWithoutMahasiswasInput
   angkatan: AngkatanUpdateOneRequiredInput
@@ -1136,7 +1087,6 @@ input MahasiswaWhereInput {
   nama_not_starts_with: String
   nama_ends_with: String
   nama_not_ends_with: String
-  jurusan: JurusanWhereInput
   prodi: ProdiWhereInput
   user: UserWhereInput
   kelases_every: KelasWhereInput
@@ -1157,7 +1107,6 @@ type MataKuliah {
   id: ID!
   kode: String!
   nama: String!
-  jurusan: Jurusan!
   prodi: Prodi!
   dosens(where: DosenWhereInput, orderBy: DosenOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Dosen!]
   kelases(where: KelasWhereInput, orderBy: KelasOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Kelas!]
@@ -1172,7 +1121,6 @@ type MataKuliahConnection {
 input MataKuliahCreateInput {
   kode: String!
   nama: String!
-  jurusan: JurusanCreateOneInput!
   prodi: ProdiCreateOneInput!
   dosens: DosenCreateManyWithoutMataKuliahsInput
   kelases: KelasCreateManyWithoutMataKuliahInput
@@ -1191,7 +1139,6 @@ input MataKuliahCreateOneWithoutKelasesInput {
 input MataKuliahCreateWithoutDosensInput {
   kode: String!
   nama: String!
-  jurusan: JurusanCreateOneInput!
   prodi: ProdiCreateOneInput!
   kelases: KelasCreateManyWithoutMataKuliahInput
 }
@@ -1199,7 +1146,6 @@ input MataKuliahCreateWithoutDosensInput {
 input MataKuliahCreateWithoutKelasesInput {
   kode: String!
   nama: String!
-  jurusan: JurusanCreateOneInput!
   prodi: ProdiCreateOneInput!
   dosens: DosenCreateManyWithoutMataKuliahsInput
 }
@@ -1249,7 +1195,6 @@ input MataKuliahSubscriptionWhereInput {
 input MataKuliahUpdateInput {
   kode: String
   nama: String
-  jurusan: JurusanUpdateOneRequiredInput
   prodi: ProdiUpdateOneRequiredInput
   dosens: DosenUpdateManyWithoutMataKuliahsInput
   kelases: KelasUpdateManyWithoutMataKuliahInput
@@ -1264,17 +1209,18 @@ input MataKuliahUpdateManyWithoutDosensInput {
   upsert: [MataKuliahUpsertWithWhereUniqueWithoutDosensInput!]
 }
 
-input MataKuliahUpdateOneRequiredWithoutKelasesInput {
+input MataKuliahUpdateOneWithoutKelasesInput {
   create: MataKuliahCreateWithoutKelasesInput
   update: MataKuliahUpdateWithoutKelasesDataInput
   upsert: MataKuliahUpsertWithoutKelasesInput
+  delete: Boolean
+  disconnect: Boolean
   connect: MataKuliahWhereUniqueInput
 }
 
 input MataKuliahUpdateWithoutDosensDataInput {
   kode: String
   nama: String
-  jurusan: JurusanUpdateOneRequiredInput
   prodi: ProdiUpdateOneRequiredInput
   kelases: KelasUpdateManyWithoutMataKuliahInput
 }
@@ -1282,7 +1228,6 @@ input MataKuliahUpdateWithoutDosensDataInput {
 input MataKuliahUpdateWithoutKelasesDataInput {
   kode: String
   nama: String
-  jurusan: JurusanUpdateOneRequiredInput
   prodi: ProdiUpdateOneRequiredInput
   dosens: DosenUpdateManyWithoutMataKuliahsInput
 }
@@ -1346,7 +1291,6 @@ input MataKuliahWhereInput {
   nama_not_starts_with: String
   nama_ends_with: String
   nama_not_ends_with: String
-  jurusan: JurusanWhereInput
   prodi: ProdiWhereInput
   dosens_every: DosenWhereInput
   dosens_some: DosenWhereInput
@@ -1463,11 +1407,6 @@ input ProdiCreateInput {
   nama: String!
 }
 
-input ProdiCreateManyInput {
-  create: [ProdiCreateInput!]
-  connect: [ProdiWhereUniqueInput!]
-}
-
 input ProdiCreateManyWithoutJurusanInput {
   create: [ProdiCreateWithoutJurusanInput!]
   connect: [ProdiWhereUniqueInput!]
@@ -1531,15 +1470,6 @@ input ProdiUpdateInput {
   nama: String
 }
 
-input ProdiUpdateManyInput {
-  create: [ProdiCreateInput!]
-  delete: [ProdiWhereUniqueInput!]
-  connect: [ProdiWhereUniqueInput!]
-  disconnect: [ProdiWhereUniqueInput!]
-  update: [ProdiUpdateWithWhereUniqueNestedInput!]
-  upsert: [ProdiUpsertWithWhereUniqueNestedInput!]
-}
-
 input ProdiUpdateManyWithoutJurusanInput {
   create: [ProdiCreateWithoutJurusanInput!]
   delete: [ProdiWhereUniqueInput!]
@@ -1560,23 +1490,12 @@ input ProdiUpdateWithoutJurusanDataInput {
   nama: String
 }
 
-input ProdiUpdateWithWhereUniqueNestedInput {
-  where: ProdiWhereUniqueInput!
-  data: ProdiUpdateDataInput!
-}
-
 input ProdiUpdateWithWhereUniqueWithoutJurusanInput {
   where: ProdiWhereUniqueInput!
   data: ProdiUpdateWithoutJurusanDataInput!
 }
 
 input ProdiUpsertNestedInput {
-  update: ProdiUpdateDataInput!
-  create: ProdiCreateInput!
-}
-
-input ProdiUpsertWithWhereUniqueNestedInput {
-  where: ProdiWhereUniqueInput!
   update: ProdiUpdateDataInput!
   create: ProdiCreateInput!
 }
@@ -1624,6 +1543,7 @@ input ProdiWhereInput {
 
 input ProdiWhereUniqueInput {
   id: ID
+  nama: String
 }
 
 type Query {

@@ -427,11 +427,9 @@ export type KelasOrderByInput =
   | "updatedAt_ASC"
   | "updatedAt_DESC";
 
-export type MataKuliahOrderByInput =
+export type ProdiOrderByInput =
   | "id_ASC"
   | "id_DESC"
-  | "kode_ASC"
-  | "kode_DESC"
   | "nama_ASC"
   | "nama_DESC"
   | "createdAt_ASC"
@@ -439,9 +437,11 @@ export type MataKuliahOrderByInput =
   | "updatedAt_ASC"
   | "updatedAt_DESC";
 
-export type ProdiOrderByInput =
+export type MataKuliahOrderByInput =
   | "id_ASC"
   | "id_DESC"
+  | "kode_ASC"
+  | "kode_DESC"
   | "nama_ASC"
   | "nama_DESC"
   | "createdAt_ASC"
@@ -517,18 +517,22 @@ export type UserOrderByInput =
   | "updatedAt_ASC"
   | "updatedAt_DESC";
 
-export interface AdminUpdateInput {
-  nama?: String;
-  user?: UserUpdateOneRequiredWithoutAdminInput;
+export interface UserUpdateOneRequiredWithoutAdminInput {
+  create?: UserCreateWithoutAdminInput;
+  update?: UserUpdateWithoutAdminDataInput;
+  upsert?: UserUpsertWithoutAdminInput;
+  connect?: UserWhereUniqueInput;
 }
 
 export type AdminWhereUniqueInput = AtLeastOne<{
   id: ID_Input;
 }>;
 
-export interface JurusanUpdateDataInput {
-  nama?: String;
-  prodis?: ProdiUpdateManyWithoutJurusanInput;
+export interface JurusanUpdateOneRequiredWithoutProdisInput {
+  create?: JurusanCreateWithoutProdisInput;
+  update?: JurusanUpdateWithoutProdisDataInput;
+  upsert?: JurusanUpsertWithoutProdisInput;
+  connect?: JurusanWhereUniqueInput;
 }
 
 export interface KelasWhereInput {
@@ -546,7 +550,6 @@ export interface KelasWhereInput {
   id_not_starts_with?: ID_Input;
   id_ends_with?: ID_Input;
   id_not_ends_with?: ID_Input;
-  jurusan?: JurusanWhereInput;
   prodi?: ProdiWhereInput;
   dosen?: DosenWhereInput;
   mataKuliah?: MataKuliahWhereInput;
@@ -572,17 +575,8 @@ export interface KelasWhereInput {
   NOT?: KelasWhereInput[] | KelasWhereInput;
 }
 
-export interface ProdiUpdateManyWithoutJurusanInput {
-  create?: ProdiCreateWithoutJurusanInput[] | ProdiCreateWithoutJurusanInput;
-  delete?: ProdiWhereUniqueInput[] | ProdiWhereUniqueInput;
-  connect?: ProdiWhereUniqueInput[] | ProdiWhereUniqueInput;
-  disconnect?: ProdiWhereUniqueInput[] | ProdiWhereUniqueInput;
-  update?:
-    | ProdiUpdateWithWhereUniqueWithoutJurusanInput[]
-    | ProdiUpdateWithWhereUniqueWithoutJurusanInput;
-  upsert?:
-    | ProdiUpsertWithWhereUniqueWithoutJurusanInput[]
-    | ProdiUpsertWithWhereUniqueWithoutJurusanInput;
+export interface JurusanUpdateWithoutProdisDataInput {
+  nama?: String;
 }
 
 export interface UserWhereInput {
@@ -692,9 +686,9 @@ export interface UserWhereInput {
   NOT?: UserWhereInput[] | UserWhereInput;
 }
 
-export interface ProdiUpdateWithWhereUniqueWithoutJurusanInput {
-  where: ProdiWhereUniqueInput;
-  data: ProdiUpdateWithoutJurusanDataInput;
+export interface JurusanUpsertWithoutProdisInput {
+  update: JurusanUpdateWithoutProdisDataInput;
+  create: JurusanCreateWithoutProdisInput;
 }
 
 export interface MahasiswaWhereInput {
@@ -740,7 +734,6 @@ export interface MahasiswaWhereInput {
   nama_not_starts_with?: String;
   nama_ends_with?: String;
   nama_not_ends_with?: String;
-  jurusan?: JurusanWhereInput;
   prodi?: ProdiWhereInput;
   user?: UserWhereInput;
   kelases_every?: KelasWhereInput;
@@ -752,8 +745,9 @@ export interface MahasiswaWhereInput {
   NOT?: MahasiswaWhereInput[] | MahasiswaWhereInput;
 }
 
-export interface ProdiUpdateWithoutJurusanDataInput {
-  nama?: String;
+export interface ProdiUpsertNestedInput {
+  update: ProdiUpdateDataInput;
+  create: ProdiCreateInput;
 }
 
 export interface MataKuliahWhereInput {
@@ -799,7 +793,6 @@ export interface MataKuliahWhereInput {
   nama_not_starts_with?: String;
   nama_ends_with?: String;
   nama_not_ends_with?: String;
-  jurusan?: JurusanWhereInput;
   prodi?: ProdiWhereInput;
   dosens_every?: DosenWhereInput;
   dosens_some?: DosenWhereInput;
@@ -812,26 +805,6 @@ export interface MataKuliahWhereInput {
   NOT?: MataKuliahWhereInput[] | MataKuliahWhereInput;
 }
 
-export interface ProdiCreateManyInput {
-  create?: ProdiCreateInput[] | ProdiCreateInput;
-  connect?: ProdiWhereUniqueInput[] | ProdiWhereUniqueInput;
-}
-
-export interface DosenUpdateManyWithoutMataKuliahsInput {
-  create?:
-    | DosenCreateWithoutMataKuliahsInput[]
-    | DosenCreateWithoutMataKuliahsInput;
-  delete?: DosenWhereUniqueInput[] | DosenWhereUniqueInput;
-  connect?: DosenWhereUniqueInput[] | DosenWhereUniqueInput;
-  disconnect?: DosenWhereUniqueInput[] | DosenWhereUniqueInput;
-  update?:
-    | DosenUpdateWithWhereUniqueWithoutMataKuliahsInput[]
-    | DosenUpdateWithWhereUniqueWithoutMataKuliahsInput;
-  upsert?:
-    | DosenUpsertWithWhereUniqueWithoutMataKuliahsInput[]
-    | DosenUpsertWithWhereUniqueWithoutMataKuliahsInput;
-}
-
 export interface MataKuliahCreateManyWithoutDosensInput {
   create?:
     | MataKuliahCreateWithoutDosensInput[]
@@ -839,18 +812,56 @@ export interface MataKuliahCreateManyWithoutDosensInput {
   connect?: MataKuliahWhereUniqueInput[] | MataKuliahWhereUniqueInput;
 }
 
-export interface ProdiUpsertWithWhereUniqueWithoutJurusanInput {
-  where: ProdiWhereUniqueInput;
-  update: ProdiUpdateWithoutJurusanDataInput;
-  create: ProdiCreateWithoutJurusanInput;
+export interface UserUpsertWithoutMahasiswaInput {
+  update: UserUpdateWithoutMahasiswaDataInput;
+  create: UserCreateWithoutMahasiswaInput;
 }
 
 export interface MataKuliahCreateWithoutDosensInput {
   kode: String;
   nama: String;
-  jurusan: JurusanCreateOneInput;
   prodi: ProdiCreateOneInput;
   kelases?: KelasCreateManyWithoutMataKuliahInput;
+}
+
+export interface KelasUpdateManyWithoutMahasiswasInput {
+  create?:
+    | KelasCreateWithoutMahasiswasInput[]
+    | KelasCreateWithoutMahasiswasInput;
+  delete?: KelasWhereUniqueInput[] | KelasWhereUniqueInput;
+  connect?: KelasWhereUniqueInput[] | KelasWhereUniqueInput;
+  disconnect?: KelasWhereUniqueInput[] | KelasWhereUniqueInput;
+  update?:
+    | KelasUpdateWithWhereUniqueWithoutMahasiswasInput[]
+    | KelasUpdateWithWhereUniqueWithoutMahasiswasInput;
+  upsert?:
+    | KelasUpsertWithWhereUniqueWithoutMahasiswasInput[]
+    | KelasUpsertWithWhereUniqueWithoutMahasiswasInput;
+}
+
+export interface KelasCreateManyWithoutMataKuliahInput {
+  create?:
+    | KelasCreateWithoutMataKuliahInput[]
+    | KelasCreateWithoutMataKuliahInput;
+  connect?: KelasWhereUniqueInput[] | KelasWhereUniqueInput;
+}
+
+export interface UserSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: UserWhereInput;
+  AND?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
+  OR?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
+  NOT?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
+}
+
+export interface KelasCreateWithoutMataKuliahInput {
+  prodi: ProdiCreateOneInput;
+  dosen?: DosenCreateOneWithoutKelasesInput;
+  nama: String;
+  mahasiswas?: MahasiswaCreateManyWithoutKelasesInput;
 }
 
 export interface ProdiSubscriptionWhereInput {
@@ -864,54 +875,11 @@ export interface ProdiSubscriptionWhereInput {
   NOT?: ProdiSubscriptionWhereInput[] | ProdiSubscriptionWhereInput;
 }
 
-export interface KelasCreateManyWithoutMataKuliahInput {
+export interface MahasiswaCreateManyWithoutKelasesInput {
   create?:
-    | KelasCreateWithoutMataKuliahInput[]
-    | KelasCreateWithoutMataKuliahInput;
-  connect?: KelasWhereUniqueInput[] | KelasWhereUniqueInput;
-}
-
-export interface ProdiWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  jurusan?: JurusanWhereInput;
-  nama?: String;
-  nama_not?: String;
-  nama_in?: String[] | String;
-  nama_not_in?: String[] | String;
-  nama_lt?: String;
-  nama_lte?: String;
-  nama_gt?: String;
-  nama_gte?: String;
-  nama_contains?: String;
-  nama_not_contains?: String;
-  nama_starts_with?: String;
-  nama_not_starts_with?: String;
-  nama_ends_with?: String;
-  nama_not_ends_with?: String;
-  AND?: ProdiWhereInput[] | ProdiWhereInput;
-  OR?: ProdiWhereInput[] | ProdiWhereInput;
-  NOT?: ProdiWhereInput[] | ProdiWhereInput;
-}
-
-export interface KelasCreateWithoutMataKuliahInput {
-  jurusan: JurusanCreateOneInput;
-  prodi: ProdiCreateOneInput;
-  dosen: DosenCreateOneWithoutKelasesInput;
-  nama: String;
-  mahasiswas?: MahasiswaCreateManyWithoutKelasesInput;
+    | MahasiswaCreateWithoutKelasesInput[]
+    | MahasiswaCreateWithoutKelasesInput;
+  connect?: MahasiswaWhereUniqueInput[] | MahasiswaWhereUniqueInput;
 }
 
 export interface MahasiswaSubscriptionWhereInput {
@@ -925,11 +893,12 @@ export interface MahasiswaSubscriptionWhereInput {
   NOT?: MahasiswaSubscriptionWhereInput[] | MahasiswaSubscriptionWhereInput;
 }
 
-export interface MahasiswaCreateManyWithoutKelasesInput {
-  create?:
-    | MahasiswaCreateWithoutKelasesInput[]
-    | MahasiswaCreateWithoutKelasesInput;
-  connect?: MahasiswaWhereUniqueInput[] | MahasiswaWhereUniqueInput;
+export interface MahasiswaCreateWithoutKelasesInput {
+  nim: String;
+  nama: String;
+  prodi: ProdiCreateOneInput;
+  user: UserCreateOneWithoutMahasiswaInput;
+  angkatan: AngkatanCreateOneInput;
 }
 
 export interface JurusanSubscriptionWhereInput {
@@ -943,13 +912,9 @@ export interface JurusanSubscriptionWhereInput {
   NOT?: JurusanSubscriptionWhereInput[] | JurusanSubscriptionWhereInput;
 }
 
-export interface MahasiswaCreateWithoutKelasesInput {
-  nim: String;
-  nama: String;
-  jurusan: JurusanCreateOneInput;
-  prodi: ProdiCreateOneInput;
-  user: UserCreateOneWithoutMahasiswaInput;
-  angkatan: AngkatanCreateOneInput;
+export interface UserCreateOneWithoutMahasiswaInput {
+  create?: UserCreateWithoutMahasiswaInput;
+  connect?: UserWhereUniqueInput;
 }
 
 export interface AngkatanSubscriptionWhereInput {
@@ -963,16 +928,6 @@ export interface AngkatanSubscriptionWhereInput {
   NOT?: AngkatanSubscriptionWhereInput[] | AngkatanSubscriptionWhereInput;
 }
 
-export interface UserCreateOneWithoutMahasiswaInput {
-  create?: UserCreateWithoutMahasiswaInput;
-  connect?: UserWhereUniqueInput;
-}
-
-export type AngkatanWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-  nama?: String;
-}>;
-
 export interface UserCreateWithoutMahasiswaInput {
   gambar?: String;
   email: String;
@@ -983,6 +938,16 @@ export interface UserCreateWithoutMahasiswaInput {
   dosen?: DosenCreateOneWithoutUserInput;
   resetToken?: String;
   resetTokenExpiry?: String;
+}
+
+export type AngkatanWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+  nama?: String;
+}>;
+
+export interface DosenCreateOneWithoutUserInput {
+  create?: DosenCreateWithoutUserInput;
+  connect?: DosenWhereUniqueInput;
 }
 
 export interface UserCreateInput {
@@ -998,36 +963,20 @@ export interface UserCreateInput {
   resetTokenExpiry?: String;
 }
 
-export interface DosenCreateOneWithoutUserInput {
-  create?: DosenCreateWithoutUserInput;
-  connect?: DosenWhereUniqueInput;
+export interface DosenCreateWithoutUserInput {
+  nip: String;
+  nama: String;
+  prodi: ProdiCreateOneInput;
+  mataKuliahs?: MataKuliahCreateManyWithoutDosensInput;
+  kelases?: KelasCreateManyWithoutDosenInput;
 }
 
 export interface MataKuliahUpdateInput {
   kode?: String;
   nama?: String;
-  jurusan?: JurusanUpdateOneRequiredInput;
   prodi?: ProdiUpdateOneRequiredInput;
   dosens?: DosenUpdateManyWithoutMataKuliahsInput;
   kelases?: KelasUpdateManyWithoutMataKuliahInput;
-}
-
-export interface DosenCreateWithoutUserInput {
-  nip: String;
-  nama: String;
-  jurusan: JurusanCreateOneInput;
-  prodi?: ProdiCreateManyInput;
-  mataKuliahs?: MataKuliahCreateManyWithoutDosensInput;
-  kelases?: KelasCreateManyWithoutDosenInput;
-}
-
-export interface MataKuliahCreateInput {
-  kode: String;
-  nama: String;
-  jurusan: JurusanCreateOneInput;
-  prodi: ProdiCreateOneInput;
-  dosens?: DosenCreateManyWithoutMataKuliahsInput;
-  kelases?: KelasCreateManyWithoutMataKuliahInput;
 }
 
 export interface KelasCreateManyWithoutDosenInput {
@@ -1035,31 +984,28 @@ export interface KelasCreateManyWithoutDosenInput {
   connect?: KelasWhereUniqueInput[] | KelasWhereUniqueInput;
 }
 
-export interface MahasiswaCreateInput {
-  nim: String;
+export interface MataKuliahCreateInput {
+  kode: String;
   nama: String;
-  jurusan: JurusanCreateOneInput;
   prodi: ProdiCreateOneInput;
-  user: UserCreateOneWithoutMahasiswaInput;
-  kelases?: KelasCreateManyWithoutMahasiswasInput;
-  angkatan: AngkatanCreateOneInput;
+  dosens?: DosenCreateManyWithoutMataKuliahsInput;
+  kelases?: KelasCreateManyWithoutMataKuliahInput;
 }
 
 export interface KelasCreateWithoutDosenInput {
-  jurusan: JurusanCreateOneInput;
   prodi: ProdiCreateOneInput;
-  mataKuliah: MataKuliahCreateOneWithoutKelasesInput;
+  mataKuliah?: MataKuliahCreateOneWithoutKelasesInput;
   nama: String;
   mahasiswas?: MahasiswaCreateManyWithoutKelasesInput;
 }
 
-export interface KelasUpdateInput {
-  jurusan?: JurusanUpdateOneRequiredInput;
-  prodi?: ProdiUpdateOneRequiredInput;
-  dosen?: DosenUpdateOneRequiredWithoutKelasesInput;
-  mataKuliah?: MataKuliahUpdateOneRequiredWithoutKelasesInput;
-  nama?: String;
-  mahasiswas?: MahasiswaUpdateManyWithoutKelasesInput;
+export interface MahasiswaCreateInput {
+  nim: String;
+  nama: String;
+  prodi: ProdiCreateOneInput;
+  user: UserCreateOneWithoutMahasiswaInput;
+  kelases?: KelasCreateManyWithoutMahasiswasInput;
+  angkatan: AngkatanCreateOneInput;
 }
 
 export interface MataKuliahCreateOneWithoutKelasesInput {
@@ -1067,22 +1013,26 @@ export interface MataKuliahCreateOneWithoutKelasesInput {
   connect?: MataKuliahWhereUniqueInput;
 }
 
-export interface JurusanUpdateInput {
+export interface KelasUpdateInput {
+  prodi?: ProdiUpdateOneRequiredInput;
+  dosen?: DosenUpdateOneWithoutKelasesInput;
+  mataKuliah?: MataKuliahUpdateOneWithoutKelasesInput;
   nama?: String;
-  prodis?: ProdiUpdateManyWithoutJurusanInput;
+  mahasiswas?: MahasiswaUpdateManyWithoutKelasesInput;
 }
 
 export interface MataKuliahCreateWithoutKelasesInput {
   kode: String;
   nama: String;
-  jurusan: JurusanCreateOneInput;
   prodi: ProdiCreateOneInput;
   dosens?: DosenCreateManyWithoutMataKuliahsInput;
 }
 
-export type KelasWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
+export interface ProdiUpsertWithWhereUniqueWithoutJurusanInput {
+  where: ProdiWhereUniqueInput;
+  update: ProdiUpdateWithoutJurusanDataInput;
+  create: ProdiCreateWithoutJurusanInput;
+}
 
 export interface DosenCreateManyWithoutMataKuliahsInput {
   create?:
@@ -1091,17 +1041,34 @@ export interface DosenCreateManyWithoutMataKuliahsInput {
   connect?: DosenWhereUniqueInput[] | DosenWhereUniqueInput;
 }
 
-export interface AngkatanUpdateInput {
-  nama?: String;
-}
+export type KelasWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
 
 export interface DosenCreateWithoutMataKuliahsInput {
   nip: String;
   nama: String;
   user: UserCreateOneWithoutDosenInput;
-  jurusan: JurusanCreateOneInput;
-  prodi?: ProdiCreateManyInput;
+  prodi: ProdiCreateOneInput;
   kelases?: KelasCreateManyWithoutDosenInput;
+}
+
+export interface ProdiUpdateManyWithoutJurusanInput {
+  create?: ProdiCreateWithoutJurusanInput[] | ProdiCreateWithoutJurusanInput;
+  delete?: ProdiWhereUniqueInput[] | ProdiWhereUniqueInput;
+  connect?: ProdiWhereUniqueInput[] | ProdiWhereUniqueInput;
+  disconnect?: ProdiWhereUniqueInput[] | ProdiWhereUniqueInput;
+  update?:
+    | ProdiUpdateWithWhereUniqueWithoutJurusanInput[]
+    | ProdiUpdateWithWhereUniqueWithoutJurusanInput;
+  upsert?:
+    | ProdiUpsertWithWhereUniqueWithoutJurusanInput[]
+    | ProdiUpsertWithWhereUniqueWithoutJurusanInput;
+}
+
+export interface AngkatanCreateOneInput {
+  create?: AngkatanCreateInput;
+  connect?: AngkatanWhereUniqueInput;
 }
 
 export type MahasiswaWhereUniqueInput = AtLeastOne<{
@@ -1109,19 +1076,18 @@ export type MahasiswaWhereUniqueInput = AtLeastOne<{
   nim?: String;
 }>;
 
-export interface AngkatanCreateOneInput {
-  create?: AngkatanCreateInput;
-  connect?: AngkatanWhereUniqueInput;
-}
-
-export interface KelasUpsertWithWhereUniqueWithoutMahasiswasInput {
-  where: KelasWhereUniqueInput;
-  update: KelasUpdateWithoutMahasiswasDataInput;
-  create: KelasCreateWithoutMahasiswasInput;
-}
-
 export interface AngkatanCreateInput {
   nama: String;
+}
+
+export interface ProdiCreateManyWithoutJurusanInput {
+  create?: ProdiCreateWithoutJurusanInput[] | ProdiCreateWithoutJurusanInput;
+  connect?: ProdiWhereUniqueInput[] | ProdiWhereUniqueInput;
+}
+
+export interface AdminUpdateInput {
+  nama?: String;
+  user?: UserUpdateOneRequiredWithoutAdminInput;
 }
 
 export type MataKuliahWhereUniqueInput = AtLeastOne<{
@@ -1129,28 +1095,19 @@ export type MataKuliahWhereUniqueInput = AtLeastOne<{
   kode?: String;
 }>;
 
-export interface DosenUpsertWithWhereUniqueWithoutMataKuliahsInput {
-  where: DosenWhereUniqueInput;
-  update: DosenUpdateWithoutMataKuliahsDataInput;
-  create: DosenCreateWithoutMataKuliahsInput;
+export interface AngkatanUpsertNestedInput {
+  update: AngkatanUpdateDataInput;
+  create: AngkatanCreateInput;
 }
 
-export interface KelasUpsertWithWhereUniqueWithoutMataKuliahInput {
-  where: KelasWhereUniqueInput;
-  update: KelasUpdateWithoutMataKuliahDataInput;
-  create: KelasCreateWithoutMataKuliahInput;
+export interface DosenCreateInput {
+  nip: String;
+  nama: String;
+  user: UserCreateOneWithoutDosenInput;
+  prodi: ProdiCreateOneInput;
+  mataKuliahs?: MataKuliahCreateManyWithoutDosensInput;
+  kelases?: KelasCreateManyWithoutDosenInput;
 }
-
-export interface UserUpdateOneRequiredWithoutAdminInput {
-  create?: UserCreateWithoutAdminInput;
-  update?: UserUpdateWithoutAdminDataInput;
-  upsert?: UserUpsertWithoutAdminInput;
-  connect?: UserWhereUniqueInput;
-}
-
-export type ProdiWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
 
 export interface UserUpdateWithoutAdminDataInput {
   gambar?: String;
@@ -1164,18 +1121,19 @@ export interface UserUpdateWithoutAdminDataInput {
   resetTokenExpiry?: String;
 }
 
-export interface AngkatanUpdateDataInput {
+export type ProdiWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
   nama?: String;
-}
+}>;
 
 export interface UserUpdatepermissionsInput {
   set?: Permission[] | Permission;
 }
 
-export type UserWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-  email?: String;
-}>;
+export interface MahasiswaUpsertWithoutUserInput {
+  update: MahasiswaUpdateWithoutUserDataInput;
+  create: MahasiswaCreateWithoutUserInput;
+}
 
 export interface MahasiswaUpdateOneWithoutUserInput {
   create?: MahasiswaCreateWithoutUserInput;
@@ -1186,30 +1144,41 @@ export interface MahasiswaUpdateOneWithoutUserInput {
   connect?: MahasiswaWhereUniqueInput;
 }
 
-export interface DosenUpsertWithoutUserInput {
-  update: DosenUpdateWithoutUserDataInput;
-  create: DosenCreateWithoutUserInput;
-}
+export type UserWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+  email?: String;
+}>;
 
 export interface MahasiswaUpdateWithoutUserDataInput {
   nim?: String;
   nama?: String;
-  jurusan?: JurusanUpdateOneRequiredInput;
   prodi?: ProdiUpdateOneRequiredInput;
   kelases?: KelasUpdateManyWithoutMahasiswasInput;
   angkatan?: AngkatanUpdateOneRequiredInput;
 }
 
-export interface MataKuliahUpsertWithoutKelasesInput {
-  update: MataKuliahUpdateWithoutKelasesDataInput;
-  create: MataKuliahCreateWithoutKelasesInput;
+export interface MataKuliahUpsertWithWhereUniqueWithoutDosensInput {
+  where: MataKuliahWhereUniqueInput;
+  update: MataKuliahUpdateWithoutDosensDataInput;
+  create: MataKuliahCreateWithoutDosensInput;
 }
 
-export interface JurusanUpdateOneRequiredInput {
-  create?: JurusanCreateInput;
-  update?: JurusanUpdateDataInput;
-  upsert?: JurusanUpsertNestedInput;
-  connect?: JurusanWhereUniqueInput;
+export interface ProdiUpdateOneRequiredInput {
+  create?: ProdiCreateInput;
+  update?: ProdiUpdateDataInput;
+  upsert?: ProdiUpsertNestedInput;
+  connect?: ProdiWhereUniqueInput;
+}
+
+export interface MahasiswaUpsertWithWhereUniqueWithoutKelasesInput {
+  where: MahasiswaWhereUniqueInput;
+  update: MahasiswaUpdateWithoutKelasesDataInput;
+  create: MahasiswaCreateWithoutKelasesInput;
+}
+
+export interface ProdiUpdateDataInput {
+  jurusan?: JurusanUpdateOneRequiredWithoutProdisInput;
+  nama?: String;
 }
 
 export interface AdminCreateInput {
@@ -1261,10 +1230,7 @@ export interface DosenWhereInput {
   nama_ends_with?: String;
   nama_not_ends_with?: String;
   user?: UserWhereInput;
-  jurusan?: JurusanWhereInput;
-  prodi_every?: ProdiWhereInput;
-  prodi_some?: ProdiWhereInput;
-  prodi_none?: ProdiWhereInput;
+  prodi?: ProdiWhereInput;
   mataKuliahs_every?: MataKuliahWhereInput;
   mataKuliahs_some?: MataKuliahWhereInput;
   mataKuliahs_none?: MataKuliahWhereInput;
@@ -1362,255 +1328,18 @@ export interface AngkatanWhereInput {
   NOT?: AngkatanWhereInput[] | AngkatanWhereInput;
 }
 
-export interface JurusanCreateOneInput {
-  create?: JurusanCreateInput;
-  connect?: JurusanWhereUniqueInput;
-}
-
-export interface DosenUpdateWithoutMataKuliahsDataInput {
-  nip?: String;
-  nama?: String;
-  user?: UserUpdateOneRequiredWithoutDosenInput;
-  jurusan?: JurusanUpdateOneRequiredInput;
-  prodi?: ProdiUpdateManyInput;
-  kelases?: KelasUpdateManyWithoutDosenInput;
-}
-
-export interface ProdiCreateManyWithoutJurusanInput {
-  create?: ProdiCreateWithoutJurusanInput[] | ProdiCreateWithoutJurusanInput;
-  connect?: ProdiWhereUniqueInput[] | ProdiWhereUniqueInput;
-}
-
-export interface DosenUpdateWithWhereUniqueWithoutMataKuliahsInput {
-  where: DosenWhereUniqueInput;
-  data: DosenUpdateWithoutMataKuliahsDataInput;
-}
-
 export interface ProdiCreateOneInput {
   create?: ProdiCreateInput;
   connect?: ProdiWhereUniqueInput;
 }
 
-export interface JurusanUpsertNestedInput {
-  update: JurusanUpdateDataInput;
-  create: JurusanCreateInput;
+export interface AngkatanUpdateDataInput {
+  nama?: String;
 }
 
 export interface JurusanCreateOneWithoutProdisInput {
   create?: JurusanCreateWithoutProdisInput;
   connect?: JurusanWhereUniqueInput;
-}
-
-export interface ProdiUpdateOneRequiredInput {
-  create?: ProdiCreateInput;
-  update?: ProdiUpdateDataInput;
-  upsert?: ProdiUpsertNestedInput;
-  connect?: ProdiWhereUniqueInput;
-}
-
-export interface KelasCreateManyWithoutMahasiswasInput {
-  create?:
-    | KelasCreateWithoutMahasiswasInput[]
-    | KelasCreateWithoutMahasiswasInput;
-  connect?: KelasWhereUniqueInput[] | KelasWhereUniqueInput;
-}
-
-export interface ProdiUpdateDataInput {
-  jurusan?: JurusanUpdateOneRequiredWithoutProdisInput;
-  nama?: String;
-}
-
-export interface DosenCreateOneWithoutKelasesInput {
-  create?: DosenCreateWithoutKelasesInput;
-  connect?: DosenWhereUniqueInput;
-}
-
-export interface JurusanUpdateOneRequiredWithoutProdisInput {
-  create?: JurusanCreateWithoutProdisInput;
-  update?: JurusanUpdateWithoutProdisDataInput;
-  upsert?: JurusanUpsertWithoutProdisInput;
-  connect?: JurusanWhereUniqueInput;
-}
-
-export interface UserCreateOneWithoutDosenInput {
-  create?: UserCreateWithoutDosenInput;
-  connect?: UserWhereUniqueInput;
-}
-
-export interface JurusanUpdateWithoutProdisDataInput {
-  nama?: String;
-}
-
-export interface AdminCreateOneWithoutUserInput {
-  create?: AdminCreateWithoutUserInput;
-  connect?: AdminWhereUniqueInput;
-}
-
-export interface JurusanUpsertWithoutProdisInput {
-  update: JurusanUpdateWithoutProdisDataInput;
-  create: JurusanCreateWithoutProdisInput;
-}
-
-export interface UserSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: UserWhereInput;
-  AND?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
-  OR?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
-  NOT?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
-}
-
-export interface ProdiUpsertNestedInput {
-  update: ProdiUpdateDataInput;
-  create: ProdiCreateInput;
-}
-
-export interface MataKuliahSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: MataKuliahWhereInput;
-  AND?: MataKuliahSubscriptionWhereInput[] | MataKuliahSubscriptionWhereInput;
-  OR?: MataKuliahSubscriptionWhereInput[] | MataKuliahSubscriptionWhereInput;
-  NOT?: MataKuliahSubscriptionWhereInput[] | MataKuliahSubscriptionWhereInput;
-}
-
-export interface KelasUpdateManyWithoutMahasiswasInput {
-  create?:
-    | KelasCreateWithoutMahasiswasInput[]
-    | KelasCreateWithoutMahasiswasInput;
-  delete?: KelasWhereUniqueInput[] | KelasWhereUniqueInput;
-  connect?: KelasWhereUniqueInput[] | KelasWhereUniqueInput;
-  disconnect?: KelasWhereUniqueInput[] | KelasWhereUniqueInput;
-  update?:
-    | KelasUpdateWithWhereUniqueWithoutMahasiswasInput[]
-    | KelasUpdateWithWhereUniqueWithoutMahasiswasInput;
-  upsert?:
-    | KelasUpsertWithWhereUniqueWithoutMahasiswasInput[]
-    | KelasUpsertWithWhereUniqueWithoutMahasiswasInput;
-}
-
-export interface DosenSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: DosenWhereInput;
-  AND?: DosenSubscriptionWhereInput[] | DosenSubscriptionWhereInput;
-  OR?: DosenSubscriptionWhereInput[] | DosenSubscriptionWhereInput;
-  NOT?: DosenSubscriptionWhereInput[] | DosenSubscriptionWhereInput;
-}
-
-export interface KelasUpdateWithWhereUniqueWithoutMahasiswasInput {
-  where: KelasWhereUniqueInput;
-  data: KelasUpdateWithoutMahasiswasDataInput;
-}
-
-export interface UserUpdateInput {
-  gambar?: String;
-  email?: String;
-  password?: String;
-  passwordKasih?: String;
-  permissions?: UserUpdatepermissionsInput;
-  admin?: AdminUpdateOneWithoutUserInput;
-  mahasiswa?: MahasiswaUpdateOneWithoutUserInput;
-  dosen?: DosenUpdateOneWithoutUserInput;
-  resetToken?: String;
-  resetTokenExpiry?: String;
-}
-
-export interface KelasUpdateWithoutMahasiswasDataInput {
-  jurusan?: JurusanUpdateOneRequiredInput;
-  prodi?: ProdiUpdateOneRequiredInput;
-  dosen?: DosenUpdateOneRequiredWithoutKelasesInput;
-  mataKuliah?: MataKuliahUpdateOneRequiredWithoutKelasesInput;
-  nama?: String;
-}
-
-export type DosenWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-  nip?: String;
-}>;
-
-export interface DosenUpdateOneRequiredWithoutKelasesInput {
-  create?: DosenCreateWithoutKelasesInput;
-  update?: DosenUpdateWithoutKelasesDataInput;
-  upsert?: DosenUpsertWithoutKelasesInput;
-  connect?: DosenWhereUniqueInput;
-}
-
-export type JurusanWhereUniqueInput = AtLeastOne<{
-  id: ID_Input;
-}>;
-
-export interface DosenUpdateWithoutKelasesDataInput {
-  nip?: String;
-  nama?: String;
-  user?: UserUpdateOneRequiredWithoutDosenInput;
-  jurusan?: JurusanUpdateOneRequiredInput;
-  prodi?: ProdiUpdateManyInput;
-  mataKuliahs?: MataKuliahUpdateManyWithoutDosensInput;
-}
-
-export interface DosenUpdateInput {
-  nip?: String;
-  nama?: String;
-  user?: UserUpdateOneRequiredWithoutDosenInput;
-  jurusan?: JurusanUpdateOneRequiredInput;
-  prodi?: ProdiUpdateManyInput;
-  mataKuliahs?: MataKuliahUpdateManyWithoutDosensInput;
-  kelases?: KelasUpdateManyWithoutDosenInput;
-}
-
-export interface UserUpdateOneRequiredWithoutDosenInput {
-  create?: UserCreateWithoutDosenInput;
-  update?: UserUpdateWithoutDosenDataInput;
-  upsert?: UserUpsertWithoutDosenInput;
-  connect?: UserWhereUniqueInput;
-}
-
-export interface UserUpsertWithoutAdminInput {
-  update: UserUpdateWithoutAdminDataInput;
-  create: UserCreateWithoutAdminInput;
-}
-
-export interface UserUpdateWithoutDosenDataInput {
-  gambar?: String;
-  email?: String;
-  password?: String;
-  passwordKasih?: String;
-  permissions?: UserUpdatepermissionsInput;
-  admin?: AdminUpdateOneWithoutUserInput;
-  mahasiswa?: MahasiswaUpdateOneWithoutUserInput;
-  resetToken?: String;
-  resetTokenExpiry?: String;
-}
-
-export interface DosenUpsertWithoutKelasesInput {
-  update: DosenUpdateWithoutKelasesDataInput;
-  create: DosenCreateWithoutKelasesInput;
-}
-
-export interface AdminUpdateOneWithoutUserInput {
-  create?: AdminCreateWithoutUserInput;
-  update?: AdminUpdateWithoutUserDataInput;
-  upsert?: AdminUpsertWithoutUserInput;
-  delete?: Boolean;
-  disconnect?: Boolean;
-  connect?: AdminWhereUniqueInput;
-}
-
-export interface MahasiswaUpsertWithWhereUniqueWithoutKelasesInput {
-  where: MahasiswaWhereUniqueInput;
-  update: MahasiswaUpdateWithoutKelasesDataInput;
-  create: MahasiswaCreateWithoutKelasesInput;
-}
-
-export interface AdminUpdateWithoutUserDataInput {
-  nama?: String;
 }
 
 export interface AngkatanUpdateOneRequiredInput {
@@ -1620,219 +1349,55 @@ export interface AngkatanUpdateOneRequiredInput {
   connect?: AngkatanWhereUniqueInput;
 }
 
-export interface AdminUpsertWithoutUserInput {
-  update: AdminUpdateWithoutUserDataInput;
-  create: AdminCreateWithoutUserInput;
-}
-
-export interface KelasUpsertWithWhereUniqueWithoutDosenInput {
-  where: KelasWhereUniqueInput;
-  update: KelasUpdateWithoutDosenDataInput;
-  create: KelasCreateWithoutDosenInput;
-}
-
-export interface UserUpsertWithoutDosenInput {
-  update: UserUpdateWithoutDosenDataInput;
-  create: UserCreateWithoutDosenInput;
-}
-
-export interface UserCreateOneWithoutAdminInput {
-  create?: UserCreateWithoutAdminInput;
-  connect?: UserWhereUniqueInput;
-}
-
-export interface ProdiUpdateManyInput {
-  create?: ProdiCreateInput[] | ProdiCreateInput;
-  delete?: ProdiWhereUniqueInput[] | ProdiWhereUniqueInput;
-  connect?: ProdiWhereUniqueInput[] | ProdiWhereUniqueInput;
-  disconnect?: ProdiWhereUniqueInput[] | ProdiWhereUniqueInput;
-  update?:
-    | ProdiUpdateWithWhereUniqueNestedInput[]
-    | ProdiUpdateWithWhereUniqueNestedInput;
-  upsert?:
-    | ProdiUpsertWithWhereUniqueNestedInput[]
-    | ProdiUpsertWithWhereUniqueNestedInput;
-}
-
-export interface MahasiswaCreateWithoutUserInput {
-  nim: String;
-  nama: String;
-  jurusan: JurusanCreateOneInput;
-  prodi: ProdiCreateOneInput;
-  kelases?: KelasCreateManyWithoutMahasiswasInput;
-  angkatan: AngkatanCreateOneInput;
-}
-
-export interface ProdiUpdateWithWhereUniqueNestedInput {
-  where: ProdiWhereUniqueInput;
-  data: ProdiUpdateDataInput;
-}
-
-export interface ProdiCreateWithoutJurusanInput {
-  nama: String;
-}
-
-export interface ProdiUpsertWithWhereUniqueNestedInput {
-  where: ProdiWhereUniqueInput;
-  update: ProdiUpdateDataInput;
-  create: ProdiCreateInput;
-}
-
-export interface JurusanCreateWithoutProdisInput {
-  nama: String;
-}
-
-export interface MataKuliahUpdateManyWithoutDosensInput {
+export interface KelasCreateManyWithoutMahasiswasInput {
   create?:
-    | MataKuliahCreateWithoutDosensInput[]
-    | MataKuliahCreateWithoutDosensInput;
-  delete?: MataKuliahWhereUniqueInput[] | MataKuliahWhereUniqueInput;
-  connect?: MataKuliahWhereUniqueInput[] | MataKuliahWhereUniqueInput;
-  disconnect?: MataKuliahWhereUniqueInput[] | MataKuliahWhereUniqueInput;
-  update?:
-    | MataKuliahUpdateWithWhereUniqueWithoutDosensInput[]
-    | MataKuliahUpdateWithWhereUniqueWithoutDosensInput;
-  upsert?:
-    | MataKuliahUpsertWithWhereUniqueWithoutDosensInput[]
-    | MataKuliahUpsertWithWhereUniqueWithoutDosensInput;
-}
-
-export interface DosenCreateWithoutKelasesInput {
-  nip: String;
-  nama: String;
-  user: UserCreateOneWithoutDosenInput;
-  jurusan: JurusanCreateOneInput;
-  prodi?: ProdiCreateManyInput;
-  mataKuliahs?: MataKuliahCreateManyWithoutDosensInput;
-}
-
-export interface MataKuliahUpdateWithWhereUniqueWithoutDosensInput {
-  where: MataKuliahWhereUniqueInput;
-  data: MataKuliahUpdateWithoutDosensDataInput;
-}
-
-export interface AdminCreateWithoutUserInput {
-  nama: String;
-}
-
-export interface MataKuliahUpdateWithoutDosensDataInput {
-  kode?: String;
-  nama?: String;
-  jurusan?: JurusanUpdateOneRequiredInput;
-  prodi?: ProdiUpdateOneRequiredInput;
-  kelases?: KelasUpdateManyWithoutMataKuliahInput;
-}
-
-export interface KelasSubscriptionWhereInput {
-  mutation_in?: MutationType[] | MutationType;
-  updatedFields_contains?: String;
-  updatedFields_contains_every?: String[] | String;
-  updatedFields_contains_some?: String[] | String;
-  node?: KelasWhereInput;
-  AND?: KelasSubscriptionWhereInput[] | KelasSubscriptionWhereInput;
-  OR?: KelasSubscriptionWhereInput[] | KelasSubscriptionWhereInput;
-  NOT?: KelasSubscriptionWhereInput[] | KelasSubscriptionWhereInput;
-}
-
-export interface KelasUpdateManyWithoutMataKuliahInput {
-  create?:
-    | KelasCreateWithoutMataKuliahInput[]
-    | KelasCreateWithoutMataKuliahInput;
-  delete?: KelasWhereUniqueInput[] | KelasWhereUniqueInput;
+    | KelasCreateWithoutMahasiswasInput[]
+    | KelasCreateWithoutMahasiswasInput;
   connect?: KelasWhereUniqueInput[] | KelasWhereUniqueInput;
-  disconnect?: KelasWhereUniqueInput[] | KelasWhereUniqueInput;
-  update?:
-    | KelasUpdateWithWhereUniqueWithoutMataKuliahInput[]
-    | KelasUpdateWithWhereUniqueWithoutMataKuliahInput;
-  upsert?:
-    | KelasUpsertWithWhereUniqueWithoutMataKuliahInput[]
-    | KelasUpsertWithWhereUniqueWithoutMataKuliahInput;
 }
 
-export interface ProdiUpdateInput {
-  jurusan?: JurusanUpdateOneRequiredWithoutProdisInput;
-  nama?: String;
-}
-
-export interface KelasUpdateWithWhereUniqueWithoutMataKuliahInput {
+export interface KelasUpdateWithWhereUniqueWithoutMahasiswasInput {
   where: KelasWhereUniqueInput;
-  data: KelasUpdateWithoutMataKuliahDataInput;
+  data: KelasUpdateWithoutMahasiswasDataInput;
 }
 
-export interface KelasCreateInput {
-  jurusan: JurusanCreateOneInput;
-  prodi: ProdiCreateOneInput;
-  dosen: DosenCreateOneWithoutKelasesInput;
-  mataKuliah: MataKuliahCreateOneWithoutKelasesInput;
-  nama: String;
-  mahasiswas?: MahasiswaCreateManyWithoutKelasesInput;
+export interface DosenCreateOneWithoutKelasesInput {
+  create?: DosenCreateWithoutKelasesInput;
+  connect?: DosenWhereUniqueInput;
 }
 
-export interface KelasUpdateWithoutMataKuliahDataInput {
-  jurusan?: JurusanUpdateOneRequiredInput;
+export interface KelasUpdateWithoutMahasiswasDataInput {
   prodi?: ProdiUpdateOneRequiredInput;
-  dosen?: DosenUpdateOneRequiredWithoutKelasesInput;
+  dosen?: DosenUpdateOneWithoutKelasesInput;
+  mataKuliah?: MataKuliahUpdateOneWithoutKelasesInput;
   nama?: String;
-  mahasiswas?: MahasiswaUpdateManyWithoutKelasesInput;
 }
 
-export interface MahasiswaUpsertWithoutUserInput {
-  update: MahasiswaUpdateWithoutUserDataInput;
-  create: MahasiswaCreateWithoutUserInput;
-}
-
-export interface MahasiswaUpdateManyWithoutKelasesInput {
-  create?:
-    | MahasiswaCreateWithoutKelasesInput[]
-    | MahasiswaCreateWithoutKelasesInput;
-  delete?: MahasiswaWhereUniqueInput[] | MahasiswaWhereUniqueInput;
-  connect?: MahasiswaWhereUniqueInput[] | MahasiswaWhereUniqueInput;
-  disconnect?: MahasiswaWhereUniqueInput[] | MahasiswaWhereUniqueInput;
-  update?:
-    | MahasiswaUpdateWithWhereUniqueWithoutKelasesInput[]
-    | MahasiswaUpdateWithWhereUniqueWithoutKelasesInput;
-  upsert?:
-    | MahasiswaUpsertWithWhereUniqueWithoutKelasesInput[]
-    | MahasiswaUpsertWithWhereUniqueWithoutKelasesInput;
-}
-
-export interface AngkatanUpsertNestedInput {
-  update: AngkatanUpdateDataInput;
-  create: AngkatanCreateInput;
-}
-
-export interface MahasiswaUpdateWithWhereUniqueWithoutKelasesInput {
-  where: MahasiswaWhereUniqueInput;
-  data: MahasiswaUpdateWithoutKelasesDataInput;
-}
-
-export interface JurusanCreateInput {
-  nama: String;
-  prodis?: ProdiCreateManyWithoutJurusanInput;
-}
-
-export interface MahasiswaUpdateWithoutKelasesDataInput {
-  nim?: String;
-  nama?: String;
-  jurusan?: JurusanUpdateOneRequiredInput;
-  prodi?: ProdiUpdateOneRequiredInput;
-  user?: UserUpdateOneRequiredWithoutMahasiswaInput;
-  angkatan?: AngkatanUpdateOneRequiredInput;
-}
-
-export interface KelasCreateWithoutMahasiswasInput {
-  jurusan: JurusanCreateOneInput;
-  prodi: ProdiCreateOneInput;
-  dosen: DosenCreateOneWithoutKelasesInput;
-  mataKuliah: MataKuliahCreateOneWithoutKelasesInput;
-  nama: String;
-}
-
-export interface UserUpdateOneRequiredWithoutMahasiswaInput {
-  create?: UserCreateWithoutMahasiswaInput;
-  update?: UserUpdateWithoutMahasiswaDataInput;
-  upsert?: UserUpsertWithoutMahasiswaInput;
+export interface UserCreateOneWithoutDosenInput {
+  create?: UserCreateWithoutDosenInput;
   connect?: UserWhereUniqueInput;
+}
+
+export interface DosenUpdateOneWithoutKelasesInput {
+  create?: DosenCreateWithoutKelasesInput;
+  update?: DosenUpdateWithoutKelasesDataInput;
+  upsert?: DosenUpsertWithoutKelasesInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: DosenWhereUniqueInput;
+}
+
+export interface AdminCreateOneWithoutUserInput {
+  create?: AdminCreateWithoutUserInput;
+  connect?: AdminWhereUniqueInput;
+}
+
+export interface DosenUpdateWithoutKelasesDataInput {
+  nip?: String;
+  nama?: String;
+  user?: UserUpdateOneRequiredWithoutDosenInput;
+  prodi?: ProdiUpdateOneRequiredInput;
+  mataKuliahs?: MataKuliahUpdateManyWithoutDosensInput;
 }
 
 export interface JurusanWhereInput {
@@ -1872,6 +1437,240 @@ export interface JurusanWhereInput {
   NOT?: JurusanWhereInput[] | JurusanWhereInput;
 }
 
+export interface UserUpdateOneRequiredWithoutDosenInput {
+  create?: UserCreateWithoutDosenInput;
+  update?: UserUpdateWithoutDosenDataInput;
+  upsert?: UserUpsertWithoutDosenInput;
+  connect?: UserWhereUniqueInput;
+}
+
+export interface MataKuliahSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: MataKuliahWhereInput;
+  AND?: MataKuliahSubscriptionWhereInput[] | MataKuliahSubscriptionWhereInput;
+  OR?: MataKuliahSubscriptionWhereInput[] | MataKuliahSubscriptionWhereInput;
+  NOT?: MataKuliahSubscriptionWhereInput[] | MataKuliahSubscriptionWhereInput;
+}
+
+export interface UserUpdateWithoutDosenDataInput {
+  gambar?: String;
+  email?: String;
+  password?: String;
+  passwordKasih?: String;
+  permissions?: UserUpdatepermissionsInput;
+  admin?: AdminUpdateOneWithoutUserInput;
+  mahasiswa?: MahasiswaUpdateOneWithoutUserInput;
+  resetToken?: String;
+  resetTokenExpiry?: String;
+}
+
+export interface DosenSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: DosenWhereInput;
+  AND?: DosenSubscriptionWhereInput[] | DosenSubscriptionWhereInput;
+  OR?: DosenSubscriptionWhereInput[] | DosenSubscriptionWhereInput;
+  NOT?: DosenSubscriptionWhereInput[] | DosenSubscriptionWhereInput;
+}
+
+export interface AdminUpdateOneWithoutUserInput {
+  create?: AdminCreateWithoutUserInput;
+  update?: AdminUpdateWithoutUserDataInput;
+  upsert?: AdminUpsertWithoutUserInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: AdminWhereUniqueInput;
+}
+
+export interface UserUpdateInput {
+  gambar?: String;
+  email?: String;
+  password?: String;
+  passwordKasih?: String;
+  permissions?: UserUpdatepermissionsInput;
+  admin?: AdminUpdateOneWithoutUserInput;
+  mahasiswa?: MahasiswaUpdateOneWithoutUserInput;
+  dosen?: DosenUpdateOneWithoutUserInput;
+  resetToken?: String;
+  resetTokenExpiry?: String;
+}
+
+export interface AdminUpdateWithoutUserDataInput {
+  nama?: String;
+}
+
+export type DosenWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+  nip?: String;
+}>;
+
+export interface AdminUpsertWithoutUserInput {
+  update: AdminUpdateWithoutUserDataInput;
+  create: AdminCreateWithoutUserInput;
+}
+
+export type JurusanWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
+
+export interface UserUpsertWithoutDosenInput {
+  update: UserUpdateWithoutDosenDataInput;
+  create: UserCreateWithoutDosenInput;
+}
+
+export interface ProdiUpdateWithoutJurusanDataInput {
+  nama?: String;
+}
+
+export interface MataKuliahUpdateManyWithoutDosensInput {
+  create?:
+    | MataKuliahCreateWithoutDosensInput[]
+    | MataKuliahCreateWithoutDosensInput;
+  delete?: MataKuliahWhereUniqueInput[] | MataKuliahWhereUniqueInput;
+  connect?: MataKuliahWhereUniqueInput[] | MataKuliahWhereUniqueInput;
+  disconnect?: MataKuliahWhereUniqueInput[] | MataKuliahWhereUniqueInput;
+  update?:
+    | MataKuliahUpdateWithWhereUniqueWithoutDosensInput[]
+    | MataKuliahUpdateWithWhereUniqueWithoutDosensInput;
+  upsert?:
+    | MataKuliahUpsertWithWhereUniqueWithoutDosensInput[]
+    | MataKuliahUpsertWithWhereUniqueWithoutDosensInput;
+}
+
+export interface JurusanUpdateInput {
+  nama?: String;
+  prodis?: ProdiUpdateManyWithoutJurusanInput;
+}
+
+export interface MataKuliahUpdateWithWhereUniqueWithoutDosensInput {
+  where: MataKuliahWhereUniqueInput;
+  data: MataKuliahUpdateWithoutDosensDataInput;
+}
+
+export interface JurusanCreateInput {
+  nama: String;
+  prodis?: ProdiCreateManyWithoutJurusanInput;
+}
+
+export interface MataKuliahUpdateWithoutDosensDataInput {
+  kode?: String;
+  nama?: String;
+  prodi?: ProdiUpdateOneRequiredInput;
+  kelases?: KelasUpdateManyWithoutMataKuliahInput;
+}
+
+export interface AngkatanUpdateInput {
+  nama?: String;
+}
+
+export interface KelasUpdateManyWithoutMataKuliahInput {
+  create?:
+    | KelasCreateWithoutMataKuliahInput[]
+    | KelasCreateWithoutMataKuliahInput;
+  delete?: KelasWhereUniqueInput[] | KelasWhereUniqueInput;
+  connect?: KelasWhereUniqueInput[] | KelasWhereUniqueInput;
+  disconnect?: KelasWhereUniqueInput[] | KelasWhereUniqueInput;
+  update?:
+    | KelasUpdateWithWhereUniqueWithoutMataKuliahInput[]
+    | KelasUpdateWithWhereUniqueWithoutMataKuliahInput;
+  upsert?:
+    | KelasUpsertWithWhereUniqueWithoutMataKuliahInput[]
+    | KelasUpsertWithWhereUniqueWithoutMataKuliahInput;
+}
+
+export interface KelasUpsertWithWhereUniqueWithoutMahasiswasInput {
+  where: KelasWhereUniqueInput;
+  update: KelasUpdateWithoutMahasiswasDataInput;
+  create: KelasCreateWithoutMahasiswasInput;
+}
+
+export interface KelasUpdateWithWhereUniqueWithoutMataKuliahInput {
+  where: KelasWhereUniqueInput;
+  data: KelasUpdateWithoutMataKuliahDataInput;
+}
+
+export interface KelasUpsertWithWhereUniqueWithoutMataKuliahInput {
+  where: KelasWhereUniqueInput;
+  update: KelasUpdateWithoutMataKuliahDataInput;
+  create: KelasCreateWithoutMataKuliahInput;
+}
+
+export interface KelasUpdateWithoutMataKuliahDataInput {
+  prodi?: ProdiUpdateOneRequiredInput;
+  dosen?: DosenUpdateOneWithoutKelasesInput;
+  nama?: String;
+  mahasiswas?: MahasiswaUpdateManyWithoutKelasesInput;
+}
+
+export interface UserCreateOneWithoutAdminInput {
+  create?: UserCreateWithoutAdminInput;
+  connect?: UserWhereUniqueInput;
+}
+
+export interface MahasiswaUpdateManyWithoutKelasesInput {
+  create?:
+    | MahasiswaCreateWithoutKelasesInput[]
+    | MahasiswaCreateWithoutKelasesInput;
+  delete?: MahasiswaWhereUniqueInput[] | MahasiswaWhereUniqueInput;
+  connect?: MahasiswaWhereUniqueInput[] | MahasiswaWhereUniqueInput;
+  disconnect?: MahasiswaWhereUniqueInput[] | MahasiswaWhereUniqueInput;
+  update?:
+    | MahasiswaUpdateWithWhereUniqueWithoutKelasesInput[]
+    | MahasiswaUpdateWithWhereUniqueWithoutKelasesInput;
+  upsert?:
+    | MahasiswaUpsertWithWhereUniqueWithoutKelasesInput[]
+    | MahasiswaUpsertWithWhereUniqueWithoutKelasesInput;
+}
+
+export interface MahasiswaCreateWithoutUserInput {
+  nim: String;
+  nama: String;
+  prodi: ProdiCreateOneInput;
+  kelases?: KelasCreateManyWithoutMahasiswasInput;
+  angkatan: AngkatanCreateOneInput;
+}
+
+export interface MahasiswaUpdateWithWhereUniqueWithoutKelasesInput {
+  where: MahasiswaWhereUniqueInput;
+  data: MahasiswaUpdateWithoutKelasesDataInput;
+}
+
+export interface JurusanCreateWithoutProdisInput {
+  nama: String;
+}
+
+export interface MahasiswaUpdateWithoutKelasesDataInput {
+  nim?: String;
+  nama?: String;
+  prodi?: ProdiUpdateOneRequiredInput;
+  user?: UserUpdateOneRequiredWithoutMahasiswaInput;
+  angkatan?: AngkatanUpdateOneRequiredInput;
+}
+
+export interface DosenCreateWithoutKelasesInput {
+  nip: String;
+  nama: String;
+  user: UserCreateOneWithoutDosenInput;
+  prodi: ProdiCreateOneInput;
+  mataKuliahs?: MataKuliahCreateManyWithoutDosensInput;
+}
+
+export interface UserUpdateOneRequiredWithoutMahasiswaInput {
+  create?: UserCreateWithoutMahasiswaInput;
+  update?: UserUpdateWithoutMahasiswaDataInput;
+  upsert?: UserUpsertWithoutMahasiswaInput;
+  connect?: UserWhereUniqueInput;
+}
+
+export interface AdminCreateWithoutUserInput {
+  nama: String;
+}
+
 export interface UserUpdateWithoutMahasiswaDataInput {
   gambar?: String;
   email?: String;
@@ -1884,14 +1683,15 @@ export interface UserUpdateWithoutMahasiswaDataInput {
   resetTokenExpiry?: String;
 }
 
-export interface MahasiswaUpdateInput {
-  nim?: String;
-  nama?: String;
-  jurusan?: JurusanUpdateOneRequiredInput;
-  prodi?: ProdiUpdateOneRequiredInput;
-  user?: UserUpdateOneRequiredWithoutMahasiswaInput;
-  kelases?: KelasUpdateManyWithoutMahasiswasInput;
-  angkatan?: AngkatanUpdateOneRequiredInput;
+export interface KelasSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: KelasWhereInput;
+  AND?: KelasSubscriptionWhereInput[] | KelasSubscriptionWhereInput;
+  OR?: KelasSubscriptionWhereInput[] | KelasSubscriptionWhereInput;
+  NOT?: KelasSubscriptionWhereInput[] | KelasSubscriptionWhereInput;
 }
 
 export interface DosenUpdateOneWithoutUserInput {
@@ -1903,23 +1703,25 @@ export interface DosenUpdateOneWithoutUserInput {
   connect?: DosenWhereUniqueInput;
 }
 
-export interface MataKuliahUpsertWithWhereUniqueWithoutDosensInput {
-  where: MataKuliahWhereUniqueInput;
-  update: MataKuliahUpdateWithoutDosensDataInput;
-  create: MataKuliahCreateWithoutDosensInput;
+export interface ProdiUpdateInput {
+  jurusan?: JurusanUpdateOneRequiredWithoutProdisInput;
+  nama?: String;
 }
 
 export interface DosenUpdateWithoutUserDataInput {
   nip?: String;
   nama?: String;
-  jurusan?: JurusanUpdateOneRequiredInput;
-  prodi?: ProdiUpdateManyInput;
+  prodi?: ProdiUpdateOneRequiredInput;
   mataKuliahs?: MataKuliahUpdateManyWithoutDosensInput;
   kelases?: KelasUpdateManyWithoutDosenInput;
 }
 
-export interface UserCreatepermissionsInput {
-  set?: Permission[] | Permission;
+export interface KelasCreateInput {
+  prodi: ProdiCreateOneInput;
+  dosen?: DosenCreateOneWithoutKelasesInput;
+  mataKuliah?: MataKuliahCreateOneWithoutKelasesInput;
+  nama: String;
+  mahasiswas?: MahasiswaCreateManyWithoutKelasesInput;
 }
 
 export interface KelasUpdateManyWithoutDosenInput {
@@ -1933,6 +1735,41 @@ export interface KelasUpdateManyWithoutDosenInput {
   upsert?:
     | KelasUpsertWithWhereUniqueWithoutDosenInput[]
     | KelasUpsertWithWhereUniqueWithoutDosenInput;
+}
+
+export interface ProdiCreateWithoutJurusanInput {
+  nama: String;
+}
+
+export interface KelasUpdateWithWhereUniqueWithoutDosenInput {
+  where: KelasWhereUniqueInput;
+  data: KelasUpdateWithoutDosenDataInput;
+}
+
+export interface UserUpsertWithoutAdminInput {
+  update: UserUpdateWithoutAdminDataInput;
+  create: UserCreateWithoutAdminInput;
+}
+
+export interface KelasUpdateWithoutDosenDataInput {
+  prodi?: ProdiUpdateOneRequiredInput;
+  mataKuliah?: MataKuliahUpdateOneWithoutKelasesInput;
+  nama?: String;
+  mahasiswas?: MahasiswaUpdateManyWithoutKelasesInput;
+}
+
+export interface ProdiCreateInput {
+  jurusan: JurusanCreateOneWithoutProdisInput;
+  nama: String;
+}
+
+export interface MataKuliahUpdateOneWithoutKelasesInput {
+  create?: MataKuliahCreateWithoutKelasesInput;
+  update?: MataKuliahUpdateWithoutKelasesDataInput;
+  upsert?: MataKuliahUpsertWithoutKelasesInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: MataKuliahWhereUniqueInput;
 }
 
 export interface UserCreateWithoutDosenInput {
@@ -1950,29 +1787,8 @@ export interface UserCreateWithoutDosenInput {
 export interface MataKuliahUpdateWithoutKelasesDataInput {
   kode?: String;
   nama?: String;
-  jurusan?: JurusanUpdateOneRequiredInput;
   prodi?: ProdiUpdateOneRequiredInput;
   dosens?: DosenUpdateManyWithoutMataKuliahsInput;
-}
-
-export interface MataKuliahUpdateOneRequiredWithoutKelasesInput {
-  create?: MataKuliahCreateWithoutKelasesInput;
-  update?: MataKuliahUpdateWithoutKelasesDataInput;
-  upsert?: MataKuliahUpsertWithoutKelasesInput;
-  connect?: MataKuliahWhereUniqueInput;
-}
-
-export interface KelasUpdateWithoutDosenDataInput {
-  jurusan?: JurusanUpdateOneRequiredInput;
-  prodi?: ProdiUpdateOneRequiredInput;
-  mataKuliah?: MataKuliahUpdateOneRequiredWithoutKelasesInput;
-  nama?: String;
-  mahasiswas?: MahasiswaUpdateManyWithoutKelasesInput;
-}
-
-export interface KelasUpdateWithWhereUniqueWithoutDosenInput {
-  where: KelasWhereUniqueInput;
-  data: KelasUpdateWithoutDosenDataInput;
 }
 
 export interface AdminSubscriptionWhereInput {
@@ -1986,24 +1802,128 @@ export interface AdminSubscriptionWhereInput {
   NOT?: AdminSubscriptionWhereInput[] | AdminSubscriptionWhereInput;
 }
 
-export interface ProdiCreateInput {
-  jurusan: JurusanCreateOneWithoutProdisInput;
+export interface DosenUpdateManyWithoutMataKuliahsInput {
+  create?:
+    | DosenCreateWithoutMataKuliahsInput[]
+    | DosenCreateWithoutMataKuliahsInput;
+  delete?: DosenWhereUniqueInput[] | DosenWhereUniqueInput;
+  connect?: DosenWhereUniqueInput[] | DosenWhereUniqueInput;
+  disconnect?: DosenWhereUniqueInput[] | DosenWhereUniqueInput;
+  update?:
+    | DosenUpdateWithWhereUniqueWithoutMataKuliahsInput[]
+    | DosenUpdateWithWhereUniqueWithoutMataKuliahsInput;
+  upsert?:
+    | DosenUpsertWithWhereUniqueWithoutMataKuliahsInput[]
+    | DosenUpsertWithWhereUniqueWithoutMataKuliahsInput;
+}
+
+export interface ProdiUpdateWithWhereUniqueWithoutJurusanInput {
+  where: ProdiWhereUniqueInput;
+  data: ProdiUpdateWithoutJurusanDataInput;
+}
+
+export interface DosenUpdateWithWhereUniqueWithoutMataKuliahsInput {
+  where: DosenWhereUniqueInput;
+  data: DosenUpdateWithoutMataKuliahsDataInput;
+}
+
+export interface DosenUpsertWithoutKelasesInput {
+  update: DosenUpdateWithoutKelasesDataInput;
+  create: DosenCreateWithoutKelasesInput;
+}
+
+export interface DosenUpdateWithoutMataKuliahsDataInput {
+  nip?: String;
+  nama?: String;
+  user?: UserUpdateOneRequiredWithoutDosenInput;
+  prodi?: ProdiUpdateOneRequiredInput;
+  kelases?: KelasUpdateManyWithoutDosenInput;
+}
+
+export interface KelasCreateWithoutMahasiswasInput {
+  prodi: ProdiCreateOneInput;
+  dosen?: DosenCreateOneWithoutKelasesInput;
+  mataKuliah?: MataKuliahCreateOneWithoutKelasesInput;
   nama: String;
 }
 
-export interface UserUpsertWithoutMahasiswaInput {
-  update: UserUpdateWithoutMahasiswaDataInput;
-  create: UserCreateWithoutMahasiswaInput;
+export interface DosenUpsertWithoutUserInput {
+  update: DosenUpdateWithoutUserDataInput;
+  create: DosenCreateWithoutUserInput;
 }
 
-export interface DosenCreateInput {
-  nip: String;
-  nama: String;
-  user: UserCreateOneWithoutDosenInput;
-  jurusan: JurusanCreateOneInput;
-  prodi?: ProdiCreateManyInput;
-  mataKuliahs?: MataKuliahCreateManyWithoutDosensInput;
-  kelases?: KelasCreateManyWithoutDosenInput;
+export interface KelasUpsertWithWhereUniqueWithoutDosenInput {
+  where: KelasWhereUniqueInput;
+  update: KelasUpdateWithoutDosenDataInput;
+  create: KelasCreateWithoutDosenInput;
+}
+
+export interface MataKuliahUpsertWithoutKelasesInput {
+  update: MataKuliahUpdateWithoutKelasesDataInput;
+  create: MataKuliahCreateWithoutKelasesInput;
+}
+
+export interface DosenUpsertWithWhereUniqueWithoutMataKuliahsInput {
+  where: DosenWhereUniqueInput;
+  update: DosenUpdateWithoutMataKuliahsDataInput;
+  create: DosenCreateWithoutMataKuliahsInput;
+}
+
+export interface ProdiWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  jurusan?: JurusanWhereInput;
+  nama?: String;
+  nama_not?: String;
+  nama_in?: String[] | String;
+  nama_not_in?: String[] | String;
+  nama_lt?: String;
+  nama_lte?: String;
+  nama_gt?: String;
+  nama_gte?: String;
+  nama_contains?: String;
+  nama_not_contains?: String;
+  nama_starts_with?: String;
+  nama_not_starts_with?: String;
+  nama_ends_with?: String;
+  nama_not_ends_with?: String;
+  AND?: ProdiWhereInput[] | ProdiWhereInput;
+  OR?: ProdiWhereInput[] | ProdiWhereInput;
+  NOT?: ProdiWhereInput[] | ProdiWhereInput;
+}
+
+export interface UserCreatepermissionsInput {
+  set?: Permission[] | Permission;
+}
+
+export interface DosenUpdateInput {
+  nip?: String;
+  nama?: String;
+  user?: UserUpdateOneRequiredWithoutDosenInput;
+  prodi?: ProdiUpdateOneRequiredInput;
+  mataKuliahs?: MataKuliahUpdateManyWithoutDosensInput;
+  kelases?: KelasUpdateManyWithoutDosenInput;
+}
+
+export interface MahasiswaUpdateInput {
+  nim?: String;
+  nama?: String;
+  prodi?: ProdiUpdateOneRequiredInput;
+  user?: UserUpdateOneRequiredWithoutMahasiswaInput;
+  kelases?: KelasUpdateManyWithoutMahasiswasInput;
+  angkatan?: AngkatanUpdateOneRequiredInput;
 }
 
 export interface NodeNode {
@@ -2072,7 +1992,6 @@ export interface KelasNode {
 
 export interface Kelas extends Promise<KelasNode>, Fragmentable {
   id: () => Promise<ID_Output>;
-  jurusan: <T = Jurusan>() => T;
   prodi: <T = Prodi>() => T;
   dosen: <T = Dosen>() => T;
   mataKuliah: <T = MataKuliah>() => T;
@@ -2092,7 +2011,6 @@ export interface KelasSubscription
   extends Promise<AsyncIterator<KelasNode>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
-  jurusan: <T = JurusanSubscription>() => T;
   prodi: <T = ProdiSubscription>() => T;
   dosen: <T = DosenSubscription>() => T;
   mataKuliah: <T = MataKuliahSubscription>() => T;
@@ -2120,7 +2038,6 @@ export interface Mahasiswa extends Promise<MahasiswaNode>, Fragmentable {
   id: () => Promise<ID_Output>;
   nim: () => Promise<String>;
   nama: () => Promise<String>;
-  jurusan: <T = Jurusan>() => T;
   prodi: <T = Prodi>() => T;
   user: <T = User>() => T;
   kelases: <T = Promise<Array<KelasNode>>>(args?: {
@@ -2141,7 +2058,6 @@ export interface MahasiswaSubscription
   id: () => Promise<AsyncIterator<ID_Output>>;
   nim: () => Promise<AsyncIterator<String>>;
   nama: () => Promise<AsyncIterator<String>>;
-  jurusan: <T = JurusanSubscription>() => T;
   prodi: <T = ProdiSubscription>() => T;
   user: <T = UserSubscription>() => T;
   kelases: <T = Promise<AsyncIterator<Array<KelasSubscription>>>>(args?: {
@@ -2167,16 +2083,7 @@ export interface Dosen extends Promise<DosenNode>, Fragmentable {
   nip: () => Promise<String>;
   nama: () => Promise<String>;
   user: <T = User>() => T;
-  jurusan: <T = Jurusan>() => T;
-  prodi: <T = Promise<Array<ProdiNode>>>(args?: {
-    where?: ProdiWhereInput;
-    orderBy?: ProdiOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => T;
+  prodi: <T = Prodi>() => T;
   mataKuliahs: <T = Promise<Array<MataKuliahNode>>>(args?: {
     where?: MataKuliahWhereInput;
     orderBy?: MataKuliahOrderByInput;
@@ -2204,16 +2111,7 @@ export interface DosenSubscription
   nip: () => Promise<AsyncIterator<String>>;
   nama: () => Promise<AsyncIterator<String>>;
   user: <T = UserSubscription>() => T;
-  jurusan: <T = JurusanSubscription>() => T;
-  prodi: <T = Promise<AsyncIterator<Array<ProdiSubscription>>>>(args?: {
-    where?: ProdiWhereInput;
-    orderBy?: ProdiOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => T;
+  prodi: <T = ProdiSubscription>() => T;
   mataKuliahs: <
     T = Promise<AsyncIterator<Array<MataKuliahSubscription>>>
   >(args?: {
@@ -2401,22 +2299,27 @@ export interface AdminSubscriptionPayloadSubscription
   previousValues: <T = AdminPreviousValuesSubscription>() => T;
 }
 
-export interface MataKuliahEdgeNode {
-  cursor: String;
+export interface UserSubscriptionPayloadNode {
+  mutation: MutationType;
+  updatedFields?: String[];
 }
 
-export interface MataKuliahEdge
-  extends Promise<MataKuliahEdgeNode>,
+export interface UserSubscriptionPayload
+  extends Promise<UserSubscriptionPayloadNode>,
     Fragmentable {
-  node: <T = MataKuliah>() => T;
-  cursor: () => Promise<String>;
+  mutation: () => Promise<MutationType>;
+  node: <T = User>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = UserPreviousValues>() => T;
 }
 
-export interface MataKuliahEdgeSubscription
-  extends Promise<AsyncIterator<MataKuliahEdgeNode>>,
+export interface UserSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<UserSubscriptionPayloadNode>>,
     Fragmentable {
-  node: <T = MataKuliahSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = UserSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = UserPreviousValuesSubscription>() => T;
 }
 
 export interface AdminPreviousValuesNode {
@@ -2438,20 +2341,22 @@ export interface AdminPreviousValuesSubscription
   nama: () => Promise<AsyncIterator<String>>;
 }
 
-export interface AggregateMahasiswaNode {
-  count: Int;
+export interface MataKuliahEdgeNode {
+  cursor: String;
 }
 
-export interface AggregateMahasiswa
-  extends Promise<AggregateMahasiswaNode>,
+export interface MataKuliahEdge
+  extends Promise<MataKuliahEdgeNode>,
     Fragmentable {
-  count: () => Promise<Int>;
+  node: <T = MataKuliah>() => T;
+  cursor: () => Promise<String>;
 }
 
-export interface AggregateMahasiswaSubscription
-  extends Promise<AsyncIterator<AggregateMahasiswaNode>>,
+export interface MataKuliahEdgeSubscription
+  extends Promise<AsyncIterator<MataKuliahEdgeNode>>,
     Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
+  node: <T = MataKuliahSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
 }
 
 export interface AdminEdgeNode {
@@ -2470,22 +2375,20 @@ export interface AdminEdgeSubscription
   cursor: () => Promise<AsyncIterator<String>>;
 }
 
-export interface MahasiswaConnectionNode {}
-
-export interface MahasiswaConnection
-  extends Promise<MahasiswaConnectionNode>,
-    Fragmentable {
-  pageInfo: <T = PageInfo>() => T;
-  edges: <T = Promise<Array<MahasiswaEdgeNode>>>() => T;
-  aggregate: <T = AggregateMahasiswa>() => T;
+export interface AggregateMahasiswaNode {
+  count: Int;
 }
 
-export interface MahasiswaConnectionSubscription
-  extends Promise<AsyncIterator<MahasiswaConnectionNode>>,
+export interface AggregateMahasiswa
+  extends Promise<AggregateMahasiswaNode>,
     Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<Array<MahasiswaEdgeSubscription>>>>() => T;
-  aggregate: <T = AggregateMahasiswaSubscription>() => T;
+  count: () => Promise<Int>;
+}
+
+export interface AggregateMahasiswaSubscription
+  extends Promise<AsyncIterator<AggregateMahasiswaNode>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
 }
 
 export interface AngkatanSubscriptionPayloadNode {
@@ -2511,18 +2414,22 @@ export interface AngkatanSubscriptionPayloadSubscription
   previousValues: <T = AngkatanPreviousValuesSubscription>() => T;
 }
 
-export interface BatchPayloadNode {
-  count: Long;
-}
+export interface MahasiswaConnectionNode {}
 
-export interface BatchPayload extends Promise<BatchPayloadNode>, Fragmentable {
-  count: () => Promise<Long>;
-}
-
-export interface BatchPayloadSubscription
-  extends Promise<AsyncIterator<BatchPayloadNode>>,
+export interface MahasiswaConnection
+  extends Promise<MahasiswaConnectionNode>,
     Fragmentable {
-  count: () => Promise<AsyncIterator<Long>>;
+  pageInfo: <T = PageInfo>() => T;
+  edges: <T = Promise<Array<MahasiswaEdgeNode>>>() => T;
+  aggregate: <T = AggregateMahasiswa>() => T;
+}
+
+export interface MahasiswaConnectionSubscription
+  extends Promise<AsyncIterator<MahasiswaConnectionNode>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<Array<MahasiswaEdgeSubscription>>>>() => T;
+  aggregate: <T = AggregateMahasiswaSubscription>() => T;
 }
 
 export interface AngkatanPreviousValuesNode {
@@ -2807,22 +2714,20 @@ export interface AdminConnectionSubscription
   aggregate: <T = AggregateAdminSubscription>() => T;
 }
 
-export interface MataKuliahConnectionNode {}
-
-export interface MataKuliahConnection
-  extends Promise<MataKuliahConnectionNode>,
-    Fragmentable {
-  pageInfo: <T = PageInfo>() => T;
-  edges: <T = Promise<Array<MataKuliahEdgeNode>>>() => T;
-  aggregate: <T = AggregateMataKuliah>() => T;
+export interface AggregateMataKuliahNode {
+  count: Int;
 }
 
-export interface MataKuliahConnectionSubscription
-  extends Promise<AsyncIterator<MataKuliahConnectionNode>>,
+export interface AggregateMataKuliah
+  extends Promise<AggregateMataKuliahNode>,
     Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<Array<MataKuliahEdgeSubscription>>>>() => T;
-  aggregate: <T = AggregateMataKuliahSubscription>() => T;
+  count: () => Promise<Int>;
+}
+
+export interface AggregateMataKuliahSubscription
+  extends Promise<AsyncIterator<AggregateMataKuliahNode>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
 }
 
 export interface KelasSubscriptionPayloadNode {
@@ -2848,20 +2753,22 @@ export interface KelasSubscriptionPayloadSubscription
   previousValues: <T = KelasPreviousValuesSubscription>() => T;
 }
 
-export interface AggregateKelasNode {
-  count: Int;
+export interface MahasiswaEdgeNode {
+  cursor: String;
 }
 
-export interface AggregateKelas
-  extends Promise<AggregateKelasNode>,
+export interface MahasiswaEdge
+  extends Promise<MahasiswaEdgeNode>,
     Fragmentable {
-  count: () => Promise<Int>;
+  node: <T = Mahasiswa>() => T;
+  cursor: () => Promise<String>;
 }
 
-export interface AggregateKelasSubscription
-  extends Promise<AsyncIterator<AggregateKelasNode>>,
+export interface MahasiswaEdgeSubscription
+  extends Promise<AsyncIterator<MahasiswaEdgeNode>>,
     Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
+  node: <T = MahasiswaSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
 }
 
 export interface KelasPreviousValuesNode {
@@ -2901,39 +2808,23 @@ export interface KelasConnectionSubscription
   aggregate: <T = AggregateKelasSubscription>() => T;
 }
 
-export interface JurusanNode {
+export interface ProdiNode {
   id: ID_Output;
   nama: String;
 }
 
-export interface Jurusan extends Promise<JurusanNode>, Fragmentable {
+export interface Prodi extends Promise<ProdiNode>, Fragmentable {
   id: () => Promise<ID_Output>;
+  jurusan: <T = Jurusan>() => T;
   nama: () => Promise<String>;
-  prodis: <T = Promise<Array<ProdiNode>>>(args?: {
-    where?: ProdiWhereInput;
-    orderBy?: ProdiOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => T;
 }
 
-export interface JurusanSubscription
-  extends Promise<AsyncIterator<JurusanNode>>,
+export interface ProdiSubscription
+  extends Promise<AsyncIterator<ProdiNode>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
+  jurusan: <T = JurusanSubscription>() => T;
   nama: () => Promise<AsyncIterator<String>>;
-  prodis: <T = Promise<AsyncIterator<Array<ProdiSubscription>>>>(args?: {
-    where?: ProdiWhereInput;
-    orderBy?: ProdiOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => T;
 }
 
 export interface UserNode {
@@ -3038,69 +2929,47 @@ export interface MahasiswaPreviousValuesSubscription
   nama: () => Promise<AsyncIterator<String>>;
 }
 
-export interface AggregateMataKuliahNode {
+export interface BatchPayloadNode {
+  count: Long;
+}
+
+export interface BatchPayload extends Promise<BatchPayloadNode>, Fragmentable {
+  count: () => Promise<Long>;
+}
+
+export interface BatchPayloadSubscription
+  extends Promise<AsyncIterator<BatchPayloadNode>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Long>>;
+}
+
+export interface AggregateKelasNode {
   count: Int;
 }
 
-export interface AggregateMataKuliah
-  extends Promise<AggregateMataKuliahNode>,
+export interface AggregateKelas
+  extends Promise<AggregateKelasNode>,
     Fragmentable {
   count: () => Promise<Int>;
 }
 
-export interface AggregateMataKuliahSubscription
-  extends Promise<AsyncIterator<AggregateMataKuliahNode>>,
+export interface AggregateKelasSubscription
+  extends Promise<AsyncIterator<AggregateKelasNode>>,
     Fragmentable {
   count: () => Promise<AsyncIterator<Int>>;
 }
 
-export interface UserSubscriptionPayloadNode {
-  mutation: MutationType;
-  updatedFields?: String[];
-}
-
-export interface UserSubscriptionPayload
-  extends Promise<UserSubscriptionPayloadNode>,
-    Fragmentable {
-  mutation: () => Promise<MutationType>;
-  node: <T = User>() => T;
-  updatedFields: () => Promise<String[]>;
-  previousValues: <T = UserPreviousValues>() => T;
-}
-
-export interface UserSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<UserSubscriptionPayloadNode>>,
-    Fragmentable {
-  mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = UserSubscription>() => T;
-  updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = UserPreviousValuesSubscription>() => T;
-}
-
-export interface MataKuliahNode {
+export interface JurusanNode {
   id: ID_Output;
-  kode: String;
   nama: String;
 }
 
-export interface MataKuliah extends Promise<MataKuliahNode>, Fragmentable {
+export interface Jurusan extends Promise<JurusanNode>, Fragmentable {
   id: () => Promise<ID_Output>;
-  kode: () => Promise<String>;
   nama: () => Promise<String>;
-  jurusan: <T = Jurusan>() => T;
-  prodi: <T = Prodi>() => T;
-  dosens: <T = Promise<Array<DosenNode>>>(args?: {
-    where?: DosenWhereInput;
-    orderBy?: DosenOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => T;
-  kelases: <T = Promise<Array<KelasNode>>>(args?: {
-    where?: KelasWhereInput;
-    orderBy?: KelasOrderByInput;
+  prodis: <T = Promise<Array<ProdiNode>>>(args?: {
+    where?: ProdiWhereInput;
+    orderBy?: ProdiOrderByInput;
     skip?: Int;
     after?: String;
     before?: String;
@@ -3109,26 +2978,14 @@ export interface MataKuliah extends Promise<MataKuliahNode>, Fragmentable {
   }) => T;
 }
 
-export interface MataKuliahSubscription
-  extends Promise<AsyncIterator<MataKuliahNode>>,
+export interface JurusanSubscription
+  extends Promise<AsyncIterator<JurusanNode>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
-  kode: () => Promise<AsyncIterator<String>>;
   nama: () => Promise<AsyncIterator<String>>;
-  jurusan: <T = JurusanSubscription>() => T;
-  prodi: <T = ProdiSubscription>() => T;
-  dosens: <T = Promise<AsyncIterator<Array<DosenSubscription>>>>(args?: {
-    where?: DosenWhereInput;
-    orderBy?: DosenOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => T;
-  kelases: <T = Promise<AsyncIterator<Array<KelasSubscription>>>>(args?: {
-    where?: KelasWhereInput;
-    orderBy?: KelasOrderByInput;
+  prodis: <T = Promise<AsyncIterator<Array<ProdiSubscription>>>>(args?: {
+    where?: ProdiWhereInput;
+    orderBy?: ProdiOrderByInput;
     skip?: Int;
     after?: String;
     before?: String;
@@ -3215,41 +3072,80 @@ export interface JurusanEdgeSubscription
   cursor: () => Promise<AsyncIterator<String>>;
 }
 
-export interface MahasiswaEdgeNode {
-  cursor: String;
-}
+export interface MataKuliahConnectionNode {}
 
-export interface MahasiswaEdge
-  extends Promise<MahasiswaEdgeNode>,
+export interface MataKuliahConnection
+  extends Promise<MataKuliahConnectionNode>,
     Fragmentable {
-  node: <T = Mahasiswa>() => T;
-  cursor: () => Promise<String>;
+  pageInfo: <T = PageInfo>() => T;
+  edges: <T = Promise<Array<MataKuliahEdgeNode>>>() => T;
+  aggregate: <T = AggregateMataKuliah>() => T;
 }
 
-export interface MahasiswaEdgeSubscription
-  extends Promise<AsyncIterator<MahasiswaEdgeNode>>,
+export interface MataKuliahConnectionSubscription
+  extends Promise<AsyncIterator<MataKuliahConnectionNode>>,
     Fragmentable {
-  node: <T = MahasiswaSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<Array<MataKuliahEdgeSubscription>>>>() => T;
+  aggregate: <T = AggregateMataKuliahSubscription>() => T;
 }
 
-export interface ProdiNode {
+export interface MataKuliahNode {
   id: ID_Output;
+  kode: String;
   nama: String;
 }
 
-export interface Prodi extends Promise<ProdiNode>, Fragmentable {
+export interface MataKuliah extends Promise<MataKuliahNode>, Fragmentable {
   id: () => Promise<ID_Output>;
-  jurusan: <T = Jurusan>() => T;
+  kode: () => Promise<String>;
   nama: () => Promise<String>;
+  prodi: <T = Prodi>() => T;
+  dosens: <T = Promise<Array<DosenNode>>>(args?: {
+    where?: DosenWhereInput;
+    orderBy?: DosenOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+  kelases: <T = Promise<Array<KelasNode>>>(args?: {
+    where?: KelasWhereInput;
+    orderBy?: KelasOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
 }
 
-export interface ProdiSubscription
-  extends Promise<AsyncIterator<ProdiNode>>,
+export interface MataKuliahSubscription
+  extends Promise<AsyncIterator<MataKuliahNode>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
-  jurusan: <T = JurusanSubscription>() => T;
+  kode: () => Promise<AsyncIterator<String>>;
   nama: () => Promise<AsyncIterator<String>>;
+  prodi: <T = ProdiSubscription>() => T;
+  dosens: <T = Promise<AsyncIterator<Array<DosenSubscription>>>>(args?: {
+    where?: DosenWhereInput;
+    orderBy?: DosenOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+  kelases: <T = Promise<AsyncIterator<Array<KelasSubscription>>>>(args?: {
+    where?: KelasWhereInput;
+    orderBy?: KelasOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
 }
 
 export interface DosenEdgeNode {

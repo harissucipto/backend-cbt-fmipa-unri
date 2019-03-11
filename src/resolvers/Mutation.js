@@ -193,38 +193,17 @@ const mutations = {
   },
 
   async updateDosen(parent, args, ctx, info) {
-    const where = { id: args.id };
-    // 1. find the item
-    const item = await ctx.db.query.dosen({ where }, '{ id  user { id }}');
-    // 2. Check if they own that item, or have the permissions
-    const ownsItem = item.user.id === ctx.request.userId;
-    const hasPermissions = ctx.request.user.permissions.some(permission =>
-      ['ADMIN'].includes(permission));
-
-    if (!ownsItem && !hasPermissions) {
-      throw new Error("You don't have permission to do that!");
+    // 1. Check if they are logged in
+    if (!ctx.request.userId) {
+      throw new Error('You must be logged in!');
     }
+    // 2. Check if the user has the permissions to query all the users
+    hasPermission(ctx.request.user, ['ADMIN']);
 
-    const updateInfo = await ctx.db.mutation.updateUser(
-      {
-        where: {
-          id: item.user.id,
-        },
-        data: {
-          ...args.user,
-          dosen: {
-            update: {
-              ...args.dosen,
-            },
-          },
-        },
-      },
-      info,
-    );
+    console.log(args);
 
-    // 4. return data
-
-    return updateInfo;
+    // 3. if they do, query all the dosens!
+    return ctx.db.mutation.updateDosen(args, info);
   },
 
   // mahasiswa query
@@ -500,6 +479,18 @@ const mutations = {
       },
       info,
     );
+  },
+
+  async createUser(parent, args, ctx, info) {
+    // 1. Check if they are logged in
+    if (!ctx.request.userId) {
+      throw new Error('You must be logged in!');
+    }
+    // 2. Check if the user has the permissions to query all the users
+    hasPermission(ctx.request.user, ['ADMIN']);
+
+    // 3. if they do, query all the dosens!
+    return ctx.db.mutation.createUser(args, info);
   },
 };
 
