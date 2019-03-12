@@ -177,11 +177,6 @@ input AngkatanCreateInput {
   nama: String!
 }
 
-input AngkatanCreateOneInput {
-  create: AngkatanCreateInput
-  connect: AngkatanWhereUniqueInput
-}
-
 type AngkatanEdge {
   node: Angkatan!
   cursor: String!
@@ -221,24 +216,8 @@ input AngkatanSubscriptionWhereInput {
   NOT: [AngkatanSubscriptionWhereInput!]
 }
 
-input AngkatanUpdateDataInput {
-  nama: String
-}
-
 input AngkatanUpdateInput {
   nama: String
-}
-
-input AngkatanUpdateOneRequiredInput {
-  create: AngkatanCreateInput
-  update: AngkatanUpdateDataInput
-  upsert: AngkatanUpsertNestedInput
-  connect: AngkatanWhereUniqueInput
-}
-
-input AngkatanUpsertNestedInput {
-  update: AngkatanUpdateDataInput!
-  create: AngkatanCreateInput!
 }
 
 input AngkatanWhereInput {
@@ -899,7 +878,6 @@ type Mahasiswa {
   prodi: Prodi!
   user: User!
   kelases(where: KelasWhereInput, orderBy: KelasOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Kelas!]
-  angkatan: Angkatan!
 }
 
 type MahasiswaConnection {
@@ -914,7 +892,6 @@ input MahasiswaCreateInput {
   prodi: ProdiCreateOneInput!
   user: UserCreateOneWithoutMahasiswaInput!
   kelases: KelasCreateManyWithoutMahasiswasInput
-  angkatan: AngkatanCreateOneInput!
 }
 
 input MahasiswaCreateManyWithoutKelasesInput {
@@ -932,7 +909,6 @@ input MahasiswaCreateWithoutKelasesInput {
   nama: String!
   prodi: ProdiCreateOneInput!
   user: UserCreateOneWithoutMahasiswaInput!
-  angkatan: AngkatanCreateOneInput!
 }
 
 input MahasiswaCreateWithoutUserInput {
@@ -940,7 +916,6 @@ input MahasiswaCreateWithoutUserInput {
   nama: String!
   prodi: ProdiCreateOneInput!
   kelases: KelasCreateManyWithoutMahasiswasInput
-  angkatan: AngkatanCreateOneInput!
 }
 
 type MahasiswaEdge {
@@ -991,7 +966,6 @@ input MahasiswaUpdateInput {
   prodi: ProdiUpdateOneRequiredInput
   user: UserUpdateOneRequiredWithoutMahasiswaInput
   kelases: KelasUpdateManyWithoutMahasiswasInput
-  angkatan: AngkatanUpdateOneRequiredInput
 }
 
 input MahasiswaUpdateManyWithoutKelasesInput {
@@ -1017,7 +991,6 @@ input MahasiswaUpdateWithoutKelasesDataInput {
   nama: String
   prodi: ProdiUpdateOneRequiredInput
   user: UserUpdateOneRequiredWithoutMahasiswaInput
-  angkatan: AngkatanUpdateOneRequiredInput
 }
 
 input MahasiswaUpdateWithoutUserDataInput {
@@ -1025,7 +998,6 @@ input MahasiswaUpdateWithoutUserDataInput {
   nama: String
   prodi: ProdiUpdateOneRequiredInput
   kelases: KelasUpdateManyWithoutMahasiswasInput
-  angkatan: AngkatanUpdateOneRequiredInput
 }
 
 input MahasiswaUpdateWithWhereUniqueWithoutKelasesInput {
@@ -1092,7 +1064,6 @@ input MahasiswaWhereInput {
   kelases_every: KelasWhereInput
   kelases_some: KelasWhereInput
   kelases_none: KelasWhereInput
-  angkatan: AngkatanWhereInput
   AND: [MahasiswaWhereInput!]
   OR: [MahasiswaWhereInput!]
   NOT: [MahasiswaWhereInput!]

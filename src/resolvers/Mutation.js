@@ -276,70 +276,33 @@ const mutations = {
   },
 
   async updateMahasiswa(parent, args, ctx, info) {
-    const where = { id: args.id };
-    // 1. find the item
-    const item = await ctx.db.query.mahasiswa({ where }, '{ id  user { id }}');
-    // 2. Check if they own that item, or have the permissions
-    const ownsItem = item.user.id === ctx.request.userId;
-    const hasPermissions = ctx.request.user.permissions.some(permission =>
-      ['ADMIN'].includes(permission));
-
-    if (!ownsItem && !hasPermissions) {
-      throw new Error("You don't have permission to do that!");
+    // 1. Check if they are logged in
+    if (!ctx.request.userId) {
+      throw new Error('You must be logged in!');
     }
+    // 2. Check if the user has the permissions to query all the users
+    hasPermission(ctx.request.user, ['ADMIN']);
 
-    const updateInfo = await ctx.db.mutation.updateUser(
-      {
-        where: {
-          id: item.user.id,
-        },
-        data: {
-          ...args.user,
-          mahasiswa: {
-            update: {
-              ...args.mahasiswa,
-            },
-          },
-        },
-      },
-      info,
-    );
+    console.log(args);
 
-    // 4. return data
-
-    return updateInfo;
+    // 3. if they do, query all the dosens!
+    return ctx.db.mutation.updateMahasiswa(args, info);
   },
 
   // Matakuliah query
 
-  async addMataKuliah(parent, args, ctx, info) {
-    // 1. login  punya hak akses dan query user login tersebut
+  async createMataKuliah(parent, args, ctx, info) {
+    // 1. Check if they are logged in
+    if (!ctx.request.userId) {
+      throw new Error('You must be logged in!');
+    }
+    // 2. Check if the user has the permissions to query all the users
+    hasPermission(ctx.request.user, ['ADMIN']);
 
-    const { userId } = ctx.request;
-    if (!userId) throw new Error('Kamu Harus Login dahulu, untuk melakukan aksi ini');
-    const currentUser = await ctx.db.query.user(
-      { where: { id: userId } },
-      `{
-        id
-        permissions
-      }`,
-    );
+    console.log(args);
 
-    // 2. cek hak akses untuk menambah akun
-    hasPermission(currentUser, ['ADMIN']);
-
-    const mataKuliah = await ctx.db.mutation.createMataKuliah(
-      {
-        data: {
-          ...args.mataKuliah,
-        },
-      },
-      info,
-    );
-
-    // 4. return data
-
-    return mataKuliah;
+    // 3. if they do, query all the dosens!
+    return ctx.db.mutation.createMataKuliah(args, info);
   },
 
   async deleteMataKuliah(parent, args, ctx, info) {
@@ -364,30 +327,17 @@ const mutations = {
   },
 
   async updateMataKuliah(parent, args, ctx, info) {
-    const where = { id: args.id };
+    // 1. Check if they are logged in
+    if (!ctx.request.userId) {
+      throw new Error('You must be logged in!');
+    }
+    // 2. Check if the user has the permissions to query all the users
+    hasPermission(ctx.request.user, ['ADMIN']);
 
-    const { userId } = ctx.request;
-    if (!userId) throw new Error('Kamu Harus Login dahulu, untuk melakukan aksi ini');
-    const currentUser = await ctx.db.query.user(
-      { where: { id: userId } },
-      `{
-        id
-        permissions
-      }`,
-    );
+    console.log(args);
 
-    // 2. cek hak akses untuk menambah akun
-    hasPermission(currentUser, ['ADMIN']);
-
-    return ctx.db.mutation.updateMataKuliah(
-      {
-        where,
-        data: {
-          ...args.mataKuliah,
-        },
-      },
-      info,
-    );
+    // 3. if they do, query all the dosens!
+    return ctx.db.mutation.updateMataKuliah(args, info);
   },
 
   // Kelas query

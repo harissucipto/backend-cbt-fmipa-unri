@@ -50,7 +50,6 @@ type Mahasiswa {
   prodi: Prodi!
   user: User!
   kelases: [Kelas!]
-  angkatan: Angkatan!
 }
 
 type Dosen {

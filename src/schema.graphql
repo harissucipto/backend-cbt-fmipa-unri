@@ -16,14 +16,16 @@ type Mutation {
   deleteDosen(id: ID!): Dosen!
   addMahasiswa(user: UserBaruInput, mahasiswa: MahasiswaBaruInput): User!
   updateMahasiswa(
-    user: UserInput
-    mahasiswa: MahasiswaBaruInput
-    id: ID!
-  ): User!
+    data: MahasiswaUpdateInput!
+    where: MahasiswaWhereUniqueInput!
+  ): Mahasiswa
   deleteMahasiswa(id: ID!): Mahasiswa!
 
-  addMataKuliah(mataKuliah: MataKuliahBaruInput!): MataKuliah!
-  updateMataKuliah(mataKuliah: MataKuliahBaruInput!, id: ID!): MataKuliah!
+  createMataKuliah(data: MataKuliahCreateInput!): MataKuliah!
+  updateMataKuliah(
+    data: MataKuliahUpdateInput!
+    where: MataKuliahWhereUniqueInput!
+  ): MataKuliah
   deleteMataKuliah(id: ID!): MataKuliah!
   addKelas(kelas: KelasBaruInput!, idDosen: ID!, idMataKuliah: ID!): Kelas!
   updateKelas(kelas: KelasBaruInput!, id: ID!): Kelas!
@@ -77,6 +79,16 @@ type Query {
     last: Int
   ): [Kelas!]!
   kelas(id: ID!): Kelas!
+
+  angkatans(
+    where: AngkatanWhereInput
+    orderBy: AngkatanOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [Angkatan]!
 }
 
 type User {
