@@ -28,10 +28,11 @@ type Mutation {
   ): MataKuliah
   deleteMataKuliah(id: ID!): MataKuliah!
   addKelas(kelas: KelasBaruInput!, idDosen: ID!, idMataKuliah: ID!): Kelas!
-  updateKelas(kelas: KelasBaruInput!, id: ID!): Kelas!
+  updateKelas(data: KelasUpdateInput!, where: KelasWhereUniqueInput!): Kelas
   deleteKelas(id: ID!): Kelas!
 
   createUser(data: UserCreateInput!): User!
+  createKelas(data: KelasCreateInput!): Kelas!
 }
 
 type Query {

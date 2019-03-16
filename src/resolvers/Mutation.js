@@ -405,30 +405,15 @@ const mutations = {
   },
 
   async updateKelas(parent, args, ctx, info) {
-    const where = { id: args.id };
+    // 1. Check if they are logged in
+    if (!ctx.request.userId) {
+      throw new Error('You must be logged in!');
+    }
+    // 2. Check if the user has the permissions to query all the users
+    hasPermission(ctx.request.user, ['ADMIN']);
 
-    const { userId } = ctx.request;
-    if (!userId) throw new Error('Kamu Harus Login dahulu, untuk melakukan aksi ini');
-    const currentUser = await ctx.db.query.user(
-      { where: { id: userId } },
-      `{
-        id
-        permissions
-      }`,
-    );
-
-    // 2. cek hak akses untuk menambah akun
-    hasPermission(currentUser, ['ADMIN']);
-
-    return ctx.db.mutation.updateKelas(
-      {
-        where,
-        data: {
-          ...args.kelas,
-        },
-      },
-      info,
-    );
+    // 3. if they do, query all the dosens!
+    return ctx.db.mutation.updateKelas(args, info);
   },
 
   async createUser(parent, args, ctx, info) {
@@ -439,8 +424,25 @@ const mutations = {
     // 2. Check if the user has the permissions to query all the users
     hasPermission(ctx.request.user, ['ADMIN']);
 
+    console.log(args.data, 'data user baru');
+
+    args.data.password = await bcrypt.hash(args.data.password, 10);
+
     // 3. if they do, query all the dosens!
     return ctx.db.mutation.createUser(args, info);
+  },
+
+  async createKelas(parent, args, ctx, info) {
+    console.log(args, 'ini lagi bikin user');
+    // 1. Check if they are logged in
+    if (!ctx.request.userId) {
+      throw new Error('You must be logged in!');
+    }
+    // 2. Check if the user has the permissions to query all the users
+    hasPermission(ctx.request.user, ['ADMIN']);
+
+    // 3. if they do, query all the dosens!
+    return ctx.db.mutation.createKelas(args, info);
   },
 };
 
