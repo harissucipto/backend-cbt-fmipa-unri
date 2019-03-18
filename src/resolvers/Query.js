@@ -175,7 +175,40 @@ const Query = {
       throw new Error('You must be logged in!');
     }
     // 2. Check if the user has the permissions to query all the users
-    hasPermission(ctx.request.user, ['ADMIN']);
+    // hasPermission(ctx.request.user, ['ADMIN']);
+
+    // 3. if they do, query all the dosens!
+    return ctx.db.query.kelases(args, info);
+  },
+
+  async kelasesDosen(parent, args, ctx, info) {
+    // 1. Check if they are logged in
+    if (!ctx.request.userId) {
+      throw new Error('You must be logged in!');
+    }
+
+    const idDosen = await ctx.db.query.user(
+      {
+        where: { id: ctx.request.userId },
+      },
+      `
+        {
+          dosen {
+            id
+          }
+        }
+      `,
+    );
+
+    args.where.AND.push({
+      dosen: {
+        id: idDosen.dosen.id,
+      },
+    });
+
+    console.log(args);
+    // 2. Check if the user has the permissions to query all the users
+    // hasPermission(ctx.request.user, ['ADMIN']);
 
     // 3. if they do, query all the dosens!
     return ctx.db.query.kelases(args, info);
@@ -187,8 +220,8 @@ const Query = {
       throw new Error('You must be logged in!');
     }
     // 1.2 hak akses bagi admin dan yang punya akun
-    const hasPermissions = ctx.request.user.permissions.some(permission =>
-      ['ADMIN'].includes(permission));
+    // const hasPermissions = ctx.request.user.permissions.some(permission =>
+    //   ['ADMIN'].includes(permission));
 
     const kelas = await ctx.db.query.kelas(
       {
@@ -197,13 +230,13 @@ const Query = {
       info,
     );
 
-    if (!kelas) {
-      throw new Error('ID matakuliah not valid');
-    }
+    // if (!kelas) {
+    //   throw new Error('ID matakuliah not valid');
+    // }
 
-    if (!hasPermissions) {
-      throw new Error('You dont have permission to do that');
-    }
+    // if (!hasPermissions) {
+    //   throw new Error('You dont have permission to do that');
+    // }
 
     return kelas;
   },

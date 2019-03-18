@@ -84,6 +84,16 @@ type Query {
     first: Int
     last: Int
   ): [Kelas!]!
+
+  kelasesDosen(
+    where: MataKuliahWhereInput
+    orderBy: MataKuliahOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [Kelas!]!
   kelas(id: ID!): Kelas!
 
   angkatans(
