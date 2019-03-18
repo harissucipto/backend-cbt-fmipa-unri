@@ -13,6 +13,10 @@ type Mutation {
   updatePassword(password: String!): User!
   addDosen(user: UserBaruInput, dosen: DosenBaruInput): User!
   updateDosen(data: DosenUpdateInput!, where: DosenWhereUniqueInput!): Dosen
+  updatePasswordDosen(
+    data: DosenUpdateInput!
+    where: DosenWhereUniqueInput!
+  ): Dosen
   deleteDosen(id: ID!): Dosen!
   addMahasiswa(user: UserBaruInput, mahasiswa: MahasiswaBaruInput): User!
   updateMahasiswa(
@@ -39,6 +43,7 @@ type Query {
   pertanyaan: String!
   me: User
   admin: User!
+  currentDosen: User!
   dosens(
     where: DosenWhereInput
     orderBy: DosenOrderByInput
