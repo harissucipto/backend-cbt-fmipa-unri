@@ -44,6 +44,8 @@ type Mutation {
     data: BankSoalUpdateInput!
     where: BankSoalWhereUniqueInput!
   ): BankSoal
+
+  createSoal(data: SoalCreateInput!): Soal!
 }
 
 type Query {

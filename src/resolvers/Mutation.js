@@ -525,6 +525,20 @@ const mutations = {
     // // 3. Delete it!
     return ctx.db.mutation.updateBankSoal(args, info);
   },
+
+  async createSoal(parent, args, ctx, info) {
+    console.log(args, 'ini lagi bikin bank soal');
+    // 1. Check if they are logged in
+    if (!ctx.request.userId) {
+      throw new Error('You must be logged in!');
+    }
+    // 2. Check if the user has the permissions to query all the users
+    // hasPermission(ctx.request.user, ['ADMIN']);
+
+
+    // 3. if they do, query all the dosens!
+    return ctx.db.mutation.createSoal(args, info);
+  },
 };
 
 module.exports = mutations;

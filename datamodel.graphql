@@ -78,18 +78,12 @@ type Kelas {
   mahasiswas: [Mahasiswa!]
 }
 
-enum TingkatKesulitan {
-  MUDAH
-  SEDANG
-  SUSAH
-}
-
 type Soal {
   id: ID! @unique
   pertanyaan: String!
   jawaban: [Jawaban!]
   bankSoal: BankSoal!
-  tingkatKesulitan: TingkatKesulitan!
+  tingkatKesulitan: String!
   kunciJawaban: String!
 }
 

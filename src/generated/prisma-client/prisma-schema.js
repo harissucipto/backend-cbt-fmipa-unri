@@ -1838,7 +1838,7 @@ type Soal {
   pertanyaan: String!
   jawaban(where: JawabanWhereInput, orderBy: JawabanOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Jawaban!]
   bankSoal: BankSoal!
-  tingkatKesulitan: TingkatKesulitan!
+  tingkatKesulitan: String!
   kunciJawaban: String!
 }
 
@@ -1852,7 +1852,7 @@ input SoalCreateInput {
   pertanyaan: String!
   jawaban: JawabanCreateManyInput
   bankSoal: BankSoalCreateOneWithoutSoalsInput!
-  tingkatKesulitan: TingkatKesulitan!
+  tingkatKesulitan: String!
   kunciJawaban: String!
 }
 
@@ -1864,7 +1864,7 @@ input SoalCreateManyWithoutBankSoalInput {
 input SoalCreateWithoutBankSoalInput {
   pertanyaan: String!
   jawaban: JawabanCreateManyInput
-  tingkatKesulitan: TingkatKesulitan!
+  tingkatKesulitan: String!
   kunciJawaban: String!
 }
 
@@ -1891,7 +1891,7 @@ enum SoalOrderByInput {
 type SoalPreviousValues {
   id: ID!
   pertanyaan: String!
-  tingkatKesulitan: TingkatKesulitan!
+  tingkatKesulitan: String!
   kunciJawaban: String!
 }
 
@@ -1917,7 +1917,7 @@ input SoalUpdateInput {
   pertanyaan: String
   jawaban: JawabanUpdateManyInput
   bankSoal: BankSoalUpdateOneRequiredWithoutSoalsInput
-  tingkatKesulitan: TingkatKesulitan
+  tingkatKesulitan: String
   kunciJawaban: String
 }
 
@@ -1933,7 +1933,7 @@ input SoalUpdateManyWithoutBankSoalInput {
 input SoalUpdateWithoutBankSoalDataInput {
   pertanyaan: String
   jawaban: JawabanUpdateManyInput
-  tingkatKesulitan: TingkatKesulitan
+  tingkatKesulitan: String
   kunciJawaban: String
 }
 
@@ -1981,10 +1981,20 @@ input SoalWhereInput {
   jawaban_some: JawabanWhereInput
   jawaban_none: JawabanWhereInput
   bankSoal: BankSoalWhereInput
-  tingkatKesulitan: TingkatKesulitan
-  tingkatKesulitan_not: TingkatKesulitan
-  tingkatKesulitan_in: [TingkatKesulitan!]
-  tingkatKesulitan_not_in: [TingkatKesulitan!]
+  tingkatKesulitan: String
+  tingkatKesulitan_not: String
+  tingkatKesulitan_in: [String!]
+  tingkatKesulitan_not_in: [String!]
+  tingkatKesulitan_lt: String
+  tingkatKesulitan_lte: String
+  tingkatKesulitan_gt: String
+  tingkatKesulitan_gte: String
+  tingkatKesulitan_contains: String
+  tingkatKesulitan_not_contains: String
+  tingkatKesulitan_starts_with: String
+  tingkatKesulitan_not_starts_with: String
+  tingkatKesulitan_ends_with: String
+  tingkatKesulitan_not_ends_with: String
   kunciJawaban: String
   kunciJawaban_not: String
   kunciJawaban_in: [String!]
@@ -2021,12 +2031,6 @@ type Subscription {
   prodi(where: ProdiSubscriptionWhereInput): ProdiSubscriptionPayload
   soal(where: SoalSubscriptionWhereInput): SoalSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
-}
-
-enum TingkatKesulitan {
-  MUDAH
-  SEDANG
-  SUSAH
 }
 
 type User {
