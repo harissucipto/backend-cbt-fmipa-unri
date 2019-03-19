@@ -37,7 +37,13 @@ type Mutation {
 
   createUser(data: UserCreateInput!): User!
   createKelas(data: KelasCreateInput!): Kelas!
+
   createBankSoal(data: BankSoalCreateInput!): BankSoal!
+  deleteBankSoal(id: ID!): BankSoal
+  updateBankSoal(
+    data: BankSoalUpdateInput!
+    where: BankSoalWhereUniqueInput!
+  ): BankSoal
 }
 
 type Query {
@@ -118,7 +124,7 @@ type Query {
     last: Int
   ): [Angkatan]!
 
-  bankSoal(where: BankSoalWhereUniqueInput!): BankSoal
+  bankSoal(where: BankSoalWhereUniqueInput!): BankSoal!
   bankSoals(
     where: BankSoalWhereInput
     orderBy: BankSoalOrderByInput
