@@ -142,6 +142,10 @@ type AggregateDosen {
   count: Int!
 }
 
+type AggregateJawaban {
+  count: Int!
+}
+
 type AggregateJurusan {
   count: Int!
 }
@@ -159,6 +163,10 @@ type AggregateMataKuliah {
 }
 
 type AggregateProdi {
+  count: Int!
+}
+
+type AggregateSoal {
   count: Int!
 }
 
@@ -269,6 +277,7 @@ type BankSoal {
   nama: String!
   mataKuliah: MataKuliah
   dosen: Dosen
+  soals(where: SoalWhereInput, orderBy: SoalOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Soal!]
 }
 
 type BankSoalConnection {
@@ -278,6 +287,19 @@ type BankSoalConnection {
 }
 
 input BankSoalCreateInput {
+  prodi: ProdiCreateOneInput!
+  nama: String!
+  mataKuliah: MataKuliahCreateOneInput
+  dosen: DosenCreateOneInput
+  soals: SoalCreateManyWithoutBankSoalInput
+}
+
+input BankSoalCreateOneWithoutSoalsInput {
+  create: BankSoalCreateWithoutSoalsInput
+  connect: BankSoalWhereUniqueInput
+}
+
+input BankSoalCreateWithoutSoalsInput {
   prodi: ProdiCreateOneInput!
   nama: String!
   mataKuliah: MataKuliahCreateOneInput
@@ -328,6 +350,26 @@ input BankSoalUpdateInput {
   nama: String
   mataKuliah: MataKuliahUpdateOneInput
   dosen: DosenUpdateOneInput
+  soals: SoalUpdateManyWithoutBankSoalInput
+}
+
+input BankSoalUpdateOneRequiredWithoutSoalsInput {
+  create: BankSoalCreateWithoutSoalsInput
+  update: BankSoalUpdateWithoutSoalsDataInput
+  upsert: BankSoalUpsertWithoutSoalsInput
+  connect: BankSoalWhereUniqueInput
+}
+
+input BankSoalUpdateWithoutSoalsDataInput {
+  prodi: ProdiUpdateOneRequiredInput
+  nama: String
+  mataKuliah: MataKuliahUpdateOneInput
+  dosen: DosenUpdateOneInput
+}
+
+input BankSoalUpsertWithoutSoalsInput {
+  update: BankSoalUpdateWithoutSoalsDataInput!
+  create: BankSoalCreateWithoutSoalsInput!
 }
 
 input BankSoalWhereInput {
@@ -362,6 +404,9 @@ input BankSoalWhereInput {
   nama_not_ends_with: String
   mataKuliah: MataKuliahWhereInput
   dosen: DosenWhereInput
+  soals_every: SoalWhereInput
+  soals_some: SoalWhereInput
+  soals_none: SoalWhereInput
   AND: [BankSoalWhereInput!]
   OR: [BankSoalWhereInput!]
   NOT: [BankSoalWhereInput!]
@@ -597,6 +642,152 @@ input DosenWhereInput {
 input DosenWhereUniqueInput {
   id: ID
   nip: String
+}
+
+type Jawaban {
+  id: ID!
+  title: String!
+  content: String!
+}
+
+type JawabanConnection {
+  pageInfo: PageInfo!
+  edges: [JawabanEdge]!
+  aggregate: AggregateJawaban!
+}
+
+input JawabanCreateInput {
+  title: String!
+  content: String!
+}
+
+input JawabanCreateManyInput {
+  create: [JawabanCreateInput!]
+  connect: [JawabanWhereUniqueInput!]
+}
+
+type JawabanEdge {
+  node: Jawaban!
+  cursor: String!
+}
+
+enum JawabanOrderByInput {
+  id_ASC
+  id_DESC
+  title_ASC
+  title_DESC
+  content_ASC
+  content_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type JawabanPreviousValues {
+  id: ID!
+  title: String!
+  content: String!
+}
+
+type JawabanSubscriptionPayload {
+  mutation: MutationType!
+  node: Jawaban
+  updatedFields: [String!]
+  previousValues: JawabanPreviousValues
+}
+
+input JawabanSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: JawabanWhereInput
+  AND: [JawabanSubscriptionWhereInput!]
+  OR: [JawabanSubscriptionWhereInput!]
+  NOT: [JawabanSubscriptionWhereInput!]
+}
+
+input JawabanUpdateDataInput {
+  title: String
+  content: String
+}
+
+input JawabanUpdateInput {
+  title: String
+  content: String
+}
+
+input JawabanUpdateManyInput {
+  create: [JawabanCreateInput!]
+  delete: [JawabanWhereUniqueInput!]
+  connect: [JawabanWhereUniqueInput!]
+  disconnect: [JawabanWhereUniqueInput!]
+  update: [JawabanUpdateWithWhereUniqueNestedInput!]
+  upsert: [JawabanUpsertWithWhereUniqueNestedInput!]
+}
+
+input JawabanUpdateWithWhereUniqueNestedInput {
+  where: JawabanWhereUniqueInput!
+  data: JawabanUpdateDataInput!
+}
+
+input JawabanUpsertWithWhereUniqueNestedInput {
+  where: JawabanWhereUniqueInput!
+  update: JawabanUpdateDataInput!
+  create: JawabanCreateInput!
+}
+
+input JawabanWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  title: String
+  title_not: String
+  title_in: [String!]
+  title_not_in: [String!]
+  title_lt: String
+  title_lte: String
+  title_gt: String
+  title_gte: String
+  title_contains: String
+  title_not_contains: String
+  title_starts_with: String
+  title_not_starts_with: String
+  title_ends_with: String
+  title_not_ends_with: String
+  content: String
+  content_not: String
+  content_in: [String!]
+  content_not_in: [String!]
+  content_lt: String
+  content_lte: String
+  content_gt: String
+  content_gte: String
+  content_contains: String
+  content_not_contains: String
+  content_starts_with: String
+  content_not_starts_with: String
+  content_ends_with: String
+  content_not_ends_with: String
+  AND: [JawabanWhereInput!]
+  OR: [JawabanWhereInput!]
+  NOT: [JawabanWhereInput!]
+}
+
+input JawabanWhereUniqueInput {
+  id: ID
 }
 
 type Jurusan {
@@ -1371,6 +1562,12 @@ type Mutation {
   upsertDosen(where: DosenWhereUniqueInput!, create: DosenCreateInput!, update: DosenUpdateInput!): Dosen!
   deleteDosen(where: DosenWhereUniqueInput!): Dosen
   deleteManyDosens(where: DosenWhereInput): BatchPayload!
+  createJawaban(data: JawabanCreateInput!): Jawaban!
+  updateJawaban(data: JawabanUpdateInput!, where: JawabanWhereUniqueInput!): Jawaban
+  updateManyJawabans(data: JawabanUpdateInput!, where: JawabanWhereInput): BatchPayload!
+  upsertJawaban(where: JawabanWhereUniqueInput!, create: JawabanCreateInput!, update: JawabanUpdateInput!): Jawaban!
+  deleteJawaban(where: JawabanWhereUniqueInput!): Jawaban
+  deleteManyJawabans(where: JawabanWhereInput): BatchPayload!
   createJurusan(data: JurusanCreateInput!): Jurusan!
   updateJurusan(data: JurusanUpdateInput!, where: JurusanWhereUniqueInput!): Jurusan
   updateManyJurusans(data: JurusanUpdateInput!, where: JurusanWhereInput): BatchPayload!
@@ -1401,6 +1598,12 @@ type Mutation {
   upsertProdi(where: ProdiWhereUniqueInput!, create: ProdiCreateInput!, update: ProdiUpdateInput!): Prodi!
   deleteProdi(where: ProdiWhereUniqueInput!): Prodi
   deleteManyProdis(where: ProdiWhereInput): BatchPayload!
+  createSoal(data: SoalCreateInput!): Soal!
+  updateSoal(data: SoalUpdateInput!, where: SoalWhereUniqueInput!): Soal
+  updateManySoals(data: SoalUpdateInput!, where: SoalWhereInput): BatchPayload!
+  upsertSoal(where: SoalWhereUniqueInput!, create: SoalCreateInput!, update: SoalUpdateInput!): Soal!
+  deleteSoal(where: SoalWhereUniqueInput!): Soal
+  deleteManySoals(where: SoalWhereInput): BatchPayload!
   createUser(data: UserCreateInput!): User!
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
   updateManyUsers(data: UserUpdateInput!, where: UserWhereInput): BatchPayload!
@@ -1603,6 +1806,9 @@ type Query {
   dosen(where: DosenWhereUniqueInput!): Dosen
   dosens(where: DosenWhereInput, orderBy: DosenOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Dosen]!
   dosensConnection(where: DosenWhereInput, orderBy: DosenOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): DosenConnection!
+  jawaban(where: JawabanWhereUniqueInput!): Jawaban
+  jawabans(where: JawabanWhereInput, orderBy: JawabanOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Jawaban]!
+  jawabansConnection(where: JawabanWhereInput, orderBy: JawabanOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): JawabanConnection!
   jurusan(where: JurusanWhereUniqueInput!): Jurusan
   jurusans(where: JurusanWhereInput, orderBy: JurusanOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Jurusan]!
   jurusansConnection(where: JurusanWhereInput, orderBy: JurusanOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): JurusanConnection!
@@ -1618,10 +1824,188 @@ type Query {
   prodi(where: ProdiWhereUniqueInput!): Prodi
   prodis(where: ProdiWhereInput, orderBy: ProdiOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Prodi]!
   prodisConnection(where: ProdiWhereInput, orderBy: ProdiOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ProdiConnection!
+  soal(where: SoalWhereUniqueInput!): Soal
+  soals(where: SoalWhereInput, orderBy: SoalOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Soal]!
+  soalsConnection(where: SoalWhereInput, orderBy: SoalOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): SoalConnection!
   user(where: UserWhereUniqueInput!): User
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
   node(id: ID!): Node
+}
+
+type Soal {
+  id: ID!
+  pertanyaan: String!
+  jawaban(where: JawabanWhereInput, orderBy: JawabanOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Jawaban!]
+  bankSoal: BankSoal!
+  tingkatKesulitan: TingkatKesulitan!
+  kunciJawaban: String!
+}
+
+type SoalConnection {
+  pageInfo: PageInfo!
+  edges: [SoalEdge]!
+  aggregate: AggregateSoal!
+}
+
+input SoalCreateInput {
+  pertanyaan: String!
+  jawaban: JawabanCreateManyInput
+  bankSoal: BankSoalCreateOneWithoutSoalsInput!
+  tingkatKesulitan: TingkatKesulitan!
+  kunciJawaban: String!
+}
+
+input SoalCreateManyWithoutBankSoalInput {
+  create: [SoalCreateWithoutBankSoalInput!]
+  connect: [SoalWhereUniqueInput!]
+}
+
+input SoalCreateWithoutBankSoalInput {
+  pertanyaan: String!
+  jawaban: JawabanCreateManyInput
+  tingkatKesulitan: TingkatKesulitan!
+  kunciJawaban: String!
+}
+
+type SoalEdge {
+  node: Soal!
+  cursor: String!
+}
+
+enum SoalOrderByInput {
+  id_ASC
+  id_DESC
+  pertanyaan_ASC
+  pertanyaan_DESC
+  tingkatKesulitan_ASC
+  tingkatKesulitan_DESC
+  kunciJawaban_ASC
+  kunciJawaban_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type SoalPreviousValues {
+  id: ID!
+  pertanyaan: String!
+  tingkatKesulitan: TingkatKesulitan!
+  kunciJawaban: String!
+}
+
+type SoalSubscriptionPayload {
+  mutation: MutationType!
+  node: Soal
+  updatedFields: [String!]
+  previousValues: SoalPreviousValues
+}
+
+input SoalSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: SoalWhereInput
+  AND: [SoalSubscriptionWhereInput!]
+  OR: [SoalSubscriptionWhereInput!]
+  NOT: [SoalSubscriptionWhereInput!]
+}
+
+input SoalUpdateInput {
+  pertanyaan: String
+  jawaban: JawabanUpdateManyInput
+  bankSoal: BankSoalUpdateOneRequiredWithoutSoalsInput
+  tingkatKesulitan: TingkatKesulitan
+  kunciJawaban: String
+}
+
+input SoalUpdateManyWithoutBankSoalInput {
+  create: [SoalCreateWithoutBankSoalInput!]
+  delete: [SoalWhereUniqueInput!]
+  connect: [SoalWhereUniqueInput!]
+  disconnect: [SoalWhereUniqueInput!]
+  update: [SoalUpdateWithWhereUniqueWithoutBankSoalInput!]
+  upsert: [SoalUpsertWithWhereUniqueWithoutBankSoalInput!]
+}
+
+input SoalUpdateWithoutBankSoalDataInput {
+  pertanyaan: String
+  jawaban: JawabanUpdateManyInput
+  tingkatKesulitan: TingkatKesulitan
+  kunciJawaban: String
+}
+
+input SoalUpdateWithWhereUniqueWithoutBankSoalInput {
+  where: SoalWhereUniqueInput!
+  data: SoalUpdateWithoutBankSoalDataInput!
+}
+
+input SoalUpsertWithWhereUniqueWithoutBankSoalInput {
+  where: SoalWhereUniqueInput!
+  update: SoalUpdateWithoutBankSoalDataInput!
+  create: SoalCreateWithoutBankSoalInput!
+}
+
+input SoalWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  pertanyaan: String
+  pertanyaan_not: String
+  pertanyaan_in: [String!]
+  pertanyaan_not_in: [String!]
+  pertanyaan_lt: String
+  pertanyaan_lte: String
+  pertanyaan_gt: String
+  pertanyaan_gte: String
+  pertanyaan_contains: String
+  pertanyaan_not_contains: String
+  pertanyaan_starts_with: String
+  pertanyaan_not_starts_with: String
+  pertanyaan_ends_with: String
+  pertanyaan_not_ends_with: String
+  jawaban_every: JawabanWhereInput
+  jawaban_some: JawabanWhereInput
+  jawaban_none: JawabanWhereInput
+  bankSoal: BankSoalWhereInput
+  tingkatKesulitan: TingkatKesulitan
+  tingkatKesulitan_not: TingkatKesulitan
+  tingkatKesulitan_in: [TingkatKesulitan!]
+  tingkatKesulitan_not_in: [TingkatKesulitan!]
+  kunciJawaban: String
+  kunciJawaban_not: String
+  kunciJawaban_in: [String!]
+  kunciJawaban_not_in: [String!]
+  kunciJawaban_lt: String
+  kunciJawaban_lte: String
+  kunciJawaban_gt: String
+  kunciJawaban_gte: String
+  kunciJawaban_contains: String
+  kunciJawaban_not_contains: String
+  kunciJawaban_starts_with: String
+  kunciJawaban_not_starts_with: String
+  kunciJawaban_ends_with: String
+  kunciJawaban_not_ends_with: String
+  AND: [SoalWhereInput!]
+  OR: [SoalWhereInput!]
+  NOT: [SoalWhereInput!]
+}
+
+input SoalWhereUniqueInput {
+  id: ID
 }
 
 type Subscription {
@@ -1629,12 +2013,20 @@ type Subscription {
   angkatan(where: AngkatanSubscriptionWhereInput): AngkatanSubscriptionPayload
   bankSoal(where: BankSoalSubscriptionWhereInput): BankSoalSubscriptionPayload
   dosen(where: DosenSubscriptionWhereInput): DosenSubscriptionPayload
+  jawaban(where: JawabanSubscriptionWhereInput): JawabanSubscriptionPayload
   jurusan(where: JurusanSubscriptionWhereInput): JurusanSubscriptionPayload
   kelas(where: KelasSubscriptionWhereInput): KelasSubscriptionPayload
   mahasiswa(where: MahasiswaSubscriptionWhereInput): MahasiswaSubscriptionPayload
   mataKuliah(where: MataKuliahSubscriptionWhereInput): MataKuliahSubscriptionPayload
   prodi(where: ProdiSubscriptionWhereInput): ProdiSubscriptionPayload
+  soal(where: SoalSubscriptionWhereInput): SoalSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
+}
+
+enum TingkatKesulitan {
+  MUDAH
+  SEDANG
+  SUSAH
 }
 
 type User {
