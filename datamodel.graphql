@@ -58,7 +58,6 @@ type Dosen {
   nama: String!
   user: User!
   prodi: Prodi!
-  mataKuliahs: [MataKuliah!]
   kelases: [Kelas!]
 }
 
@@ -67,7 +66,6 @@ type MataKuliah {
   kode: String! @unique
   nama: String!
   prodi: Prodi!
-  dosens: [Dosen!]
   kelases: [Kelas!]
 }
 
@@ -78,4 +76,12 @@ type Kelas {
   mataKuliah: MataKuliah
   nama: String!
   mahasiswas: [Mahasiswa!]
+}
+
+type BankSoal {
+  id: ID! @unique
+  prodi: Prodi!
+  nama: String!
+  mataKuliah: MataKuliah
+  dosen: Dosen
 }

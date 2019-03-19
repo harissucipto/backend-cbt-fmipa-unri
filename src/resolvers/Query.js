@@ -137,7 +137,38 @@ const Query = {
       throw new Error('You must be logged in!');
     }
     // 2. Check if the user has the permissions to query all the users
-    hasPermission(ctx.request.user, ['ADMIN']);
+    // hasPermission(ctx.request.user, ['ADMIN']);
+
+    // 3. if they do, query all the dosens!
+    return ctx.db.query.mataKuliahs(args, info);
+  },
+
+  async mataKuliahsDosen(parent, args, ctx, info) {
+    // 1. Check if they are logged in
+    if (!ctx.request.userId) {
+      throw new Error('You must be logged in!');
+    }
+    // 2. Check if the user has the permissions to query all the users
+    // hasPermission(ctx.request.user, ['ADMIN']);
+
+    const idDosen = await ctx.db.query.user(
+      {
+        where: { id: ctx.request.userId },
+      },
+      `
+        {
+          dosen {
+            id
+          }
+        }
+      `,
+    );
+
+    args.where.AND.push({
+      dosen: {
+        id: idDosen.dosen.id,
+      },
+    });
 
     // 3. if they do, query all the dosens!
     return ctx.db.query.mataKuliahs(args, info);
@@ -251,6 +282,30 @@ const Query = {
 
     // 3. if they do, query all the angkatans!
     return ctx.db.query.angkatans(args, info);
+  },
+
+  async bankSoal(parent, args, ctx, info) {
+    // 1. Check if they are logged in
+    if (!ctx.request.userId) {
+      throw new Error('You must be logged in!');
+    }
+    // // 2. Check if the user has the permissions to query all the users
+    // hasPermission(ctx.request.user, ['ADMIN']);
+
+    // 3. if they do, query all the angkatans!
+    return ctx.db.query.bankSoal(args, info);
+  },
+
+  async bankSoals(parent, args, ctx, info) {
+    // 1. Check if they are logged in
+    if (!ctx.request.userId) {
+      throw new Error('You must be logged in!');
+    }
+    // // 2. Check if the user has the permissions to query all the users
+    // hasPermission(ctx.request.user, ['ADMIN']);
+
+    // 3. if they do, query all the angkatans!
+    return ctx.db.query.bankSoals(args, info);
   },
 };
 

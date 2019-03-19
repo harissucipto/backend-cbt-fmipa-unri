@@ -457,6 +457,33 @@ const mutations = {
     // 3. if they do, query all the dosens!
     return ctx.db.mutation.createKelas(args, info);
   },
+
+  async createBankSoal(parent, args, ctx, info) {
+    console.log(args, 'ini lagi bikin bank soal');
+    // 1. Check if they are logged in
+    if (!ctx.request.userId) {
+      throw new Error('You must be logged in!');
+    }
+    // 2. Check if the user has the permissions to query all the users
+    // hasPermission(ctx.request.user, ['ADMIN']);
+
+    const idDosen = await ctx.db.query.user(
+      {
+        where: { id: ctx.request.userId },
+      },
+      `
+        {
+          dosen {
+            id
+          }
+        }
+      `,
+    );
+
+    args.data.dosen = { connect: { id: idDosen.dosen.id } };
+    // 3. if they do, query all the dosens!
+    return ctx.db.mutation.createBankSoal(args, info);
+  },
 };
 
 module.exports = mutations;

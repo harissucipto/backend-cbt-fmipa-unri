@@ -133,6 +133,10 @@ type AggregateAngkatan {
   count: Int!
 }
 
+type AggregateBankSoal {
+  count: Int!
+}
+
 type AggregateDosen {
   count: Int!
 }
@@ -258,6 +262,114 @@ input AngkatanWhereUniqueInput {
   nama: String
 }
 
+type BankSoal {
+  id: ID!
+  prodi: Prodi!
+  nama: String!
+  mataKuliah: MataKuliah
+  dosen: Dosen
+}
+
+type BankSoalConnection {
+  pageInfo: PageInfo!
+  edges: [BankSoalEdge]!
+  aggregate: AggregateBankSoal!
+}
+
+input BankSoalCreateInput {
+  prodi: ProdiCreateOneInput!
+  nama: String!
+  mataKuliah: MataKuliahCreateOneInput
+  dosen: DosenCreateOneInput
+}
+
+type BankSoalEdge {
+  node: BankSoal!
+  cursor: String!
+}
+
+enum BankSoalOrderByInput {
+  id_ASC
+  id_DESC
+  nama_ASC
+  nama_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type BankSoalPreviousValues {
+  id: ID!
+  nama: String!
+}
+
+type BankSoalSubscriptionPayload {
+  mutation: MutationType!
+  node: BankSoal
+  updatedFields: [String!]
+  previousValues: BankSoalPreviousValues
+}
+
+input BankSoalSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: BankSoalWhereInput
+  AND: [BankSoalSubscriptionWhereInput!]
+  OR: [BankSoalSubscriptionWhereInput!]
+  NOT: [BankSoalSubscriptionWhereInput!]
+}
+
+input BankSoalUpdateInput {
+  prodi: ProdiUpdateOneRequiredInput
+  nama: String
+  mataKuliah: MataKuliahUpdateOneInput
+  dosen: DosenUpdateOneInput
+}
+
+input BankSoalWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  prodi: ProdiWhereInput
+  nama: String
+  nama_not: String
+  nama_in: [String!]
+  nama_not_in: [String!]
+  nama_lt: String
+  nama_lte: String
+  nama_gt: String
+  nama_gte: String
+  nama_contains: String
+  nama_not_contains: String
+  nama_starts_with: String
+  nama_not_starts_with: String
+  nama_ends_with: String
+  nama_not_ends_with: String
+  mataKuliah: MataKuliahWhereInput
+  dosen: DosenWhereInput
+  AND: [BankSoalWhereInput!]
+  OR: [BankSoalWhereInput!]
+  NOT: [BankSoalWhereInput!]
+}
+
+input BankSoalWhereUniqueInput {
+  id: ID
+}
+
 type BatchPayload {
   count: Long!
 }
@@ -268,7 +380,6 @@ type Dosen {
   nama: String!
   user: User!
   prodi: Prodi!
-  mataKuliahs(where: MataKuliahWhereInput, orderBy: MataKuliahOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [MataKuliah!]
   kelases(where: KelasWhereInput, orderBy: KelasOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Kelas!]
 }
 
@@ -283,13 +394,12 @@ input DosenCreateInput {
   nama: String!
   user: UserCreateOneWithoutDosenInput!
   prodi: ProdiCreateOneInput!
-  mataKuliahs: MataKuliahCreateManyWithoutDosensInput
   kelases: KelasCreateManyWithoutDosenInput
 }
 
-input DosenCreateManyWithoutMataKuliahsInput {
-  create: [DosenCreateWithoutMataKuliahsInput!]
-  connect: [DosenWhereUniqueInput!]
+input DosenCreateOneInput {
+  create: DosenCreateInput
+  connect: DosenWhereUniqueInput
 }
 
 input DosenCreateOneWithoutKelasesInput {
@@ -307,22 +417,12 @@ input DosenCreateWithoutKelasesInput {
   nama: String!
   user: UserCreateOneWithoutDosenInput!
   prodi: ProdiCreateOneInput!
-  mataKuliahs: MataKuliahCreateManyWithoutDosensInput
-}
-
-input DosenCreateWithoutMataKuliahsInput {
-  nip: String!
-  nama: String!
-  user: UserCreateOneWithoutDosenInput!
-  prodi: ProdiCreateOneInput!
-  kelases: KelasCreateManyWithoutDosenInput
 }
 
 input DosenCreateWithoutUserInput {
   nip: String!
   nama: String!
   prodi: ProdiCreateOneInput!
-  mataKuliahs: MataKuliahCreateManyWithoutDosensInput
   kelases: KelasCreateManyWithoutDosenInput
 }
 
@@ -368,22 +468,29 @@ input DosenSubscriptionWhereInput {
   NOT: [DosenSubscriptionWhereInput!]
 }
 
+input DosenUpdateDataInput {
+  nip: String
+  nama: String
+  user: UserUpdateOneRequiredWithoutDosenInput
+  prodi: ProdiUpdateOneRequiredInput
+  kelases: KelasUpdateManyWithoutDosenInput
+}
+
 input DosenUpdateInput {
   nip: String
   nama: String
   user: UserUpdateOneRequiredWithoutDosenInput
   prodi: ProdiUpdateOneRequiredInput
-  mataKuliahs: MataKuliahUpdateManyWithoutDosensInput
   kelases: KelasUpdateManyWithoutDosenInput
 }
 
-input DosenUpdateManyWithoutMataKuliahsInput {
-  create: [DosenCreateWithoutMataKuliahsInput!]
-  delete: [DosenWhereUniqueInput!]
-  connect: [DosenWhereUniqueInput!]
-  disconnect: [DosenWhereUniqueInput!]
-  update: [DosenUpdateWithWhereUniqueWithoutMataKuliahsInput!]
-  upsert: [DosenUpsertWithWhereUniqueWithoutMataKuliahsInput!]
+input DosenUpdateOneInput {
+  create: DosenCreateInput
+  update: DosenUpdateDataInput
+  upsert: DosenUpsertNestedInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: DosenWhereUniqueInput
 }
 
 input DosenUpdateOneWithoutKelasesInput {
@@ -409,28 +516,18 @@ input DosenUpdateWithoutKelasesDataInput {
   nama: String
   user: UserUpdateOneRequiredWithoutDosenInput
   prodi: ProdiUpdateOneRequiredInput
-  mataKuliahs: MataKuliahUpdateManyWithoutDosensInput
-}
-
-input DosenUpdateWithoutMataKuliahsDataInput {
-  nip: String
-  nama: String
-  user: UserUpdateOneRequiredWithoutDosenInput
-  prodi: ProdiUpdateOneRequiredInput
-  kelases: KelasUpdateManyWithoutDosenInput
 }
 
 input DosenUpdateWithoutUserDataInput {
   nip: String
   nama: String
   prodi: ProdiUpdateOneRequiredInput
-  mataKuliahs: MataKuliahUpdateManyWithoutDosensInput
   kelases: KelasUpdateManyWithoutDosenInput
 }
 
-input DosenUpdateWithWhereUniqueWithoutMataKuliahsInput {
-  where: DosenWhereUniqueInput!
-  data: DosenUpdateWithoutMataKuliahsDataInput!
+input DosenUpsertNestedInput {
+  update: DosenUpdateDataInput!
+  create: DosenCreateInput!
 }
 
 input DosenUpsertWithoutKelasesInput {
@@ -441,12 +538,6 @@ input DosenUpsertWithoutKelasesInput {
 input DosenUpsertWithoutUserInput {
   update: DosenUpdateWithoutUserDataInput!
   create: DosenCreateWithoutUserInput!
-}
-
-input DosenUpsertWithWhereUniqueWithoutMataKuliahsInput {
-  where: DosenWhereUniqueInput!
-  update: DosenUpdateWithoutMataKuliahsDataInput!
-  create: DosenCreateWithoutMataKuliahsInput!
 }
 
 input DosenWhereInput {
@@ -494,9 +585,6 @@ input DosenWhereInput {
   nama_not_ends_with: String
   user: UserWhereInput
   prodi: ProdiWhereInput
-  mataKuliahs_every: MataKuliahWhereInput
-  mataKuliahs_some: MataKuliahWhereInput
-  mataKuliahs_none: MataKuliahWhereInput
   kelases_every: KelasWhereInput
   kelases_some: KelasWhereInput
   kelases_none: KelasWhereInput
@@ -1078,7 +1166,6 @@ type MataKuliah {
   kode: String!
   nama: String!
   prodi: Prodi!
-  dosens(where: DosenWhereInput, orderBy: DosenOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Dosen!]
   kelases(where: KelasWhereInput, orderBy: KelasOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Kelas!]
 }
 
@@ -1092,13 +1179,12 @@ input MataKuliahCreateInput {
   kode: String!
   nama: String!
   prodi: ProdiCreateOneInput!
-  dosens: DosenCreateManyWithoutMataKuliahsInput
   kelases: KelasCreateManyWithoutMataKuliahInput
 }
 
-input MataKuliahCreateManyWithoutDosensInput {
-  create: [MataKuliahCreateWithoutDosensInput!]
-  connect: [MataKuliahWhereUniqueInput!]
+input MataKuliahCreateOneInput {
+  create: MataKuliahCreateInput
+  connect: MataKuliahWhereUniqueInput
 }
 
 input MataKuliahCreateOneWithoutKelasesInput {
@@ -1106,18 +1192,10 @@ input MataKuliahCreateOneWithoutKelasesInput {
   connect: MataKuliahWhereUniqueInput
 }
 
-input MataKuliahCreateWithoutDosensInput {
-  kode: String!
-  nama: String!
-  prodi: ProdiCreateOneInput!
-  kelases: KelasCreateManyWithoutMataKuliahInput
-}
-
 input MataKuliahCreateWithoutKelasesInput {
   kode: String!
   nama: String!
   prodi: ProdiCreateOneInput!
-  dosens: DosenCreateManyWithoutMataKuliahsInput
 }
 
 type MataKuliahEdge {
@@ -1162,21 +1240,27 @@ input MataKuliahSubscriptionWhereInput {
   NOT: [MataKuliahSubscriptionWhereInput!]
 }
 
+input MataKuliahUpdateDataInput {
+  kode: String
+  nama: String
+  prodi: ProdiUpdateOneRequiredInput
+  kelases: KelasUpdateManyWithoutMataKuliahInput
+}
+
 input MataKuliahUpdateInput {
   kode: String
   nama: String
   prodi: ProdiUpdateOneRequiredInput
-  dosens: DosenUpdateManyWithoutMataKuliahsInput
   kelases: KelasUpdateManyWithoutMataKuliahInput
 }
 
-input MataKuliahUpdateManyWithoutDosensInput {
-  create: [MataKuliahCreateWithoutDosensInput!]
-  delete: [MataKuliahWhereUniqueInput!]
-  connect: [MataKuliahWhereUniqueInput!]
-  disconnect: [MataKuliahWhereUniqueInput!]
-  update: [MataKuliahUpdateWithWhereUniqueWithoutDosensInput!]
-  upsert: [MataKuliahUpsertWithWhereUniqueWithoutDosensInput!]
+input MataKuliahUpdateOneInput {
+  create: MataKuliahCreateInput
+  update: MataKuliahUpdateDataInput
+  upsert: MataKuliahUpsertNestedInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: MataKuliahWhereUniqueInput
 }
 
 input MataKuliahUpdateOneWithoutKelasesInput {
@@ -1188,34 +1272,20 @@ input MataKuliahUpdateOneWithoutKelasesInput {
   connect: MataKuliahWhereUniqueInput
 }
 
-input MataKuliahUpdateWithoutDosensDataInput {
-  kode: String
-  nama: String
-  prodi: ProdiUpdateOneRequiredInput
-  kelases: KelasUpdateManyWithoutMataKuliahInput
-}
-
 input MataKuliahUpdateWithoutKelasesDataInput {
   kode: String
   nama: String
   prodi: ProdiUpdateOneRequiredInput
-  dosens: DosenUpdateManyWithoutMataKuliahsInput
 }
 
-input MataKuliahUpdateWithWhereUniqueWithoutDosensInput {
-  where: MataKuliahWhereUniqueInput!
-  data: MataKuliahUpdateWithoutDosensDataInput!
+input MataKuliahUpsertNestedInput {
+  update: MataKuliahUpdateDataInput!
+  create: MataKuliahCreateInput!
 }
 
 input MataKuliahUpsertWithoutKelasesInput {
   update: MataKuliahUpdateWithoutKelasesDataInput!
   create: MataKuliahCreateWithoutKelasesInput!
-}
-
-input MataKuliahUpsertWithWhereUniqueWithoutDosensInput {
-  where: MataKuliahWhereUniqueInput!
-  update: MataKuliahUpdateWithoutDosensDataInput!
-  create: MataKuliahCreateWithoutDosensInput!
 }
 
 input MataKuliahWhereInput {
@@ -1262,9 +1332,6 @@ input MataKuliahWhereInput {
   nama_ends_with: String
   nama_not_ends_with: String
   prodi: ProdiWhereInput
-  dosens_every: DosenWhereInput
-  dosens_some: DosenWhereInput
-  dosens_none: DosenWhereInput
   kelases_every: KelasWhereInput
   kelases_some: KelasWhereInput
   kelases_none: KelasWhereInput
@@ -1291,6 +1358,12 @@ type Mutation {
   upsertAngkatan(where: AngkatanWhereUniqueInput!, create: AngkatanCreateInput!, update: AngkatanUpdateInput!): Angkatan!
   deleteAngkatan(where: AngkatanWhereUniqueInput!): Angkatan
   deleteManyAngkatans(where: AngkatanWhereInput): BatchPayload!
+  createBankSoal(data: BankSoalCreateInput!): BankSoal!
+  updateBankSoal(data: BankSoalUpdateInput!, where: BankSoalWhereUniqueInput!): BankSoal
+  updateManyBankSoals(data: BankSoalUpdateInput!, where: BankSoalWhereInput): BatchPayload!
+  upsertBankSoal(where: BankSoalWhereUniqueInput!, create: BankSoalCreateInput!, update: BankSoalUpdateInput!): BankSoal!
+  deleteBankSoal(where: BankSoalWhereUniqueInput!): BankSoal
+  deleteManyBankSoals(where: BankSoalWhereInput): BatchPayload!
   createDosen(data: DosenCreateInput!): Dosen!
   updateDosen(data: DosenUpdateInput!, where: DosenWhereUniqueInput!): Dosen
   updateManyDosens(data: DosenUpdateInput!, where: DosenWhereInput): BatchPayload!
@@ -1523,6 +1596,9 @@ type Query {
   angkatan(where: AngkatanWhereUniqueInput!): Angkatan
   angkatans(where: AngkatanWhereInput, orderBy: AngkatanOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Angkatan]!
   angkatansConnection(where: AngkatanWhereInput, orderBy: AngkatanOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): AngkatanConnection!
+  bankSoal(where: BankSoalWhereUniqueInput!): BankSoal
+  bankSoals(where: BankSoalWhereInput, orderBy: BankSoalOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [BankSoal]!
+  bankSoalsConnection(where: BankSoalWhereInput, orderBy: BankSoalOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): BankSoalConnection!
   dosen(where: DosenWhereUniqueInput!): Dosen
   dosens(where: DosenWhereInput, orderBy: DosenOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Dosen]!
   dosensConnection(where: DosenWhereInput, orderBy: DosenOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): DosenConnection!
@@ -1550,6 +1626,7 @@ type Query {
 type Subscription {
   admin(where: AdminSubscriptionWhereInput): AdminSubscriptionPayload
   angkatan(where: AngkatanSubscriptionWhereInput): AngkatanSubscriptionPayload
+  bankSoal(where: BankSoalSubscriptionWhereInput): BankSoalSubscriptionPayload
   dosen(where: DosenSubscriptionWhereInput): DosenSubscriptionPayload
   jurusan(where: JurusanSubscriptionWhereInput): JurusanSubscriptionPayload
   kelas(where: KelasSubscriptionWhereInput): KelasSubscriptionPayload
