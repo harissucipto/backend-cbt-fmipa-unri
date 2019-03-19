@@ -46,6 +46,7 @@ type Mutation {
   ): BankSoal
 
   createSoal(data: SoalCreateInput!): Soal!
+  updateSoal(data: SoalUpdateInput!, where: SoalWhereUniqueInput!): Soal
 }
 
 type Query {
@@ -126,7 +127,7 @@ type Query {
     last: Int
   ): [Angkatan]!
 
-  bankSoal(where: BankSoalWhereUniqueInput!): BankSoal!
+  bankSoal(where: BankSoalWhereUniqueInput!): BankSoal
   bankSoals(
     where: BankSoalWhereInput
     orderBy: BankSoalOrderByInput
@@ -135,7 +136,9 @@ type Query {
     before: String
     first: Int
     last: Int
-  ): [BankSoal]!
+  ): [BankSoal!]
+
+  soal(where: SoalWhereUniqueInput!): Soal
 }
 
 type User {

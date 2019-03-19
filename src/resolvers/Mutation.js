@@ -535,9 +535,28 @@ const mutations = {
     // 2. Check if the user has the permissions to query all the users
     // hasPermission(ctx.request.user, ['ADMIN']);
 
-
     // 3. if they do, query all the dosens!
     return ctx.db.mutation.createSoal(args, info);
+  },
+
+  async updateSoal(parent, args, ctx, info) {
+    // 1. login  punya hak akses dan query user login tersebut
+
+    const { userId } = ctx.request;
+    if (!userId) throw new Error('Kamu Harus Login dahulu, untuk melakukan aksi ini');
+    const currentUser = await ctx.db.query.user(
+      { where: { id: userId } },
+      `{
+        id
+        permissions
+      }`,
+    );
+
+    // // 2. cek hak akses untuk menambah akun
+    // hasPermission(currentUser, ['ADMIN']);
+
+    // // 3. Delete it!
+    return ctx.db.mutation.updateSoal(args, info);
   },
 };
 

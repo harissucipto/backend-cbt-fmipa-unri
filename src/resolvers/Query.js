@@ -307,6 +307,18 @@ const Query = {
     // 3. if they do, query all the angkatans!
     return ctx.db.query.bankSoals(args, info);
   },
+
+  async soal(parent, args, ctx, info) {
+    // 1. Check if they are logged in
+    if (!ctx.request.userId) {
+      throw new Error('You must be logged in!');
+    }
+    // // 2. Check if the user has the permissions to query all the users
+    // hasPermission(ctx.request.user, ['ADMIN']);
+
+    // 3. if they do, query all the angkatans!
+    return ctx.db.query.soal(args, info);
+  },
 };
 
 module.exports = Query;
