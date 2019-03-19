@@ -47,6 +47,7 @@ type Mutation {
 
   createSoal(data: SoalCreateInput!): Soal!
   updateSoal(data: SoalUpdateInput!, where: SoalWhereUniqueInput!): Soal
+  deleteSoal(where: SoalWhereUniqueInput!): Soal
 }
 
 type Query {

@@ -91,6 +91,7 @@ type Jawaban {
   id: ID! @unique
   title: String!
   content: String!
+  soal: Soal
 }
 
 type BankSoal {

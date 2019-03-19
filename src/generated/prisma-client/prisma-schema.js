@@ -648,6 +648,7 @@ type Jawaban {
   id: ID!
   title: String!
   content: String!
+  soal: Soal
 }
 
 type JawabanConnection {
@@ -659,11 +660,17 @@ type JawabanConnection {
 input JawabanCreateInput {
   title: String!
   content: String!
+  soal: SoalCreateOneWithoutJawabanInput
 }
 
-input JawabanCreateManyInput {
-  create: [JawabanCreateInput!]
+input JawabanCreateManyWithoutSoalInput {
+  create: [JawabanCreateWithoutSoalInput!]
   connect: [JawabanWhereUniqueInput!]
+}
+
+input JawabanCreateWithoutSoalInput {
+  title: String!
+  content: String!
 }
 
 type JawabanEdge {
@@ -708,34 +715,35 @@ input JawabanSubscriptionWhereInput {
   NOT: [JawabanSubscriptionWhereInput!]
 }
 
-input JawabanUpdateDataInput {
-  title: String
-  content: String
-}
-
 input JawabanUpdateInput {
   title: String
   content: String
+  soal: SoalUpdateOneWithoutJawabanInput
 }
 
-input JawabanUpdateManyInput {
-  create: [JawabanCreateInput!]
+input JawabanUpdateManyWithoutSoalInput {
+  create: [JawabanCreateWithoutSoalInput!]
   delete: [JawabanWhereUniqueInput!]
   connect: [JawabanWhereUniqueInput!]
   disconnect: [JawabanWhereUniqueInput!]
-  update: [JawabanUpdateWithWhereUniqueNestedInput!]
-  upsert: [JawabanUpsertWithWhereUniqueNestedInput!]
+  update: [JawabanUpdateWithWhereUniqueWithoutSoalInput!]
+  upsert: [JawabanUpsertWithWhereUniqueWithoutSoalInput!]
 }
 
-input JawabanUpdateWithWhereUniqueNestedInput {
-  where: JawabanWhereUniqueInput!
-  data: JawabanUpdateDataInput!
+input JawabanUpdateWithoutSoalDataInput {
+  title: String
+  content: String
 }
 
-input JawabanUpsertWithWhereUniqueNestedInput {
+input JawabanUpdateWithWhereUniqueWithoutSoalInput {
   where: JawabanWhereUniqueInput!
-  update: JawabanUpdateDataInput!
-  create: JawabanCreateInput!
+  data: JawabanUpdateWithoutSoalDataInput!
+}
+
+input JawabanUpsertWithWhereUniqueWithoutSoalInput {
+  where: JawabanWhereUniqueInput!
+  update: JawabanUpdateWithoutSoalDataInput!
+  create: JawabanCreateWithoutSoalInput!
 }
 
 input JawabanWhereInput {
@@ -781,6 +789,7 @@ input JawabanWhereInput {
   content_not_starts_with: String
   content_ends_with: String
   content_not_ends_with: String
+  soal: SoalWhereInput
   AND: [JawabanWhereInput!]
   OR: [JawabanWhereInput!]
   NOT: [JawabanWhereInput!]
@@ -1850,7 +1859,7 @@ type SoalConnection {
 
 input SoalCreateInput {
   pertanyaan: String!
-  jawaban: JawabanCreateManyInput
+  jawaban: JawabanCreateManyWithoutSoalInput
   bankSoal: BankSoalCreateOneWithoutSoalsInput!
   tingkatKesulitan: String!
   kunciJawaban: String!
@@ -1861,9 +1870,21 @@ input SoalCreateManyWithoutBankSoalInput {
   connect: [SoalWhereUniqueInput!]
 }
 
+input SoalCreateOneWithoutJawabanInput {
+  create: SoalCreateWithoutJawabanInput
+  connect: SoalWhereUniqueInput
+}
+
 input SoalCreateWithoutBankSoalInput {
   pertanyaan: String!
-  jawaban: JawabanCreateManyInput
+  jawaban: JawabanCreateManyWithoutSoalInput
+  tingkatKesulitan: String!
+  kunciJawaban: String!
+}
+
+input SoalCreateWithoutJawabanInput {
+  pertanyaan: String!
+  bankSoal: BankSoalCreateOneWithoutSoalsInput!
   tingkatKesulitan: String!
   kunciJawaban: String!
 }
@@ -1915,7 +1936,7 @@ input SoalSubscriptionWhereInput {
 
 input SoalUpdateInput {
   pertanyaan: String
-  jawaban: JawabanUpdateManyInput
+  jawaban: JawabanUpdateManyWithoutSoalInput
   bankSoal: BankSoalUpdateOneRequiredWithoutSoalsInput
   tingkatKesulitan: String
   kunciJawaban: String
@@ -1930,9 +1951,25 @@ input SoalUpdateManyWithoutBankSoalInput {
   upsert: [SoalUpsertWithWhereUniqueWithoutBankSoalInput!]
 }
 
+input SoalUpdateOneWithoutJawabanInput {
+  create: SoalCreateWithoutJawabanInput
+  update: SoalUpdateWithoutJawabanDataInput
+  upsert: SoalUpsertWithoutJawabanInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: SoalWhereUniqueInput
+}
+
 input SoalUpdateWithoutBankSoalDataInput {
   pertanyaan: String
-  jawaban: JawabanUpdateManyInput
+  jawaban: JawabanUpdateManyWithoutSoalInput
+  tingkatKesulitan: String
+  kunciJawaban: String
+}
+
+input SoalUpdateWithoutJawabanDataInput {
+  pertanyaan: String
+  bankSoal: BankSoalUpdateOneRequiredWithoutSoalsInput
   tingkatKesulitan: String
   kunciJawaban: String
 }
@@ -1940,6 +1977,11 @@ input SoalUpdateWithoutBankSoalDataInput {
 input SoalUpdateWithWhereUniqueWithoutBankSoalInput {
   where: SoalWhereUniqueInput!
   data: SoalUpdateWithoutBankSoalDataInput!
+}
+
+input SoalUpsertWithoutJawabanInput {
+  update: SoalUpdateWithoutJawabanDataInput!
+  create: SoalCreateWithoutJawabanInput!
 }
 
 input SoalUpsertWithWhereUniqueWithoutBankSoalInput {

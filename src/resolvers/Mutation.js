@@ -558,6 +558,54 @@ const mutations = {
     // // 3. Delete it!
     return ctx.db.mutation.updateSoal(args, info);
   },
+
+  async deleteSoal(parent, args, ctx, info) {
+    // 1. login  punya hak akses dan query user login tersebut
+
+    const { userId } = ctx.request;
+    if (!userId) throw new Error('Kamu Harus Login dahulu, untuk melakukan aksi ini');
+    const currentUser = await ctx.db.query.user(
+      { where: { id: userId } },
+      `{
+        id
+        permissions
+      }`,
+    );
+
+    // // 2. cek hak akses untuk menambah akun
+    // hasPermission(currentUser, ['ADMIN']);
+
+    // // 3. Delete it!
+    // get soal dulu
+    const soal = await ctx.db.query.soal(
+      {
+        where: args.where,
+      },
+      '{ id } ',
+    );
+
+    console.log(soal);
+
+    const deleteIn = await ctx.db.mutation.deleteManyJawabans(
+      {
+        where: {
+          soal: {
+            id: soal.id,
+          },
+        },
+      },
+      `
+    {count }
+    `,
+    );
+
+    const res = await ctx.db.mutation.deleteSoal(args, info);
+
+    console.log(deleteIn);
+
+    // return res;
+    return res;
+  },
 };
 
 module.exports = mutations;
