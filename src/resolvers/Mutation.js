@@ -637,6 +637,28 @@ const mutations = {
     // 3. if they do, query all the dosens!
     return ctx.db.mutation.createUjian(args, info);
   },
+
+  async deleteUjian(parent, args, ctx, info) {
+
+    // 1. login  punya hak akses dan query user login tersebut
+
+    const { userId } = ctx.request;
+    if (!userId) throw new Error('Kamu Harus Login dahulu, untuk melakukan aksi ini');
+    // const currentUser = await ctx.db.query.user(
+    //   { where: { id: userId } },
+    //   `{
+    //     id
+    //     permissions
+    //   }`,
+    // );
+
+    // // 2. cek hak akses untuk menambah akun
+    // hasPermission(currentUser, ['ADMIN']);
+
+    // // 3. Delete it!
+    return ctx.db.mutation.deleteUjian(args, info);
+  },
+
 };
 
 module.exports = mutations;

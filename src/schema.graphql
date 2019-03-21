@@ -50,6 +50,7 @@ type Mutation {
   deleteSoal(where: SoalWhereUniqueInput!): Soal
 
   createUjian(data: UjianCreateInput!): Ujian!
+  deleteUjian(where: UjianWhereUniqueInput!): Ujian
 }
 
 type Query {
