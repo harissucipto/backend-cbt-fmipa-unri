@@ -412,6 +412,41 @@ const Query = {
     // 3. if they do, query all the dosens!
     return ctx.db.query.ujians(args, info);
   },
+
+  async ujiansMahasiswa(parent, args, ctx, info) {
+    // 1. Check if they are logged in
+    if (!ctx.request.userId) {
+      throw new Error('You must be logged in!');
+    }
+
+    const idMahasiswa = await ctx.db.query.user(
+      {
+        where: { id: ctx.request.userId },
+      },
+      `
+        {
+          mahasiswa {
+            id
+          }
+        }
+      `,
+    );
+
+    args.where.AND.push({
+      kelas: {
+        mahasiswas_some: {
+          id: idMahasiswa.mahasiswa.id,
+        },
+      },
+    });
+
+    console.log(args);
+    // 2. Check if the user has the permissions to query all the users
+    // hasPermission(ctx.request.user, ['ADMIN']);
+
+    // 3. if they do, query all the dosens!
+    return ctx.db.query.ujians(args, info);
+  },
 };
 
 module.exports = Query;

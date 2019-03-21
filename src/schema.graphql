@@ -170,6 +170,16 @@ type Query {
     first: Int
     last: Int
   ): [Ujian]!
+
+  ujiansMahasiswa(
+    where: UjianWhereInput
+    orderBy: UjianOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [Ujian]!
 }
 
 type User {

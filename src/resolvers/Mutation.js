@@ -297,7 +297,6 @@ const mutations = {
     // 2. Check if the user has the permissions to query all the users
     // hasPermission(ctx.request.user, ['ADMIN']);
 
-
     // 3. if they do, query all the dosens!
     return ctx.db.mutation.updateMahasiswa(args, info);
   },
@@ -311,7 +310,6 @@ const mutations = {
     // hasPermission(ctx.request.user, ['ADMIN']);
 
     args.data.user.update.password = await bcrypt.hash(args.data.user.update.password, 10);
-
 
     // 3. if they do, query all the dosens!
     return ctx.db.mutation.updateMahasiswa(args, info);
@@ -674,6 +672,7 @@ const mutations = {
     //   `,
     // );
 
+    args.data.dosen = { connect: { id: idDosen.dosen.id } };
     args.data.pin = shortid();
 
     console.log(args, 'recheck args');
