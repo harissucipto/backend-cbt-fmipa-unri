@@ -48,6 +48,8 @@ type Mutation {
   createSoal(data: SoalCreateInput!): Soal!
   updateSoal(data: SoalUpdateInput!, where: SoalWhereUniqueInput!): Soal
   deleteSoal(where: SoalWhereUniqueInput!): Soal
+
+  createUjian(data: UjianCreateInput!): Ujian!
 }
 
 type Query {
@@ -140,6 +142,17 @@ type Query {
   ): [BankSoal!]
 
   soal(where: SoalWhereUniqueInput!): Soal
+
+  ujian(where: UjianWhereUniqueInput!): Ujian
+  ujians(
+    where: UjianWhereInput
+    orderBy: UjianOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [Ujian]!
 }
 
 type User {

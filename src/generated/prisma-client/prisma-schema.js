@@ -170,6 +170,10 @@ type AggregateSoal {
   count: Int!
 }
 
+type AggregateUjian {
+  count: Int!
+}
+
 type AggregateUser {
   count: Int!
 }
@@ -294,6 +298,11 @@ input BankSoalCreateInput {
   soals: SoalCreateManyWithoutBankSoalInput
 }
 
+input BankSoalCreateOneInput {
+  create: BankSoalCreateInput
+  connect: BankSoalWhereUniqueInput
+}
+
 input BankSoalCreateOneWithoutSoalsInput {
   create: BankSoalCreateWithoutSoalsInput
   connect: BankSoalWhereUniqueInput
@@ -345,12 +354,27 @@ input BankSoalSubscriptionWhereInput {
   NOT: [BankSoalSubscriptionWhereInput!]
 }
 
+input BankSoalUpdateDataInput {
+  prodi: ProdiUpdateOneRequiredInput
+  nama: String
+  mataKuliah: MataKuliahUpdateOneInput
+  dosen: DosenUpdateOneInput
+  soals: SoalUpdateManyWithoutBankSoalInput
+}
+
 input BankSoalUpdateInput {
   prodi: ProdiUpdateOneRequiredInput
   nama: String
   mataKuliah: MataKuliahUpdateOneInput
   dosen: DosenUpdateOneInput
   soals: SoalUpdateManyWithoutBankSoalInput
+}
+
+input BankSoalUpdateOneRequiredInput {
+  create: BankSoalCreateInput
+  update: BankSoalUpdateDataInput
+  upsert: BankSoalUpsertNestedInput
+  connect: BankSoalWhereUniqueInput
 }
 
 input BankSoalUpdateOneRequiredWithoutSoalsInput {
@@ -365,6 +389,11 @@ input BankSoalUpdateWithoutSoalsDataInput {
   nama: String
   mataKuliah: MataKuliahUpdateOneInput
   dosen: DosenUpdateOneInput
+}
+
+input BankSoalUpsertNestedInput {
+  update: BankSoalUpdateDataInput!
+  create: BankSoalCreateInput!
 }
 
 input BankSoalUpsertWithoutSoalsInput {
@@ -419,6 +448,8 @@ input BankSoalWhereUniqueInput {
 type BatchPayload {
   count: Long!
 }
+
+scalar DateTime
 
 type Dosen {
   id: ID!
@@ -964,6 +995,11 @@ input KelasCreateManyWithoutMataKuliahInput {
   connect: [KelasWhereUniqueInput!]
 }
 
+input KelasCreateOneInput {
+  create: KelasCreateInput
+  connect: KelasWhereUniqueInput
+}
+
 input KelasCreateWithoutDosenInput {
   prodi: ProdiCreateOneInput!
   mataKuliah: MataKuliahCreateOneWithoutKelasesInput
@@ -1024,6 +1060,14 @@ input KelasSubscriptionWhereInput {
   NOT: [KelasSubscriptionWhereInput!]
 }
 
+input KelasUpdateDataInput {
+  prodi: ProdiUpdateOneRequiredInput
+  dosen: DosenUpdateOneWithoutKelasesInput
+  mataKuliah: MataKuliahUpdateOneWithoutKelasesInput
+  nama: String
+  mahasiswas: MahasiswaUpdateManyWithoutKelasesInput
+}
+
 input KelasUpdateInput {
   prodi: ProdiUpdateOneRequiredInput
   dosen: DosenUpdateOneWithoutKelasesInput
@@ -1057,6 +1101,13 @@ input KelasUpdateManyWithoutMataKuliahInput {
   disconnect: [KelasWhereUniqueInput!]
   update: [KelasUpdateWithWhereUniqueWithoutMataKuliahInput!]
   upsert: [KelasUpsertWithWhereUniqueWithoutMataKuliahInput!]
+}
+
+input KelasUpdateOneRequiredInput {
+  create: KelasCreateInput
+  update: KelasUpdateDataInput
+  upsert: KelasUpsertNestedInput
+  connect: KelasWhereUniqueInput
 }
 
 input KelasUpdateWithoutDosenDataInput {
@@ -1093,6 +1144,11 @@ input KelasUpdateWithWhereUniqueWithoutMahasiswasInput {
 input KelasUpdateWithWhereUniqueWithoutMataKuliahInput {
   where: KelasWhereUniqueInput!
   data: KelasUpdateWithoutMataKuliahDataInput!
+}
+
+input KelasUpsertNestedInput {
+  update: KelasUpdateDataInput!
+  create: KelasCreateInput!
 }
 
 input KelasUpsertWithWhereUniqueWithoutDosenInput {
@@ -1613,6 +1669,12 @@ type Mutation {
   upsertSoal(where: SoalWhereUniqueInput!, create: SoalCreateInput!, update: SoalUpdateInput!): Soal!
   deleteSoal(where: SoalWhereUniqueInput!): Soal
   deleteManySoals(where: SoalWhereInput): BatchPayload!
+  createUjian(data: UjianCreateInput!): Ujian!
+  updateUjian(data: UjianUpdateInput!, where: UjianWhereUniqueInput!): Ujian
+  updateManyUjians(data: UjianUpdateInput!, where: UjianWhereInput): BatchPayload!
+  upsertUjian(where: UjianWhereUniqueInput!, create: UjianCreateInput!, update: UjianUpdateInput!): Ujian!
+  deleteUjian(where: UjianWhereUniqueInput!): Ujian
+  deleteManyUjians(where: UjianWhereInput): BatchPayload!
   createUser(data: UserCreateInput!): User!
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
   updateManyUsers(data: UserUpdateInput!, where: UserWhereInput): BatchPayload!
@@ -1836,6 +1898,9 @@ type Query {
   soal(where: SoalWhereUniqueInput!): Soal
   soals(where: SoalWhereInput, orderBy: SoalOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Soal]!
   soalsConnection(where: SoalWhereInput, orderBy: SoalOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): SoalConnection!
+  ujian(where: UjianWhereUniqueInput!): Ujian
+  ujians(where: UjianWhereInput, orderBy: UjianOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Ujian]!
+  ujiansConnection(where: UjianWhereInput, orderBy: UjianOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UjianConnection!
   user(where: UserWhereUniqueInput!): User
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
@@ -2072,7 +2137,253 @@ type Subscription {
   mataKuliah(where: MataKuliahSubscriptionWhereInput): MataKuliahSubscriptionPayload
   prodi(where: ProdiSubscriptionWhereInput): ProdiSubscriptionPayload
   soal(where: SoalSubscriptionWhereInput): SoalSubscriptionPayload
+  ujian(where: UjianSubscriptionWhereInput): UjianSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
+}
+
+type Ujian {
+  id: ID!
+  pin: String
+  nama: String!
+  tanggalPelaksanaan: DateTime!
+  lokasi: String!
+  JumlahSoal: Int!
+  presentasiSusah: Float!
+  presentasiSedang: Float!
+  presentasiMudah: Float!
+  durasiPengerjaan: Int!
+  status: Boolean!
+  prodi: Prodi!
+  bankSoal: BankSoal!
+  kelas: Kelas!
+  dosen: Dosen
+}
+
+type UjianConnection {
+  pageInfo: PageInfo!
+  edges: [UjianEdge]!
+  aggregate: AggregateUjian!
+}
+
+input UjianCreateInput {
+  pin: String
+  nama: String!
+  tanggalPelaksanaan: DateTime!
+  lokasi: String!
+  JumlahSoal: Int
+  presentasiSusah: Float
+  presentasiSedang: Float
+  presentasiMudah: Float
+  durasiPengerjaan: Int!
+  status: Boolean
+  prodi: ProdiCreateOneInput!
+  bankSoal: BankSoalCreateOneInput!
+  kelas: KelasCreateOneInput!
+  dosen: DosenCreateOneInput
+}
+
+type UjianEdge {
+  node: Ujian!
+  cursor: String!
+}
+
+enum UjianOrderByInput {
+  id_ASC
+  id_DESC
+  pin_ASC
+  pin_DESC
+  nama_ASC
+  nama_DESC
+  tanggalPelaksanaan_ASC
+  tanggalPelaksanaan_DESC
+  lokasi_ASC
+  lokasi_DESC
+  JumlahSoal_ASC
+  JumlahSoal_DESC
+  presentasiSusah_ASC
+  presentasiSusah_DESC
+  presentasiSedang_ASC
+  presentasiSedang_DESC
+  presentasiMudah_ASC
+  presentasiMudah_DESC
+  durasiPengerjaan_ASC
+  durasiPengerjaan_DESC
+  status_ASC
+  status_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type UjianPreviousValues {
+  id: ID!
+  pin: String
+  nama: String!
+  tanggalPelaksanaan: DateTime!
+  lokasi: String!
+  JumlahSoal: Int!
+  presentasiSusah: Float!
+  presentasiSedang: Float!
+  presentasiMudah: Float!
+  durasiPengerjaan: Int!
+  status: Boolean!
+}
+
+type UjianSubscriptionPayload {
+  mutation: MutationType!
+  node: Ujian
+  updatedFields: [String!]
+  previousValues: UjianPreviousValues
+}
+
+input UjianSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: UjianWhereInput
+  AND: [UjianSubscriptionWhereInput!]
+  OR: [UjianSubscriptionWhereInput!]
+  NOT: [UjianSubscriptionWhereInput!]
+}
+
+input UjianUpdateInput {
+  pin: String
+  nama: String
+  tanggalPelaksanaan: DateTime
+  lokasi: String
+  JumlahSoal: Int
+  presentasiSusah: Float
+  presentasiSedang: Float
+  presentasiMudah: Float
+  durasiPengerjaan: Int
+  status: Boolean
+  prodi: ProdiUpdateOneRequiredInput
+  bankSoal: BankSoalUpdateOneRequiredInput
+  kelas: KelasUpdateOneRequiredInput
+  dosen: DosenUpdateOneInput
+}
+
+input UjianWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  pin: String
+  pin_not: String
+  pin_in: [String!]
+  pin_not_in: [String!]
+  pin_lt: String
+  pin_lte: String
+  pin_gt: String
+  pin_gte: String
+  pin_contains: String
+  pin_not_contains: String
+  pin_starts_with: String
+  pin_not_starts_with: String
+  pin_ends_with: String
+  pin_not_ends_with: String
+  nama: String
+  nama_not: String
+  nama_in: [String!]
+  nama_not_in: [String!]
+  nama_lt: String
+  nama_lte: String
+  nama_gt: String
+  nama_gte: String
+  nama_contains: String
+  nama_not_contains: String
+  nama_starts_with: String
+  nama_not_starts_with: String
+  nama_ends_with: String
+  nama_not_ends_with: String
+  tanggalPelaksanaan: DateTime
+  tanggalPelaksanaan_not: DateTime
+  tanggalPelaksanaan_in: [DateTime!]
+  tanggalPelaksanaan_not_in: [DateTime!]
+  tanggalPelaksanaan_lt: DateTime
+  tanggalPelaksanaan_lte: DateTime
+  tanggalPelaksanaan_gt: DateTime
+  tanggalPelaksanaan_gte: DateTime
+  lokasi: String
+  lokasi_not: String
+  lokasi_in: [String!]
+  lokasi_not_in: [String!]
+  lokasi_lt: String
+  lokasi_lte: String
+  lokasi_gt: String
+  lokasi_gte: String
+  lokasi_contains: String
+  lokasi_not_contains: String
+  lokasi_starts_with: String
+  lokasi_not_starts_with: String
+  lokasi_ends_with: String
+  lokasi_not_ends_with: String
+  JumlahSoal: Int
+  JumlahSoal_not: Int
+  JumlahSoal_in: [Int!]
+  JumlahSoal_not_in: [Int!]
+  JumlahSoal_lt: Int
+  JumlahSoal_lte: Int
+  JumlahSoal_gt: Int
+  JumlahSoal_gte: Int
+  presentasiSusah: Float
+  presentasiSusah_not: Float
+  presentasiSusah_in: [Float!]
+  presentasiSusah_not_in: [Float!]
+  presentasiSusah_lt: Float
+  presentasiSusah_lte: Float
+  presentasiSusah_gt: Float
+  presentasiSusah_gte: Float
+  presentasiSedang: Float
+  presentasiSedang_not: Float
+  presentasiSedang_in: [Float!]
+  presentasiSedang_not_in: [Float!]
+  presentasiSedang_lt: Float
+  presentasiSedang_lte: Float
+  presentasiSedang_gt: Float
+  presentasiSedang_gte: Float
+  presentasiMudah: Float
+  presentasiMudah_not: Float
+  presentasiMudah_in: [Float!]
+  presentasiMudah_not_in: [Float!]
+  presentasiMudah_lt: Float
+  presentasiMudah_lte: Float
+  presentasiMudah_gt: Float
+  presentasiMudah_gte: Float
+  durasiPengerjaan: Int
+  durasiPengerjaan_not: Int
+  durasiPengerjaan_in: [Int!]
+  durasiPengerjaan_not_in: [Int!]
+  durasiPengerjaan_lt: Int
+  durasiPengerjaan_lte: Int
+  durasiPengerjaan_gt: Int
+  durasiPengerjaan_gte: Int
+  status: Boolean
+  status_not: Boolean
+  prodi: ProdiWhereInput
+  bankSoal: BankSoalWhereInput
+  kelas: KelasWhereInput
+  dosen: DosenWhereInput
+  AND: [UjianWhereInput!]
+  OR: [UjianWhereInput!]
+  NOT: [UjianWhereInput!]
+}
+
+input UjianWhereUniqueInput {
+  id: ID
+  pin: String
 }
 
 type User {

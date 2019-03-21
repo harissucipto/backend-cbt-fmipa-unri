@@ -102,3 +102,21 @@ type BankSoal {
   dosen: Dosen
   soals: [Soal!]
 }
+
+type Ujian {
+  id: ID! @unique
+  pin: String @unique
+  nama: String!
+  tanggalPelaksanaan: DateTime!
+  lokasi: String!
+  JumlahSoal: Int! @default(value: "0")
+  presentasiSusah: Float! @default(value: "0")
+  presentasiSedang: Float! @default(value: "0")
+  presentasiMudah: Float! @default(value: "0")
+  durasiPengerjaan: Int!
+  status: Boolean! @default(value: "true")
+  prodi: Prodi!
+  bankSoal: BankSoal!
+  kelas: Kelas!
+  dosen: Dosen
+}
