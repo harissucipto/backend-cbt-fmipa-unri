@@ -23,6 +23,10 @@ type Mutation {
     data: MahasiswaUpdateInput!
     where: MahasiswaWhereUniqueInput!
   ): Mahasiswa
+  updatePasswordMahasiswa(
+    data: MahasiswaUpdateInput!
+    where: MahasiswaWhereUniqueInput!
+  ): Mahasiswa
   deleteMahasiswa(id: ID!): Mahasiswa!
 
   createMataKuliah(data: MataKuliahCreateInput!): MataKuliah!
@@ -59,6 +63,7 @@ type Query {
   me: User
   admin: User!
   currentDosen: User!
+  currentMahasiswa: User!
   dosens(
     where: DosenWhereInput
     orderBy: DosenOrderByInput
@@ -102,17 +107,17 @@ type Query {
   mataKuliah(id: ID!): MataKuliah!
 
   kelases(
-    where: MataKuliahWhereInput
-    orderBy: MataKuliahOrderByInput
+    where: KelasWhereInput
+    orderBy: KelasOrderByInput
     skip: Int
     after: String
     before: String
     first: Int
     last: Int
-  ): [Kelas!]!
+  ): [Kelas]!
 
   kelasesDosen(
-    where: MataKuliahWhereInput
+    where: KelasWhereInput
     orderBy: MataKuliahOrderByInput
     skip: Int
     after: String
@@ -121,6 +126,16 @@ type Query {
     last: Int
   ): [Kelas!]!
   kelas(id: ID!): Kelas!
+
+  kelasesMahasiswa(
+    where: KelasWhereInput
+    orderBy: MataKuliahOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [Kelas!]!
 
   angkatans(
     where: AngkatanWhereInput

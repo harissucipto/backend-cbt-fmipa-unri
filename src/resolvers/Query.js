@@ -32,7 +32,7 @@ const Query = {
     );
   },
 
-  currentDosen(parent, args, ctx, info) {
+  async currentDosen(parent, args, ctx, info) {
     // check if there is a current user ID
     if (!ctx.request.userId) {
       return null;
@@ -40,6 +40,23 @@ const Query = {
 
     // 2. Check if the user has the permissions to query all the users
     hasPermission(ctx.request.user, ['DOSEN']);
+
+    return ctx.db.query.user(
+      {
+        where: { id: ctx.request.userId },
+      },
+      info,
+    );
+  },
+
+  async currentMahasiswa(parent, args, ctx, info) {
+    // check if there is a current user ID
+    if (!ctx.request.userId) {
+      return null;
+    }
+
+    // 2. Check if the user has the permissions to query all the users
+    hasPermission(ctx.request.user, ['MAHASISWA']);
 
     return ctx.db.query.user(
       {
@@ -242,6 +259,37 @@ const Query = {
     // hasPermission(ctx.request.user, ['ADMIN']);
 
     // 3. if they do, query all the dosens!
+    return ctx.db.query.kelases(args, info);
+  },
+
+  async kelasesMahasiswa(parent, args, ctx, info) {
+    // 1. Check if they are logged in
+    if (!ctx.request.userId) {
+      throw new Error('You must be logged in!');
+    }
+
+    const idMahasiswa = await ctx.db.query.user(
+      {
+        where: { id: ctx.request.userId },
+      },
+      `
+        {
+          mahasiswa {
+            id
+          }
+        }
+      `,
+    );
+
+    args.where.AND.push({
+      mahasiswas_some: { id: idMahasiswa.mahasiswa.id },
+    });
+
+    console.log(args);
+    // 2. Check if the user has the permissions to query all the users
+    // hasPermission(ctx.request.user, ['ADMIN']);
+
+    // 3. if they do, query all the mahasiswas!
     return ctx.db.query.kelases(args, info);
   },
 

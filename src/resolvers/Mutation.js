@@ -295,9 +295,23 @@ const mutations = {
       throw new Error('You must be logged in!');
     }
     // 2. Check if the user has the permissions to query all the users
-    hasPermission(ctx.request.user, ['ADMIN']);
+    // hasPermission(ctx.request.user, ['ADMIN']);
 
-    console.log(args);
+
+    // 3. if they do, query all the dosens!
+    return ctx.db.mutation.updateMahasiswa(args, info);
+  },
+
+  async updatePasswordMahasiswa(parent, args, ctx, info) {
+    // 1. Check if they are logged in
+    if (!ctx.request.userId) {
+      throw new Error('You must be logged in!');
+    }
+    // 2. Check if the user has the permissions to query all the users
+    // hasPermission(ctx.request.user, ['ADMIN']);
+
+    args.data.user.update.password = await bcrypt.hash(args.data.user.update.password, 10);
+
 
     // 3. if they do, query all the dosens!
     return ctx.db.mutation.updateMahasiswa(args, info);
