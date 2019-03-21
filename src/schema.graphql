@@ -51,6 +51,7 @@ type Mutation {
 
   createUjian(data: UjianCreateInput!): Ujian!
   deleteUjian(where: UjianWhereUniqueInput!): Ujian
+  updateUjian(data: UjianUpdateInput!, where: UjianWhereUniqueInput!): Ujian
 }
 
 type Query {

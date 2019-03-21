@@ -638,8 +638,36 @@ const mutations = {
     return ctx.db.mutation.createUjian(args, info);
   },
 
-  async deleteUjian(parent, args, ctx, info) {
+  async updateUjian(parent, args, ctx, info) {
+    console.log(args, 'ini lagi bikin bank soal');
+    // 1. Check if they are logged in
+    if (!ctx.request.userId) {
+      throw new Error('You must be logged in!');
+    }
+    // 2. Check if the user has the permissions to query all the users
+    // hasPermission(ctx.request.user, ['ADMIN']);
 
+    // const idDosen = await ctx.db.query.user(
+    //   {
+    //     where: { id: ctx.request.userId },
+    //   },
+    //   `
+    //     {
+    //       dosen {
+    //         id
+    //       }
+    //     }
+    //   `,
+    // );
+
+    args.data.pin = shortid();
+
+    console.log(args, 'recheck args');
+    // 3. if they do, query all the dosens!
+    return ctx.db.mutation.updateUjian(args, info);
+  },
+
+  async deleteUjian(parent, args, ctx, info) {
     // 1. login  punya hak akses dan query user login tersebut
 
     const { userId } = ctx.request;
@@ -658,7 +686,6 @@ const mutations = {
     // // 3. Delete it!
     return ctx.db.mutation.deleteUjian(args, info);
   },
-
 };
 
 module.exports = mutations;
