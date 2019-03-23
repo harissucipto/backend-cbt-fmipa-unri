@@ -659,18 +659,18 @@ const mutations = {
     // 2. Check if the user has the permissions to query all the users
     // hasPermission(ctx.request.user, ['ADMIN']);
 
-    // const idDosen = await ctx.db.query.user(
-    //   {
-    //     where: { id: ctx.request.userId },
-    //   },
-    //   `
-    //     {
-    //       dosen {
-    //         id
-    //       }
-    //     }
-    //   `,
-    // );
+    const idDosen = await ctx.db.query.user(
+      {
+        where: { id: ctx.request.userId },
+      },
+      `
+        {
+          dosen {
+            id
+          }
+        }
+      `,
+    );
 
     args.data.dosen = { connect: { id: idDosen.dosen.id } };
     args.data.pin = shortid();
