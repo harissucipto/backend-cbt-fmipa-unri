@@ -1,7 +1,7 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const shortid = require('shortid');
-const { hasPermission } = require('../utils');
+const { hasPermission, getRandomSoal, getSoalSiswa } = require('../utils');
 
 const mutations = {
   // eslint-disable-next-line no-unused-vars
@@ -647,7 +647,68 @@ const mutations = {
 
     console.log(args, 'recheck args');
     // 3. if they do, query all the dosens!
-    return ctx.db.mutation.createUjian(args, info);
+    const ujian = await ctx.db.mutation.createUjian(args, info);
+
+    // buat ujian di mahasiswa
+    /*
+        data yang dibutuhkan:
+        ujian:  id Ujian!
+        mahasiswa: Mahasiswa!
+        soals: [Soal!]
+    */
+
+    const idUjian = ujian.id;
+    const {
+      kelas: { mahasiswas },
+      bankSoal: { soals },
+    } = await ctx.db.query.ujian(
+      {
+        where: {
+          id: idUjian,
+        },
+      },
+      `
+      {
+        id
+        nama
+        kelas {
+          mahasiswas {
+            id
+            nama
+          }
+        }
+        bankSoal {
+          soals {
+            id
+            tingkatKesulitan
+          }
+        }
+      }
+      `,
+    );
+
+    // ekstraks tingkat kesulitan yang diminta
+    // persen
+
+    const {
+      data: {
+        presentasiMudah, presentasiSedang, presentasiSusah, JumlahSoal,
+      },
+    } = args;
+
+    const ambilSoal = (bankSoal, persenSoal, permintaan) => () =>
+      getSoalSiswa(bankSoal, persenSoal, permintaan);
+    const getSoalAcak = ambilSoal(
+      soals,
+      { presentasiMudah, presentasiSedang, presentasiSusah },
+      JumlahSoal,
+    );
+
+    for (let indexSiswa = 0; indexSiswa < mahasiswas.length; indexSiswa++) {
+      console.log(getSoalAcak(), `mahasiswa${indexSiswa}`);
+    }
+
+    return ujian;
   },
 
   async updateUjian(parent, args, ctx, info) {
