@@ -44,7 +44,7 @@ function notIncluded(total, ...minus) {
 }
 
 function concatSoal(...items) {
-  return items.reduce((a, b) => a.concat(b), []);
+  return items.reduce((a, b) => a.concat(...b), []);
 }
 
 const filterSoal = bankSoal => tingkatKesulitan =>
@@ -70,9 +70,40 @@ function getSoalSiswa(bankSoal, presentasiSoal, jumlahSoalUjian) {
     jumlahSoalUjian - totalSoalMudah - totalSoalSedang - totalSoalSusah,
   );
 
-  return concatSoal(soalAcak, soalMudah, soalSedang, soalSusah);
+  return concatSoal(soalAcak, soalMudah, soalSedang, soalSusah).map(item => ({ id: item.id }));
+}
+
+async function promiseCreateSoal(ctx, mahasiswas, getSoalAcak, idUjian) {
+  const results = [];
+  for (const mahasiswa of mahasiswas) {
+    results.push(ctx.db.mutation.createSoalMahasiswa(
+      {
+        data: {
+          ujian: {
+            connect: {
+              id: idUjian,
+            },
+          },
+          mahasiswa: {
+            connect: {
+              id: mahasiswa.id,
+            },
+          },
+          soals: {
+            connect: getSoalAcak(),
+          },
+        },
+      },
+      `{
+          id
+        }
+        `,
+    ));
+  }
+  return Promise.all(results);
 }
 
 exports.hasPermission = hasPermission;
 exports.getRandomSoal = getRandomSoal;
 exports.getSoalSiswa = getSoalSiswa;
+exports.promiseCreateSoal = promiseCreateSoal;

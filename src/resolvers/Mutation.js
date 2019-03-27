@@ -1,7 +1,9 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const shortid = require('shortid');
-const { hasPermission, getRandomSoal, getSoalSiswa } = require('../utils');
+const {
+  hasPermission, getRandomSoal, getSoalSiswa, promiseCreateSoal,
+} = require('../utils');
 
 const mutations = {
   // eslint-disable-next-line no-unused-vars
@@ -649,15 +651,11 @@ const mutations = {
     // 3. if they do, query all the dosens!
     const ujian = await ctx.db.mutation.createUjian(args, info);
 
-    // buat ujian di mahasiswa
-    /*
-        data yang dibutuhkan:
-        ujian:  id Ujian!
-        mahasiswa: Mahasiswa!
-        soals: [Soal!]
-    */
+
+    // buat soal ke mahasiswa
 
     const idUjian = ujian.id;
+
     const {
       kelas: { mahasiswas },
       bankSoal: { soals },
@@ -687,26 +685,27 @@ const mutations = {
       `,
     );
 
-    // ekstraks tingkat kesulitan yang diminta
-    // persen
 
+    // ambil data presentasi
     const {
       data: {
         presentasiMudah, presentasiSedang, presentasiSusah, JumlahSoal,
       },
     } = args;
 
+    // bikin fungsi ambil acak soal
     const ambilSoal = (bankSoal, persenSoal, permintaan) => () =>
       getSoalSiswa(bankSoal, persenSoal, permintaan);
+
     const getSoalAcak = ambilSoal(
       soals,
       { presentasiMudah, presentasiSedang, presentasiSusah },
       JumlahSoal,
     );
 
-    for (let indexSiswa = 0; indexSiswa < mahasiswas.length; indexSiswa++) {
-      console.log(getSoalAcak(), `mahasiswa${indexSiswa}`);
-    }
+    // buat soal acak pada mahasiswa
+    await promiseCreateSoal(ctx, mahasiswas, getSoalAcak, idUjian);
+
 
     return ujian;
   },
