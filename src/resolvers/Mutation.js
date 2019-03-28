@@ -651,7 +651,6 @@ const mutations = {
     // 3. if they do, query all the dosens!
     const ujian = await ctx.db.mutation.createUjian(args, info);
 
-
     // buat soal ke mahasiswa
 
     const idUjian = ujian.id;
@@ -685,7 +684,6 @@ const mutations = {
       `,
     );
 
-
     // ambil data presentasi
     const {
       data: {
@@ -705,7 +703,6 @@ const mutations = {
 
     // buat soal acak pada mahasiswa
     await promiseCreateSoal(ctx, mahasiswas, getSoalAcak, idUjian);
-
 
     return ujian;
   },
@@ -757,6 +754,19 @@ const mutations = {
     // hasPermission(currentUser, ['ADMIN']);
 
     // // 3. Delete it!
+    await ctx.db.mutation.deleteManySoalMahasiswas(
+      {
+        where: {
+          ujian: { id: args.where.id },
+        },
+      },
+      `
+      {
+        count
+      }
+      `,
+    );
+
     return ctx.db.mutation.deleteUjian(args, info);
   },
 };
