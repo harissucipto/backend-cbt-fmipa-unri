@@ -1,5 +1,6 @@
 // const { forwardTo } = require('prisma-binding');
 const { hasPermission } = require('../utils');
+const jwt = require('jsonwebtoken');
 
 const Query = {
   me(parent, args, ctx, info) {
@@ -446,6 +447,142 @@ const Query = {
 
     // 3. if they do, query all the dosens!
     return ctx.db.query.ujians(args, info);
+  },
+
+  // aplikasi ujian
+
+  statusUjian(parent, args, ctx, info) {
+    console.log(ctx.request.cookies, 'contoh request');
+    // check if there is a current user ID
+    if (!ctx.request.userId) {
+      return null;
+    }
+    return ctx.db.query.user(
+      {
+        where: { id: ctx.request.userId },
+      },
+      info,
+    );
+  },
+
+  infoUjian(parent, args, ctx, info) {
+    const { userId } = jwt.verify(args.jwt, process.env.APP_SECRET);
+    if (!userId) {
+      return null;
+    }
+
+    const getUjian = ctx.db.query.ujian(
+      {
+        where: { id: args.id },
+      },
+      `
+        {
+          id
+          nama
+          dosen {
+            id
+            nama
+          }
+          prodi {
+            id
+            nama
+            jurusan {
+              id
+              nama
+            }
+          }
+          kelas {
+            id
+            nama
+            mataKuliah {
+              id
+              nama
+            }
+          }
+          tanggalPelaksanaan
+          lokasi
+          JumlahSoal
+          durasiPengerjaan
+        }
+      `,
+    );
+
+    return getUjian;
+  },
+
+  infoPesertaUjian(parent, args, ctx, info) {
+    const { userId } = jwt.verify(args.jwt, process.env.APP_SECRET);
+    if (!userId) {
+      return null;
+    }
+
+    const getUser = ctx.db.query.user(
+      {
+        where: { id: userId },
+      },
+      `
+        {
+          id
+          email
+          mahasiswa {
+            id
+            nama
+            nim
+          }
+        }
+      `,
+    );
+
+    return getUser;
+  },
+
+  async soalUjianMahasiswa(parent, args, ctx, info) {
+    const { userId } = jwt.verify(args.jwt, process.env.APP_SECRET);
+    if (!userId) {
+      return null;
+    }
+
+    const soalUjian = await ctx.db.query.soalMahasiswas(
+      {
+        where: {
+          AND: [
+            {
+              mahasiswa: {
+                user: {
+                  id: userId,
+                },
+              },
+            },
+            {
+              ujian: {
+                id: args.id,
+              },
+            },
+          ],
+        },
+      },
+      `
+        {
+          id
+          soals {
+            id
+            pertanyaan
+            jawaban {
+              id
+              content
+              title
+            }
+          }
+          jawaban {
+            id
+            idSoal
+            jawaban
+          }
+        }
+      `,
+    );
+
+    return soalUjian[0];
   },
 };
 

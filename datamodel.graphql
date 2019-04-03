@@ -126,4 +126,11 @@ type SoalMahasiswa {
   ujian: Ujian!
   mahasiswa: Mahasiswa!
   soals: [Soal!]
+  jawaban: [JawabanMahasiswa!]
+}
+
+type JawabanMahasiswa {
+  id: ID! @unique
+  idSoal: String!
+  jawaban: String!
 }

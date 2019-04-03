@@ -34,3 +34,8 @@ input KelasBaruInput {
   tahunAjaran: String!
   nama: String!
 }
+
+type IdentitasLoginUjian {
+  jwt: String!
+  id: String!
+}

@@ -17,6 +17,14 @@ server.express.use((req, res, next) => {
     req.userId = userId;
   }
 
+  console.log(token, 'ini token');
+
+  // saat di aplikasi ujian dan pengawas
+  const { idUjian } = req.cookies;
+  if (idUjian) {
+    console.log(idUjian, 'ini idujian');
+  }
+
   next();
 });
 
@@ -34,7 +42,7 @@ server.start(
   {
     cors: {
       credentials: true,
-      origin: process.env.FRONTEND_URL,
+      origin: [process.env.FRONTEND_URL, 'http://localhost:3000'],
     },
   },
   (deets) => {

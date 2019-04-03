@@ -145,6 +145,10 @@ type AggregateJawaban {
   count: Int!
 }
 
+type AggregateJawabanMahasiswa {
+  count: Int!
+}
+
 type AggregateJurusan {
   count: Int!
 }
@@ -710,6 +714,152 @@ input JawabanCreateWithoutSoalInput {
 type JawabanEdge {
   node: Jawaban!
   cursor: String!
+}
+
+type JawabanMahasiswa {
+  id: ID!
+  idSoal: String!
+  jawaban: String!
+}
+
+type JawabanMahasiswaConnection {
+  pageInfo: PageInfo!
+  edges: [JawabanMahasiswaEdge]!
+  aggregate: AggregateJawabanMahasiswa!
+}
+
+input JawabanMahasiswaCreateInput {
+  idSoal: String!
+  jawaban: String!
+}
+
+input JawabanMahasiswaCreateManyInput {
+  create: [JawabanMahasiswaCreateInput!]
+  connect: [JawabanMahasiswaWhereUniqueInput!]
+}
+
+type JawabanMahasiswaEdge {
+  node: JawabanMahasiswa!
+  cursor: String!
+}
+
+enum JawabanMahasiswaOrderByInput {
+  id_ASC
+  id_DESC
+  idSoal_ASC
+  idSoal_DESC
+  jawaban_ASC
+  jawaban_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type JawabanMahasiswaPreviousValues {
+  id: ID!
+  idSoal: String!
+  jawaban: String!
+}
+
+type JawabanMahasiswaSubscriptionPayload {
+  mutation: MutationType!
+  node: JawabanMahasiswa
+  updatedFields: [String!]
+  previousValues: JawabanMahasiswaPreviousValues
+}
+
+input JawabanMahasiswaSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: JawabanMahasiswaWhereInput
+  AND: [JawabanMahasiswaSubscriptionWhereInput!]
+  OR: [JawabanMahasiswaSubscriptionWhereInput!]
+  NOT: [JawabanMahasiswaSubscriptionWhereInput!]
+}
+
+input JawabanMahasiswaUpdateDataInput {
+  idSoal: String
+  jawaban: String
+}
+
+input JawabanMahasiswaUpdateInput {
+  idSoal: String
+  jawaban: String
+}
+
+input JawabanMahasiswaUpdateManyInput {
+  create: [JawabanMahasiswaCreateInput!]
+  delete: [JawabanMahasiswaWhereUniqueInput!]
+  connect: [JawabanMahasiswaWhereUniqueInput!]
+  disconnect: [JawabanMahasiswaWhereUniqueInput!]
+  update: [JawabanMahasiswaUpdateWithWhereUniqueNestedInput!]
+  upsert: [JawabanMahasiswaUpsertWithWhereUniqueNestedInput!]
+}
+
+input JawabanMahasiswaUpdateWithWhereUniqueNestedInput {
+  where: JawabanMahasiswaWhereUniqueInput!
+  data: JawabanMahasiswaUpdateDataInput!
+}
+
+input JawabanMahasiswaUpsertWithWhereUniqueNestedInput {
+  where: JawabanMahasiswaWhereUniqueInput!
+  update: JawabanMahasiswaUpdateDataInput!
+  create: JawabanMahasiswaCreateInput!
+}
+
+input JawabanMahasiswaWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  idSoal: String
+  idSoal_not: String
+  idSoal_in: [String!]
+  idSoal_not_in: [String!]
+  idSoal_lt: String
+  idSoal_lte: String
+  idSoal_gt: String
+  idSoal_gte: String
+  idSoal_contains: String
+  idSoal_not_contains: String
+  idSoal_starts_with: String
+  idSoal_not_starts_with: String
+  idSoal_ends_with: String
+  idSoal_not_ends_with: String
+  jawaban: String
+  jawaban_not: String
+  jawaban_in: [String!]
+  jawaban_not_in: [String!]
+  jawaban_lt: String
+  jawaban_lte: String
+  jawaban_gt: String
+  jawaban_gte: String
+  jawaban_contains: String
+  jawaban_not_contains: String
+  jawaban_starts_with: String
+  jawaban_not_starts_with: String
+  jawaban_ends_with: String
+  jawaban_not_ends_with: String
+  AND: [JawabanMahasiswaWhereInput!]
+  OR: [JawabanMahasiswaWhereInput!]
+  NOT: [JawabanMahasiswaWhereInput!]
+}
+
+input JawabanMahasiswaWhereUniqueInput {
+  id: ID
 }
 
 enum JawabanOrderByInput {
@@ -1661,6 +1811,12 @@ type Mutation {
   upsertJawaban(where: JawabanWhereUniqueInput!, create: JawabanCreateInput!, update: JawabanUpdateInput!): Jawaban!
   deleteJawaban(where: JawabanWhereUniqueInput!): Jawaban
   deleteManyJawabans(where: JawabanWhereInput): BatchPayload!
+  createJawabanMahasiswa(data: JawabanMahasiswaCreateInput!): JawabanMahasiswa!
+  updateJawabanMahasiswa(data: JawabanMahasiswaUpdateInput!, where: JawabanMahasiswaWhereUniqueInput!): JawabanMahasiswa
+  updateManyJawabanMahasiswas(data: JawabanMahasiswaUpdateInput!, where: JawabanMahasiswaWhereInput): BatchPayload!
+  upsertJawabanMahasiswa(where: JawabanMahasiswaWhereUniqueInput!, create: JawabanMahasiswaCreateInput!, update: JawabanMahasiswaUpdateInput!): JawabanMahasiswa!
+  deleteJawabanMahasiswa(where: JawabanMahasiswaWhereUniqueInput!): JawabanMahasiswa
+  deleteManyJawabanMahasiswas(where: JawabanMahasiswaWhereInput): BatchPayload!
   createJurusan(data: JurusanCreateInput!): Jurusan!
   updateJurusan(data: JurusanUpdateInput!, where: JurusanWhereUniqueInput!): Jurusan
   updateManyJurusans(data: JurusanUpdateInput!, where: JurusanWhereInput): BatchPayload!
@@ -1914,6 +2070,9 @@ type Query {
   jawaban(where: JawabanWhereUniqueInput!): Jawaban
   jawabans(where: JawabanWhereInput, orderBy: JawabanOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Jawaban]!
   jawabansConnection(where: JawabanWhereInput, orderBy: JawabanOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): JawabanConnection!
+  jawabanMahasiswa(where: JawabanMahasiswaWhereUniqueInput!): JawabanMahasiswa
+  jawabanMahasiswas(where: JawabanMahasiswaWhereInput, orderBy: JawabanMahasiswaOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [JawabanMahasiswa]!
+  jawabanMahasiswasConnection(where: JawabanMahasiswaWhereInput, orderBy: JawabanMahasiswaOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): JawabanMahasiswaConnection!
   jurusan(where: JurusanWhereUniqueInput!): Jurusan
   jurusans(where: JurusanWhereInput, orderBy: JurusanOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Jurusan]!
   jurusansConnection(where: JurusanWhereInput, orderBy: JurusanOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): JurusanConnection!
@@ -2006,6 +2165,7 @@ type SoalMahasiswa {
   ujian: Ujian!
   mahasiswa: Mahasiswa!
   soals(where: SoalWhereInput, orderBy: SoalOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Soal!]
+  jawaban(where: JawabanMahasiswaWhereInput, orderBy: JawabanMahasiswaOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [JawabanMahasiswa!]
 }
 
 type SoalMahasiswaConnection {
@@ -2018,6 +2178,7 @@ input SoalMahasiswaCreateInput {
   ujian: UjianCreateOneInput!
   mahasiswa: MahasiswaCreateOneInput!
   soals: SoalCreateManyInput
+  jawaban: JawabanMahasiswaCreateManyInput
 }
 
 type SoalMahasiswaEdge {
@@ -2060,6 +2221,7 @@ input SoalMahasiswaUpdateInput {
   ujian: UjianUpdateOneRequiredInput
   mahasiswa: MahasiswaUpdateOneRequiredInput
   soals: SoalUpdateManyInput
+  jawaban: JawabanMahasiswaUpdateManyInput
 }
 
 input SoalMahasiswaWhereInput {
@@ -2082,6 +2244,9 @@ input SoalMahasiswaWhereInput {
   soals_every: SoalWhereInput
   soals_some: SoalWhereInput
   soals_none: SoalWhereInput
+  jawaban_every: JawabanMahasiswaWhereInput
+  jawaban_some: JawabanMahasiswaWhereInput
+  jawaban_none: JawabanMahasiswaWhereInput
   AND: [SoalMahasiswaWhereInput!]
   OR: [SoalMahasiswaWhereInput!]
   NOT: [SoalMahasiswaWhereInput!]
@@ -2291,6 +2456,7 @@ type Subscription {
   bankSoal(where: BankSoalSubscriptionWhereInput): BankSoalSubscriptionPayload
   dosen(where: DosenSubscriptionWhereInput): DosenSubscriptionPayload
   jawaban(where: JawabanSubscriptionWhereInput): JawabanSubscriptionPayload
+  jawabanMahasiswa(where: JawabanMahasiswaSubscriptionWhereInput): JawabanMahasiswaSubscriptionPayload
   jurusan(where: JurusanSubscriptionWhereInput): JurusanSubscriptionPayload
   kelas(where: KelasSubscriptionWhereInput): KelasSubscriptionPayload
   mahasiswa(where: MahasiswaSubscriptionWhereInput): MahasiswaSubscriptionPayload

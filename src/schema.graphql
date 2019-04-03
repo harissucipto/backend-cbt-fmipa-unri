@@ -56,6 +56,12 @@ type Mutation {
   createUjian(data: UjianCreateInput!): Ujian!
   deleteUjian(where: UjianWhereUniqueInput!): Ujian
   updateUjian(data: UjianUpdateInput!, where: UjianWhereUniqueInput!): Ujian
+
+  loginUjian(
+    email: String!
+    password: String!
+    pinUjian: String!
+  ): IdentitasLoginUjian!
 }
 
 type Query {
@@ -180,6 +186,12 @@ type Query {
     first: Int
     last: Int
   ): [Ujian]!
+
+  statusUjian: User
+
+  infoUjian(id: String!, jwt: String!): Ujian
+  infoPesertaUjian(id: String!, jwt: String!): User
+  soalUjianMahasiswa(id: String!, jwt: String!): SoalMahasiswa!
 }
 
 type User {
