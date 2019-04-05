@@ -587,6 +587,10 @@ const Query = {
 
     return soalUjian[0];
   },
+
+  async skor(parent, args, ctx, info) {
+    return ctx.db.query.skor(args, info);
+  },
 };
 
 module.exports = Query;

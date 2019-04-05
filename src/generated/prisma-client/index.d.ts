@@ -765,6 +765,8 @@ export type BankSoalOrderByInput =
 export type SkorOrderByInput =
   | "id_ASC"
   | "id_DESC"
+  | "idSoal_ASC"
+  | "idSoal_DESC"
   | "nilai_ASC"
   | "nilai_DESC"
   | "createdAt_ASC"
@@ -2378,6 +2380,7 @@ export interface JawabanCreateWithoutSoalInput {
 }
 
 export interface SkorUpdateInput {
+  idSoal?: String;
   soalMahasiswa?: SoalMahasiswaUpdateOneRequiredInput;
   nilai?: Float;
 }
@@ -2405,6 +2408,20 @@ export interface SkorWhereInput {
   id_not_starts_with?: ID_Input;
   id_ends_with?: ID_Input;
   id_not_ends_with?: ID_Input;
+  idSoal?: String;
+  idSoal_not?: String;
+  idSoal_in?: String[] | String;
+  idSoal_not_in?: String[] | String;
+  idSoal_lt?: String;
+  idSoal_lte?: String;
+  idSoal_gt?: String;
+  idSoal_gte?: String;
+  idSoal_contains?: String;
+  idSoal_not_contains?: String;
+  idSoal_starts_with?: String;
+  idSoal_not_starts_with?: String;
+  idSoal_ends_with?: String;
+  idSoal_not_ends_with?: String;
   soalMahasiswa?: SoalMahasiswaWhereInput;
   nilai?: Float;
   nilai_not?: Float;
@@ -2461,6 +2478,7 @@ export interface KelasUpdateManyWithoutMataKuliahInput {
 }
 
 export interface SkorCreateInput {
+  idSoal: String;
   soalMahasiswa: SoalMahasiswaCreateOneInput;
   nilai?: Float;
 }
@@ -2798,6 +2816,7 @@ export interface SoalUpsertWithWhereUniqueWithoutBankSoalInput {
 
 export type SkorWhereUniqueInput = AtLeastOne<{
   id: ID_Input;
+  idSoal?: String;
 }>;
 
 export interface DosenUpdateInput {
@@ -3928,11 +3947,13 @@ export interface BankSoalSubscriptionPayloadSubscription
 
 export interface SkorNode {
   id: ID_Output;
+  idSoal: String;
   nilai: Float;
 }
 
 export interface Skor extends Promise<SkorNode>, Fragmentable {
   id: () => Promise<ID_Output>;
+  idSoal: () => Promise<String>;
   soalMahasiswa: <T = SoalMahasiswa>() => T;
   nilai: () => Promise<Float>;
 }
@@ -3941,6 +3962,7 @@ export interface SkorSubscription
   extends Promise<AsyncIterator<SkorNode>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
+  idSoal: () => Promise<AsyncIterator<String>>;
   soalMahasiswa: <T = SoalMahasiswaSubscription>() => T;
   nilai: () => Promise<AsyncIterator<Float>>;
 }
@@ -5074,6 +5096,7 @@ export interface MahasiswaEdgeSubscription
 
 export interface SkorPreviousValuesNode {
   id: ID_Output;
+  idSoal: String;
   nilai: Float;
 }
 
@@ -5081,6 +5104,7 @@ export interface SkorPreviousValues
   extends Promise<SkorPreviousValuesNode>,
     Fragmentable {
   id: () => Promise<ID_Output>;
+  idSoal: () => Promise<String>;
   nilai: () => Promise<Float>;
 }
 
@@ -5088,6 +5112,7 @@ export interface SkorPreviousValuesSubscription
   extends Promise<AsyncIterator<SkorPreviousValuesNode>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
+  idSoal: () => Promise<AsyncIterator<String>>;
   nilai: () => Promise<AsyncIterator<Float>>;
 }
 

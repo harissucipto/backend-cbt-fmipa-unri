@@ -139,6 +139,7 @@ type JawabanMahasiswa {
 
 type Skor {
   id: ID! @unique
+  idSoal: String! @unique
   soalMahasiswa: SoalMahasiswa!
   nilai: Float! @default(value: 0)
 }

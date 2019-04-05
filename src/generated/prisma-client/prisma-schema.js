@@ -2127,6 +2127,7 @@ type Query {
 
 type Skor {
   id: ID!
+  idSoal: String!
   soalMahasiswa: SoalMahasiswa!
   nilai: Float!
 }
@@ -2138,6 +2139,7 @@ type SkorConnection {
 }
 
 input SkorCreateInput {
+  idSoal: String!
   soalMahasiswa: SoalMahasiswaCreateOneInput!
   nilai: Float
 }
@@ -2150,6 +2152,8 @@ type SkorEdge {
 enum SkorOrderByInput {
   id_ASC
   id_DESC
+  idSoal_ASC
+  idSoal_DESC
   nilai_ASC
   nilai_DESC
   createdAt_ASC
@@ -2160,6 +2164,7 @@ enum SkorOrderByInput {
 
 type SkorPreviousValues {
   id: ID!
+  idSoal: String!
   nilai: Float!
 }
 
@@ -2182,6 +2187,7 @@ input SkorSubscriptionWhereInput {
 }
 
 input SkorUpdateInput {
+  idSoal: String
   soalMahasiswa: SoalMahasiswaUpdateOneRequiredInput
   nilai: Float
 }
@@ -2201,6 +2207,20 @@ input SkorWhereInput {
   id_not_starts_with: ID
   id_ends_with: ID
   id_not_ends_with: ID
+  idSoal: String
+  idSoal_not: String
+  idSoal_in: [String!]
+  idSoal_not_in: [String!]
+  idSoal_lt: String
+  idSoal_lte: String
+  idSoal_gt: String
+  idSoal_gte: String
+  idSoal_contains: String
+  idSoal_not_contains: String
+  idSoal_starts_with: String
+  idSoal_not_starts_with: String
+  idSoal_ends_with: String
+  idSoal_not_ends_with: String
   soalMahasiswa: SoalMahasiswaWhereInput
   nilai: Float
   nilai_not: Float
@@ -2217,6 +2237,7 @@ input SkorWhereInput {
 
 input SkorWhereUniqueInput {
   id: ID
+  idSoal: String
 }
 
 type Soal {

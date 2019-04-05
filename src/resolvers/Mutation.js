@@ -890,15 +890,22 @@ const mutations = {
 
     // masukan ke db
 
-    return ctx.db.mutation.createSkor({
-      data: {
+    return ctx.db.mutation.upsertSkor({
+      where: {
+        idSoal: args.soalMahasiswa,
+      },
+      create: {
+        idSoal: args.soalMahasiswa,
         soalMahasiswa: {
           connect: {
             id: args.soalMahasiswa,
           }
         },
         nilai: skorSaya,
-      }
+      },
+      update: {
+        nilai: skorSaya,
+      },
     },
     `
      {

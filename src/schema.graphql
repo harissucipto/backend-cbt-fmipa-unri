@@ -199,6 +199,8 @@ type Query {
   infoUjian(id: String!, jwt: String!): Ujian
   infoPesertaUjian(id: String!, jwt: String!): User
   soalUjianMahasiswa(id: String!, jwt: String!): SoalMahasiswa!
+
+  skor(where: SkorWhereUniqueInput!): Skor!
 }
 
 type User {
