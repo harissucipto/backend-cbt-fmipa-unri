@@ -836,8 +836,8 @@ export type JawabanMahasiswaOrderByInput =
   | "id_DESC"
   | "idSoal_ASC"
   | "idSoal_DESC"
-  | "jawaban_ASC"
-  | "jawaban_DESC"
+  | "idJawaban_ASC"
+  | "idJawaban_DESC"
   | "createdAt_ASC"
   | "createdAt_DESC"
   | "updatedAt_ASC"
@@ -1376,7 +1376,7 @@ export interface UserUpdateWithoutAdminDataInput {
 
 export interface JawabanMahasiswaUpdateDataInput {
   idSoal?: String;
-  jawaban?: String;
+  idJawaban?: String;
 }
 
 export interface UserUpdatepermissionsInput {
@@ -1926,7 +1926,7 @@ export interface AdminCreateInput {
 
 export interface JawabanMahasiswaUpdateInput {
   idSoal?: String;
-  jawaban?: String;
+  idJawaban?: String;
 }
 
 export interface UserCreateWithoutAdminInput {
@@ -1943,7 +1943,7 @@ export interface UserCreateWithoutAdminInput {
 
 export interface JawabanMahasiswaCreateInput {
   idSoal: String;
-  jawaban: String;
+  idJawaban: String;
 }
 
 export interface MahasiswaCreateOneWithoutUserInput {
@@ -2278,6 +2278,7 @@ export interface AngkatanCreateInput {
 
 export type JawabanMahasiswaWhereUniqueInput = AtLeastOne<{
   id: ID_Input;
+  idSoal?: String;
 }>;
 
 export interface AngkatanUpdateInput {
@@ -2885,20 +2886,20 @@ export interface JawabanMahasiswaWhereInput {
   idSoal_not_starts_with?: String;
   idSoal_ends_with?: String;
   idSoal_not_ends_with?: String;
-  jawaban?: String;
-  jawaban_not?: String;
-  jawaban_in?: String[] | String;
-  jawaban_not_in?: String[] | String;
-  jawaban_lt?: String;
-  jawaban_lte?: String;
-  jawaban_gt?: String;
-  jawaban_gte?: String;
-  jawaban_contains?: String;
-  jawaban_not_contains?: String;
-  jawaban_starts_with?: String;
-  jawaban_not_starts_with?: String;
-  jawaban_ends_with?: String;
-  jawaban_not_ends_with?: String;
+  idJawaban?: String;
+  idJawaban_not?: String;
+  idJawaban_in?: String[] | String;
+  idJawaban_not_in?: String[] | String;
+  idJawaban_lt?: String;
+  idJawaban_lte?: String;
+  idJawaban_gt?: String;
+  idJawaban_gte?: String;
+  idJawaban_contains?: String;
+  idJawaban_not_contains?: String;
+  idJawaban_starts_with?: String;
+  idJawaban_not_starts_with?: String;
+  idJawaban_ends_with?: String;
+  idJawaban_not_ends_with?: String;
   AND?: JawabanMahasiswaWhereInput[] | JawabanMahasiswaWhereInput;
   OR?: JawabanMahasiswaWhereInput[] | JawabanMahasiswaWhereInput;
   NOT?: JawabanMahasiswaWhereInput[] | JawabanMahasiswaWhereInput;
@@ -4131,7 +4132,7 @@ export interface AggregateJawabanSubscription
 export interface JawabanMahasiswaPreviousValuesNode {
   id: ID_Output;
   idSoal: String;
-  jawaban: String;
+  idJawaban: String;
 }
 
 export interface JawabanMahasiswaPreviousValues
@@ -4139,7 +4140,7 @@ export interface JawabanMahasiswaPreviousValues
     Fragmentable {
   id: () => Promise<ID_Output>;
   idSoal: () => Promise<String>;
-  jawaban: () => Promise<String>;
+  idJawaban: () => Promise<String>;
 }
 
 export interface JawabanMahasiswaPreviousValuesSubscription
@@ -4147,7 +4148,7 @@ export interface JawabanMahasiswaPreviousValuesSubscription
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
   idSoal: () => Promise<AsyncIterator<String>>;
-  jawaban: () => Promise<AsyncIterator<String>>;
+  idJawaban: () => Promise<AsyncIterator<String>>;
 }
 
 export interface JawabanConnectionNode {}
@@ -4636,7 +4637,7 @@ export interface AngkatanSubscription
 export interface JawabanMahasiswaNode {
   id: ID_Output;
   idSoal: String;
-  jawaban: String;
+  idJawaban: String;
 }
 
 export interface JawabanMahasiswa
@@ -4644,7 +4645,7 @@ export interface JawabanMahasiswa
     Fragmentable {
   id: () => Promise<ID_Output>;
   idSoal: () => Promise<String>;
-  jawaban: () => Promise<String>;
+  idJawaban: () => Promise<String>;
 }
 
 export interface JawabanMahasiswaSubscription
@@ -4652,7 +4653,7 @@ export interface JawabanMahasiswaSubscription
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
   idSoal: () => Promise<AsyncIterator<String>>;
-  jawaban: () => Promise<AsyncIterator<String>>;
+  idJawaban: () => Promise<AsyncIterator<String>>;
 }
 
 export interface MataKuliahSubscriptionPayloadNode {

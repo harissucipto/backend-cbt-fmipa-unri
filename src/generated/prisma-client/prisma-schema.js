@@ -720,7 +720,7 @@ type JawabanEdge {
 type JawabanMahasiswa {
   id: ID!
   idSoal: String!
-  jawaban: String!
+  idJawaban: String!
 }
 
 type JawabanMahasiswaConnection {
@@ -731,7 +731,7 @@ type JawabanMahasiswaConnection {
 
 input JawabanMahasiswaCreateInput {
   idSoal: String!
-  jawaban: String!
+  idJawaban: String!
 }
 
 input JawabanMahasiswaCreateManyInput {
@@ -749,8 +749,8 @@ enum JawabanMahasiswaOrderByInput {
   id_DESC
   idSoal_ASC
   idSoal_DESC
-  jawaban_ASC
-  jawaban_DESC
+  idJawaban_ASC
+  idJawaban_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -760,7 +760,7 @@ enum JawabanMahasiswaOrderByInput {
 type JawabanMahasiswaPreviousValues {
   id: ID!
   idSoal: String!
-  jawaban: String!
+  idJawaban: String!
 }
 
 type JawabanMahasiswaSubscriptionPayload {
@@ -783,12 +783,12 @@ input JawabanMahasiswaSubscriptionWhereInput {
 
 input JawabanMahasiswaUpdateDataInput {
   idSoal: String
-  jawaban: String
+  idJawaban: String
 }
 
 input JawabanMahasiswaUpdateInput {
   idSoal: String
-  jawaban: String
+  idJawaban: String
 }
 
 input JawabanMahasiswaUpdateManyInput {
@@ -840,20 +840,20 @@ input JawabanMahasiswaWhereInput {
   idSoal_not_starts_with: String
   idSoal_ends_with: String
   idSoal_not_ends_with: String
-  jawaban: String
-  jawaban_not: String
-  jawaban_in: [String!]
-  jawaban_not_in: [String!]
-  jawaban_lt: String
-  jawaban_lte: String
-  jawaban_gt: String
-  jawaban_gte: String
-  jawaban_contains: String
-  jawaban_not_contains: String
-  jawaban_starts_with: String
-  jawaban_not_starts_with: String
-  jawaban_ends_with: String
-  jawaban_not_ends_with: String
+  idJawaban: String
+  idJawaban_not: String
+  idJawaban_in: [String!]
+  idJawaban_not_in: [String!]
+  idJawaban_lt: String
+  idJawaban_lte: String
+  idJawaban_gt: String
+  idJawaban_gte: String
+  idJawaban_contains: String
+  idJawaban_not_contains: String
+  idJawaban_starts_with: String
+  idJawaban_not_starts_with: String
+  idJawaban_ends_with: String
+  idJawaban_not_ends_with: String
   AND: [JawabanMahasiswaWhereInput!]
   OR: [JawabanMahasiswaWhereInput!]
   NOT: [JawabanMahasiswaWhereInput!]
@@ -861,6 +861,7 @@ input JawabanMahasiswaWhereInput {
 
 input JawabanMahasiswaWhereUniqueInput {
   id: ID
+  idSoal: String
 }
 
 enum JawabanOrderByInput {

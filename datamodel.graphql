@@ -131,6 +131,6 @@ type SoalMahasiswa {
 
 type JawabanMahasiswa {
   id: ID! @unique
-  idSoal: String!
-  jawaban: String!
+  idSoal: String! @unique
+  idJawaban: String!
 }

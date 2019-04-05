@@ -827,6 +827,11 @@ const mutations = {
       id: validPinUjian.id,
     };
   },
+
+  // udpate jawaban mahasiswa
+   updateSoalMahasiswa(parent, args, ctx, info) {
+    return ctx.db.mutation.updateSoalMahasiswa(args, info)
+  }
 };
 
 module.exports = mutations;
