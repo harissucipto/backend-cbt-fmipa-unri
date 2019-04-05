@@ -119,6 +119,7 @@ type Ujian {
   bankSoal: BankSoal!
   kelas: Kelas!
   dosen: Dosen
+  ujianSelesai: Boolean! @default(value: "false")
 }
 
 type SoalMahasiswa {
@@ -127,10 +128,17 @@ type SoalMahasiswa {
   mahasiswa: Mahasiswa!
   soals: [Soal!]
   jawaban: [JawabanMahasiswa!]
+  ujianSelesai: Boolean! @default(value: "false")
 }
 
 type JawabanMahasiswa {
   id: ID! @unique
   idSoal: String! @unique
-  idJawaban: String!
+  jawaban: Jawaban!
+}
+
+type Skor {
+  id: ID! @unique
+  soalMahasiswa: SoalMahasiswa!
+  nilai: Float! @default(value: 0)
 }

@@ -1,6 +1,8 @@
+require('moment/locale/id');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const shortid = require('shortid');
+const moment = require('moment-timezone');
 const {
   hasPermission, getRandomSoal, getSoalSiswa, promiseCreateSoal,
 } = require('../utils');
@@ -789,8 +791,11 @@ const mutations = {
       `
       {
         id
+        tanggalPelaksanaan
+        durasiPengerjaan
         kelas {
           mahasiswas {
+            id
             user {
               id
             }
@@ -806,10 +811,19 @@ const mutations = {
 
     // check apakah mahasiswa ada di list ujian
 
-    if (!validPinUjian.kelas.mahasiswas.filter(mahasiswa => mahasiswa.user.id  === user.id).length) {
+    if (!validPinUjian.kelas.mahasiswas.filter(mahasiswa => mahasiswa.user.id === user.id).length) {
       throw new Error('Pengguna tidak terdaftar di ujian');
     }
 
+    // cek  ujian telah dilaksanakan atau belum atau lewat dari satu hari
+    const bedaWaktu =
+      (moment(validPinUjian.tanggalPelaksanaan).unix() +
+       (Number(validPinUjian.durasiPengerjaan) * 60)) -
+      moment().unix();
+
+    if (bedaWaktu <= 0) {
+      throw new Error('Tanggal dan Waktu Pelaksanaan ujian telah berakhir');
+    }
 
     // 3. generate the JWT Token
     const token = jwt.sign({ userId: user.id }, process.env.APP_SECRET);
@@ -829,8 +843,71 @@ const mutations = {
   },
 
   // udpate jawaban mahasiswa
-   updateSoalMahasiswa(parent, args, ctx, info) {
-    return ctx.db.mutation.updateSoalMahasiswa(args, info)
+  updateSoalMahasiswa(parent, args, ctx, info) {
+    return ctx.db.mutation.updateSoalMahasiswa(args, info);
+  },
+
+  async createSkor(parent, args, ctx, info) {
+    // get jawabanMahasiswa dan kunci jawaban dan kompare denganjawaban
+    if (!args.soalMahasiswa) {
+      throw new Error('Anda jangan curanglah')
+    }
+    const dataSoalMahasiswa = await ctx.db.query.soalMahasiswa(
+      {
+        where: { id: args.soalMahasiswa }
+      },
+      `{
+        soals {
+          id
+          kunciJawaban
+        }
+        jawaban {
+          idSoal
+          jawaban {
+            title
+          }
+        }
+      }`,
+    )
+
+    // hitung skor;
+
+    const nilaiSkor = dataSoalMahasiswa.jawaban.reduce(
+      (acc, jawabanSaya) => {
+        // cari kunciJawaban perindex;
+        const kunciJawaban = dataSoalMahasiswa
+          .soals.filter(
+              soal => soal.id === jawabanSaya.idSoal
+          )[0].kunciJawaban;
+
+        console.log(kunciJawaban);
+        return kunciJawaban === jawabanSaya.jawaban.title ? acc + 1 : acc;
+
+      }, 0,
+    );
+
+    const skorSaya = nilaiSkor / dataSoalMahasiswa.soals.length * 100;
+
+    // masukan ke db
+
+    return ctx.db.mutation.createSkor({
+      data: {
+        soalMahasiswa: {
+          connect: {
+            id: args.soalMahasiswa,
+          }
+        },
+        nilai: skorSaya,
+      }
+    },
+    `
+     {
+       id
+       nilai
+     }
+    `
+    );
+
   }
 };
 

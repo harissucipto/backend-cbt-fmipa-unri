@@ -67,6 +67,8 @@ type Mutation {
     data: SoalMahasiswaUpdateInput!
     where: SoalMahasiswaWhereUniqueInput!
   ): SoalMahasiswa!
+
+  createSkor(soalMahasiswa: ID!): Skor
 }
 
 type Query {

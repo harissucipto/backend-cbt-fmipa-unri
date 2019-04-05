@@ -576,7 +576,10 @@ const Query = {
           jawaban {
             id
             idSoal
-            idJawaban
+            jawaban {
+              id
+              title
+            }
           }
         }
       `,
