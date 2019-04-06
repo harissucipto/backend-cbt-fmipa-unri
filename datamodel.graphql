@@ -133,8 +133,9 @@ type SoalMahasiswa {
 
 type JawabanMahasiswa {
   id: ID! @unique
-  idSoal: String! @unique
+  idSoal: String!
   jawaban: Jawaban!
+  pegangan: String @unique
 }
 
 type Skor {

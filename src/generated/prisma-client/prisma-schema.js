@@ -730,6 +730,7 @@ type JawabanMahasiswa {
   id: ID!
   idSoal: String!
   jawaban: Jawaban!
+  pegangan: String
 }
 
 type JawabanMahasiswaConnection {
@@ -741,6 +742,7 @@ type JawabanMahasiswaConnection {
 input JawabanMahasiswaCreateInput {
   idSoal: String!
   jawaban: JawabanCreateOneInput!
+  pegangan: String
 }
 
 input JawabanMahasiswaCreateManyInput {
@@ -758,6 +760,8 @@ enum JawabanMahasiswaOrderByInput {
   id_DESC
   idSoal_ASC
   idSoal_DESC
+  pegangan_ASC
+  pegangan_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -767,6 +771,7 @@ enum JawabanMahasiswaOrderByInput {
 type JawabanMahasiswaPreviousValues {
   id: ID!
   idSoal: String!
+  pegangan: String
 }
 
 type JawabanMahasiswaSubscriptionPayload {
@@ -790,11 +795,13 @@ input JawabanMahasiswaSubscriptionWhereInput {
 input JawabanMahasiswaUpdateDataInput {
   idSoal: String
   jawaban: JawabanUpdateOneRequiredInput
+  pegangan: String
 }
 
 input JawabanMahasiswaUpdateInput {
   idSoal: String
   jawaban: JawabanUpdateOneRequiredInput
+  pegangan: String
 }
 
 input JawabanMahasiswaUpdateManyInput {
@@ -847,6 +854,20 @@ input JawabanMahasiswaWhereInput {
   idSoal_ends_with: String
   idSoal_not_ends_with: String
   jawaban: JawabanWhereInput
+  pegangan: String
+  pegangan_not: String
+  pegangan_in: [String!]
+  pegangan_not_in: [String!]
+  pegangan_lt: String
+  pegangan_lte: String
+  pegangan_gt: String
+  pegangan_gte: String
+  pegangan_contains: String
+  pegangan_not_contains: String
+  pegangan_starts_with: String
+  pegangan_not_starts_with: String
+  pegangan_ends_with: String
+  pegangan_not_ends_with: String
   AND: [JawabanMahasiswaWhereInput!]
   OR: [JawabanMahasiswaWhereInput!]
   NOT: [JawabanMahasiswaWhereInput!]
@@ -854,7 +875,7 @@ input JawabanMahasiswaWhereInput {
 
 input JawabanMahasiswaWhereUniqueInput {
   id: ID
-  idSoal: String
+  pegangan: String
 }
 
 enum JawabanOrderByInput {

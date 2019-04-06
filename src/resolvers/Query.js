@@ -576,6 +576,7 @@ const Query = {
           jawaban {
             id
             idSoal
+            pegangan
             jawaban {
               id
               title

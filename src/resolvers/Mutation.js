@@ -784,6 +784,54 @@ const mutations = {
       throw new Error('Invalid Password');
     }
 
+    // check mahasiswa bisa ujian?
+
+    const [statusUjian] = await ctx.db.query.soalMahasiswas(
+      {
+        where: {
+          AND: [
+            {
+              ujian: {
+                pin: pinUjian,
+              },
+            },
+            {
+              mahasiswa: {
+                user: {
+                  id: user.id,
+                },
+              },
+            },
+          ],
+        },
+      },
+      `
+      {
+        ujianSelesai
+        ujian {
+          id
+          tanggalPelaksanaan
+          durasiPengerjaan
+          ujianSelesai
+        }
+        mahasiswa {
+          id
+          user {
+            id
+          }
+        }
+      }
+      `,
+    );
+
+    if (!statusUjian) {
+      throw new Error('Pin ujian Salah');
+    }
+
+    if (statusUjian.ujianSelesai) {
+      throw new Error('Ujian telah dilaksankan');
+    }
+
     // 3.  check if pinUjian is correct
     // get ujian
     const validPinUjian = await ctx.db.query.ujian(
@@ -793,6 +841,7 @@ const mutations = {
         id
         tanggalPelaksanaan
         durasiPengerjaan
+        ujianSelesai
         kelas {
           mahasiswas {
             id
@@ -805,20 +854,13 @@ const mutations = {
     `,
     );
 
-    if (!validPinUjian) {
-      throw new Error('Invalid pin ujian');
-    }
+    const { tanggalPelaksanaan, durasiPengerjaan } = statusUjian.ujian;
 
-    // check apakah mahasiswa ada di list ujian
-
-    if (!validPinUjian.kelas.mahasiswas.filter(mahasiswa => mahasiswa.user.id === user.id).length) {
-      throw new Error('Pengguna tidak terdaftar di ujian');
-    }
 
     // cek  ujian telah dilaksanakan atau belum atau lewat dari satu hari
     const bedaWaktu =
-      (moment(validPinUjian.tanggalPelaksanaan).unix() +
-       (Number(validPinUjian.durasiPengerjaan) * 60)) -
+      moment(tanggalPelaksanaan).unix() +
+      Number(durasiPengerjaan) * 60 -
       moment().unix();
 
     if (bedaWaktu <= 0) {
@@ -827,12 +869,6 @@ const mutations = {
 
     // 3. generate the JWT Token
     const token = jwt.sign({ userId: user.id }, process.env.APP_SECRET);
-    // 4. Set the cookie with the token
-    // const cookieLogin = ctx.response.cookie('token', token, {
-    //   httpOnly: true,
-    //   maxAge: 1000 * 60 * 60 * 24 * 365, // 1 year cookie
-    // });
-
     console.log(token, 'cookie login');
 
     // 5. finally we return the user to the browser
@@ -850,11 +886,12 @@ const mutations = {
   async createSkor(parent, args, ctx, info) {
     // get jawabanMahasiswa dan kunci jawaban dan kompare denganjawaban
     if (!args.soalMahasiswa) {
-      throw new Error('Anda jangan curanglah')
+      throw new Error('Anda jangan curanglah');
     }
-    const dataSoalMahasiswa = await ctx.db.query.soalMahasiswa(
+    const dataSoalMahasiswa = await ctx.db.mutation.updateSoalMahasiswa(
       {
-        where: { id: args.soalMahasiswa }
+        where: { id: args.soalMahasiswa },
+        data: { ujianSelesai: true },
       },
       `{
         soals {
@@ -868,54 +905,49 @@ const mutations = {
           }
         }
       }`,
-    )
+    );
 
     // hitung skor;
 
-    const nilaiSkor = dataSoalMahasiswa.jawaban.reduce(
-      (acc, jawabanSaya) => {
-        // cari kunciJawaban perindex;
-        const kunciJawaban = dataSoalMahasiswa
-          .soals.filter(
-              soal => soal.id === jawabanSaya.idSoal
-          )[0].kunciJawaban;
+    const nilaiSkor = dataSoalMahasiswa.jawaban.reduce((acc, jawabanSaya) => {
+      // cari kunciJawaban perindex;
+      const kunciJawaban = dataSoalMahasiswa.soals.filter(soal => soal.id === jawabanSaya.idSoal)[0]
+        .kunciJawaban;
 
-        console.log(kunciJawaban);
-        return kunciJawaban === jawabanSaya.jawaban.title ? acc + 1 : acc;
+      console.log(kunciJawaban);
+      return kunciJawaban === jawabanSaya.jawaban.title ? acc + 1 : acc;
+    }, 0);
 
-      }, 0,
-    );
-
-    const skorSaya = nilaiSkor / dataSoalMahasiswa.soals.length * 100;
+    const skorSaya = (nilaiSkor / dataSoalMahasiswa.soals.length) * 100;
 
     // masukan ke db
 
-    return ctx.db.mutation.upsertSkor({
-      where: {
-        idSoal: args.soalMahasiswa,
-      },
-      create: {
-        idSoal: args.soalMahasiswa,
-        soalMahasiswa: {
-          connect: {
-            id: args.soalMahasiswa,
-          }
+    return ctx.db.mutation.upsertSkor(
+      {
+        where: {
+          idSoal: args.soalMahasiswa,
         },
-        nilai: skorSaya,
+        create: {
+          idSoal: args.soalMahasiswa,
+          soalMahasiswa: {
+            connect: {
+              id: args.soalMahasiswa,
+            },
+          },
+          nilai: skorSaya,
+        },
+        update: {
+          nilai: skorSaya,
+        },
       },
-      update: {
-        nilai: skorSaya,
-      },
-    },
-    `
+      `
      {
        id
        nilai
      }
-    `
+    `,
     );
-
-  }
+  },
 };
 
 module.exports = mutations;

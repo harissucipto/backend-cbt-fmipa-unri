@@ -693,6 +693,8 @@ export type JawabanMahasiswaOrderByInput =
   | "id_DESC"
   | "idSoal_ASC"
   | "idSoal_DESC"
+  | "pegangan_ASC"
+  | "pegangan_DESC"
   | "createdAt_ASC"
   | "createdAt_DESC"
   | "updatedAt_ASC"
@@ -1396,7 +1398,7 @@ export interface MahasiswaUpdateOneWithoutUserInput {
 
 export type JawabanMahasiswaWhereUniqueInput = AtLeastOne<{
   id: ID_Input;
-  idSoal?: String;
+  pegangan?: String;
 }>;
 
 export interface MahasiswaUpdateWithoutUserDataInput {
@@ -1436,6 +1438,20 @@ export interface JawabanMahasiswaWhereInput {
   idSoal_ends_with?: String;
   idSoal_not_ends_with?: String;
   jawaban?: JawabanWhereInput;
+  pegangan?: String;
+  pegangan_not?: String;
+  pegangan_in?: String[] | String;
+  pegangan_not_in?: String[] | String;
+  pegangan_lt?: String;
+  pegangan_lte?: String;
+  pegangan_gt?: String;
+  pegangan_gte?: String;
+  pegangan_contains?: String;
+  pegangan_not_contains?: String;
+  pegangan_starts_with?: String;
+  pegangan_not_starts_with?: String;
+  pegangan_ends_with?: String;
+  pegangan_not_ends_with?: String;
   AND?: JawabanMahasiswaWhereInput[] | JawabanMahasiswaWhereInput;
   OR?: JawabanMahasiswaWhereInput[] | JawabanMahasiswaWhereInput;
   NOT?: JawabanMahasiswaWhereInput[] | JawabanMahasiswaWhereInput;
@@ -3066,6 +3082,7 @@ export interface JawabanUpdateInput {
 export interface JawabanMahasiswaUpdateDataInput {
   idSoal?: String;
   jawaban?: JawabanUpdateOneRequiredInput;
+  pegangan?: String;
 }
 
 export interface SoalUpdateOneWithoutJawabanInput {
@@ -3161,6 +3178,7 @@ export interface JawabanUpdateOneRequiredInput {
 export interface JawabanMahasiswaUpdateInput {
   idSoal?: String;
   jawaban?: JawabanUpdateOneRequiredInput;
+  pegangan?: String;
 }
 
 export interface JawabanCreateOneInput {
@@ -3171,6 +3189,7 @@ export interface JawabanCreateOneInput {
 export interface JawabanMahasiswaCreateInput {
   idSoal: String;
   jawaban: JawabanCreateOneInput;
+  pegangan?: String;
 }
 
 export type ProdiWhereUniqueInput = AtLeastOne<{
@@ -4360,6 +4379,7 @@ export interface JawabanMahasiswaEdgeSubscription
 export interface JawabanMahasiswaPreviousValuesNode {
   id: ID_Output;
   idSoal: String;
+  pegangan?: String;
 }
 
 export interface JawabanMahasiswaPreviousValues
@@ -4367,6 +4387,7 @@ export interface JawabanMahasiswaPreviousValues
     Fragmentable {
   id: () => Promise<ID_Output>;
   idSoal: () => Promise<String>;
+  pegangan: () => Promise<String>;
 }
 
 export interface JawabanMahasiswaPreviousValuesSubscription
@@ -4374,11 +4395,13 @@ export interface JawabanMahasiswaPreviousValuesSubscription
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
   idSoal: () => Promise<AsyncIterator<String>>;
+  pegangan: () => Promise<AsyncIterator<String>>;
 }
 
 export interface JawabanMahasiswaNode {
   id: ID_Output;
   idSoal: String;
+  pegangan?: String;
 }
 
 export interface JawabanMahasiswa
@@ -4387,6 +4410,7 @@ export interface JawabanMahasiswa
   id: () => Promise<ID_Output>;
   idSoal: () => Promise<String>;
   jawaban: <T = Jawaban>() => T;
+  pegangan: () => Promise<String>;
 }
 
 export interface JawabanMahasiswaSubscription
@@ -4395,6 +4419,7 @@ export interface JawabanMahasiswaSubscription
   id: () => Promise<AsyncIterator<ID_Output>>;
   idSoal: () => Promise<AsyncIterator<String>>;
   jawaban: <T = JawabanSubscription>() => T;
+  pegangan: () => Promise<AsyncIterator<String>>;
 }
 
 export interface AggregateAngkatanNode {
