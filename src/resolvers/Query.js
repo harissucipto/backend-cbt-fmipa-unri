@@ -528,6 +528,7 @@ const Query = {
             id
             nama
             nim
+            image
           }
         }
       `,
@@ -570,8 +571,10 @@ const Query = {
           soals {
             id
             pertanyaan
+            image
             jawaban {
               id
+              image
               content
               title
             }
