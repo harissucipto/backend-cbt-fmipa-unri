@@ -24,6 +24,7 @@ type Admin {
   id: ID! @unique
   nama: String!
   user: User!
+  image: String
 }
 
 type Jurusan {
@@ -52,6 +53,7 @@ type Mahasiswa {
   kelases: [Kelas!]
   soals: [SoalMahasiswa!]
   skors: [Skor!]
+  image: String
 }
 
 type Dosen {
@@ -61,6 +63,7 @@ type Dosen {
   user: User!
   prodi: Prodi!
   kelases: [Kelas!]
+  image: String
 }
 
 type MataKuliah {
@@ -137,8 +140,9 @@ type SoalMahasiswa {
 
 type JawabanMahasiswa {
   id: ID! @unique
+  ujian: Ujian!
   idSoal: String!
-  jawaban: Jawaban!
+  jawaban: Jawaban
   pegangan: String @unique
 }
 

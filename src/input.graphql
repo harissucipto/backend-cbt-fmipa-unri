@@ -4,6 +4,7 @@ input UserInput {
 
 input AdminInput {
   nama: String
+  image: String
 }
 
 input UserBaruInput {

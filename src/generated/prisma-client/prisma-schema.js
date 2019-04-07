@@ -3,6 +3,7 @@ module.exports = {
   id: ID!
   nama: String!
   user: User!
+  image: String
 }
 
 type AdminConnection {
@@ -14,6 +15,7 @@ type AdminConnection {
 input AdminCreateInput {
   nama: String!
   user: UserCreateOneWithoutAdminInput!
+  image: String
 }
 
 input AdminCreateOneWithoutUserInput {
@@ -23,6 +25,7 @@ input AdminCreateOneWithoutUserInput {
 
 input AdminCreateWithoutUserInput {
   nama: String!
+  image: String
 }
 
 type AdminEdge {
@@ -35,6 +38,8 @@ enum AdminOrderByInput {
   id_DESC
   nama_ASC
   nama_DESC
+  image_ASC
+  image_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -44,6 +49,7 @@ enum AdminOrderByInput {
 type AdminPreviousValues {
   id: ID!
   nama: String!
+  image: String
 }
 
 type AdminSubscriptionPayload {
@@ -67,6 +73,7 @@ input AdminSubscriptionWhereInput {
 input AdminUpdateInput {
   nama: String
   user: UserUpdateOneRequiredWithoutAdminInput
+  image: String
 }
 
 input AdminUpdateOneWithoutUserInput {
@@ -80,6 +87,7 @@ input AdminUpdateOneWithoutUserInput {
 
 input AdminUpdateWithoutUserDataInput {
   nama: String
+  image: String
 }
 
 input AdminUpsertWithoutUserInput {
@@ -117,6 +125,20 @@ input AdminWhereInput {
   nama_ends_with: String
   nama_not_ends_with: String
   user: UserWhereInput
+  image: String
+  image_not: String
+  image_in: [String!]
+  image_not_in: [String!]
+  image_lt: String
+  image_lte: String
+  image_gt: String
+  image_gte: String
+  image_contains: String
+  image_not_contains: String
+  image_starts_with: String
+  image_not_starts_with: String
+  image_ends_with: String
+  image_not_ends_with: String
   AND: [AdminWhereInput!]
   OR: [AdminWhereInput!]
   NOT: [AdminWhereInput!]
@@ -470,6 +492,7 @@ type Dosen {
   user: User!
   prodi: Prodi!
   kelases(where: KelasWhereInput, orderBy: KelasOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Kelas!]
+  image: String
 }
 
 type DosenConnection {
@@ -484,6 +507,7 @@ input DosenCreateInput {
   user: UserCreateOneWithoutDosenInput!
   prodi: ProdiCreateOneInput!
   kelases: KelasCreateManyWithoutDosenInput
+  image: String
 }
 
 input DosenCreateOneInput {
@@ -506,6 +530,7 @@ input DosenCreateWithoutKelasesInput {
   nama: String!
   user: UserCreateOneWithoutDosenInput!
   prodi: ProdiCreateOneInput!
+  image: String
 }
 
 input DosenCreateWithoutUserInput {
@@ -513,6 +538,7 @@ input DosenCreateWithoutUserInput {
   nama: String!
   prodi: ProdiCreateOneInput!
   kelases: KelasCreateManyWithoutDosenInput
+  image: String
 }
 
 type DosenEdge {
@@ -527,6 +553,8 @@ enum DosenOrderByInput {
   nip_DESC
   nama_ASC
   nama_DESC
+  image_ASC
+  image_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -537,6 +565,7 @@ type DosenPreviousValues {
   id: ID!
   nip: String!
   nama: String!
+  image: String
 }
 
 type DosenSubscriptionPayload {
@@ -563,6 +592,7 @@ input DosenUpdateDataInput {
   user: UserUpdateOneRequiredWithoutDosenInput
   prodi: ProdiUpdateOneRequiredInput
   kelases: KelasUpdateManyWithoutDosenInput
+  image: String
 }
 
 input DosenUpdateInput {
@@ -571,6 +601,7 @@ input DosenUpdateInput {
   user: UserUpdateOneRequiredWithoutDosenInput
   prodi: ProdiUpdateOneRequiredInput
   kelases: KelasUpdateManyWithoutDosenInput
+  image: String
 }
 
 input DosenUpdateOneInput {
@@ -605,6 +636,7 @@ input DosenUpdateWithoutKelasesDataInput {
   nama: String
   user: UserUpdateOneRequiredWithoutDosenInput
   prodi: ProdiUpdateOneRequiredInput
+  image: String
 }
 
 input DosenUpdateWithoutUserDataInput {
@@ -612,6 +644,7 @@ input DosenUpdateWithoutUserDataInput {
   nama: String
   prodi: ProdiUpdateOneRequiredInput
   kelases: KelasUpdateManyWithoutDosenInput
+  image: String
 }
 
 input DosenUpsertNestedInput {
@@ -677,6 +710,20 @@ input DosenWhereInput {
   kelases_every: KelasWhereInput
   kelases_some: KelasWhereInput
   kelases_none: KelasWhereInput
+  image: String
+  image_not: String
+  image_in: [String!]
+  image_not_in: [String!]
+  image_lt: String
+  image_lte: String
+  image_gt: String
+  image_gte: String
+  image_contains: String
+  image_not_contains: String
+  image_starts_with: String
+  image_not_starts_with: String
+  image_ends_with: String
+  image_not_ends_with: String
   AND: [DosenWhereInput!]
   OR: [DosenWhereInput!]
   NOT: [DosenWhereInput!]
@@ -728,8 +775,9 @@ type JawabanEdge {
 
 type JawabanMahasiswa {
   id: ID!
+  ujian: Ujian!
   idSoal: String!
-  jawaban: Jawaban!
+  jawaban: Jawaban
   pegangan: String
 }
 
@@ -740,8 +788,9 @@ type JawabanMahasiswaConnection {
 }
 
 input JawabanMahasiswaCreateInput {
+  ujian: UjianCreateOneInput!
   idSoal: String!
-  jawaban: JawabanCreateOneInput!
+  jawaban: JawabanCreateOneInput
   pegangan: String
 }
 
@@ -793,14 +842,16 @@ input JawabanMahasiswaSubscriptionWhereInput {
 }
 
 input JawabanMahasiswaUpdateDataInput {
+  ujian: UjianUpdateOneRequiredInput
   idSoal: String
-  jawaban: JawabanUpdateOneRequiredInput
+  jawaban: JawabanUpdateOneInput
   pegangan: String
 }
 
 input JawabanMahasiswaUpdateInput {
+  ujian: UjianUpdateOneRequiredInput
   idSoal: String
-  jawaban: JawabanUpdateOneRequiredInput
+  jawaban: JawabanUpdateOneInput
   pegangan: String
 }
 
@@ -839,6 +890,7 @@ input JawabanMahasiswaWhereInput {
   id_not_starts_with: ID
   id_ends_with: ID
   id_not_ends_with: ID
+  ujian: UjianWhereInput
   idSoal: String
   idSoal_not: String
   idSoal_in: [String!]
@@ -936,10 +988,12 @@ input JawabanUpdateManyWithoutSoalInput {
   upsert: [JawabanUpsertWithWhereUniqueWithoutSoalInput!]
 }
 
-input JawabanUpdateOneRequiredInput {
+input JawabanUpdateOneInput {
   create: JawabanCreateInput
   update: JawabanUpdateDataInput
   upsert: JawabanUpsertNestedInput
+  delete: Boolean
+  disconnect: Boolean
   connect: JawabanWhereUniqueInput
 }
 
@@ -1411,6 +1465,7 @@ type Mahasiswa {
   kelases(where: KelasWhereInput, orderBy: KelasOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Kelas!]
   soals(where: SoalMahasiswaWhereInput, orderBy: SoalMahasiswaOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [SoalMahasiswa!]
   skors(where: SkorWhereInput, orderBy: SkorOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Skor!]
+  image: String
 }
 
 type MahasiswaConnection {
@@ -1427,6 +1482,7 @@ input MahasiswaCreateInput {
   kelases: KelasCreateManyWithoutMahasiswasInput
   soals: SoalMahasiswaCreateManyWithoutMahasiswaInput
   skors: SkorCreateManyInput
+  image: String
 }
 
 input MahasiswaCreateManyWithoutKelasesInput {
@@ -1451,6 +1507,7 @@ input MahasiswaCreateWithoutKelasesInput {
   user: UserCreateOneWithoutMahasiswaInput!
   soals: SoalMahasiswaCreateManyWithoutMahasiswaInput
   skors: SkorCreateManyInput
+  image: String
 }
 
 input MahasiswaCreateWithoutSoalsInput {
@@ -1460,6 +1517,7 @@ input MahasiswaCreateWithoutSoalsInput {
   user: UserCreateOneWithoutMahasiswaInput!
   kelases: KelasCreateManyWithoutMahasiswasInput
   skors: SkorCreateManyInput
+  image: String
 }
 
 input MahasiswaCreateWithoutUserInput {
@@ -1469,6 +1527,7 @@ input MahasiswaCreateWithoutUserInput {
   kelases: KelasCreateManyWithoutMahasiswasInput
   soals: SoalMahasiswaCreateManyWithoutMahasiswaInput
   skors: SkorCreateManyInput
+  image: String
 }
 
 type MahasiswaEdge {
@@ -1483,6 +1542,8 @@ enum MahasiswaOrderByInput {
   nim_DESC
   nama_ASC
   nama_DESC
+  image_ASC
+  image_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -1493,6 +1554,7 @@ type MahasiswaPreviousValues {
   id: ID!
   nim: String!
   nama: String!
+  image: String
 }
 
 type MahasiswaSubscriptionPayload {
@@ -1521,6 +1583,7 @@ input MahasiswaUpdateInput {
   kelases: KelasUpdateManyWithoutMahasiswasInput
   soals: SoalMahasiswaUpdateManyWithoutMahasiswaInput
   skors: SkorUpdateManyInput
+  image: String
 }
 
 input MahasiswaUpdateManyWithoutKelasesInput {
@@ -1555,6 +1618,7 @@ input MahasiswaUpdateWithoutKelasesDataInput {
   user: UserUpdateOneRequiredWithoutMahasiswaInput
   soals: SoalMahasiswaUpdateManyWithoutMahasiswaInput
   skors: SkorUpdateManyInput
+  image: String
 }
 
 input MahasiswaUpdateWithoutSoalsDataInput {
@@ -1564,6 +1628,7 @@ input MahasiswaUpdateWithoutSoalsDataInput {
   user: UserUpdateOneRequiredWithoutMahasiswaInput
   kelases: KelasUpdateManyWithoutMahasiswasInput
   skors: SkorUpdateManyInput
+  image: String
 }
 
 input MahasiswaUpdateWithoutUserDataInput {
@@ -1573,6 +1638,7 @@ input MahasiswaUpdateWithoutUserDataInput {
   kelases: KelasUpdateManyWithoutMahasiswasInput
   soals: SoalMahasiswaUpdateManyWithoutMahasiswaInput
   skors: SkorUpdateManyInput
+  image: String
 }
 
 input MahasiswaUpdateWithWhereUniqueWithoutKelasesInput {
@@ -1650,6 +1716,20 @@ input MahasiswaWhereInput {
   skors_every: SkorWhereInput
   skors_some: SkorWhereInput
   skors_none: SkorWhereInput
+  image: String
+  image_not: String
+  image_in: [String!]
+  image_not_in: [String!]
+  image_lt: String
+  image_lte: String
+  image_gt: String
+  image_gte: String
+  image_contains: String
+  image_not_contains: String
+  image_starts_with: String
+  image_not_starts_with: String
+  image_ends_with: String
+  image_not_ends_with: String
   AND: [MahasiswaWhereInput!]
   OR: [MahasiswaWhereInput!]
   NOT: [MahasiswaWhereInput!]
@@ -2889,6 +2969,11 @@ input UjianCreateInput {
   soalMahasiswas: SoalMahasiswaCreateManyWithoutUjianInput
 }
 
+input UjianCreateOneInput {
+  create: UjianCreateInput
+  connect: UjianWhereUniqueInput
+}
+
 input UjianCreateOneWithoutSoalMahasiswasInput {
   create: UjianCreateWithoutSoalMahasiswasInput
   connect: UjianWhereUniqueInput
@@ -2981,6 +3066,25 @@ input UjianSubscriptionWhereInput {
   NOT: [UjianSubscriptionWhereInput!]
 }
 
+input UjianUpdateDataInput {
+  pin: String
+  nama: String
+  tanggalPelaksanaan: DateTime
+  lokasi: String
+  JumlahSoal: Int
+  presentasiSusah: Float
+  presentasiSedang: Float
+  presentasiMudah: Float
+  durasiPengerjaan: Int
+  status: Boolean
+  prodi: ProdiUpdateOneRequiredInput
+  bankSoal: BankSoalUpdateOneRequiredInput
+  kelas: KelasUpdateOneRequiredInput
+  dosen: DosenUpdateOneInput
+  ujianSelesai: Boolean
+  soalMahasiswas: SoalMahasiswaUpdateManyWithoutUjianInput
+}
+
 input UjianUpdateInput {
   pin: String
   nama: String
@@ -2998,6 +3102,13 @@ input UjianUpdateInput {
   dosen: DosenUpdateOneInput
   ujianSelesai: Boolean
   soalMahasiswas: SoalMahasiswaUpdateManyWithoutUjianInput
+}
+
+input UjianUpdateOneRequiredInput {
+  create: UjianCreateInput
+  update: UjianUpdateDataInput
+  upsert: UjianUpsertNestedInput
+  connect: UjianWhereUniqueInput
 }
 
 input UjianUpdateOneRequiredWithoutSoalMahasiswasInput {
@@ -3023,6 +3134,11 @@ input UjianUpdateWithoutSoalMahasiswasDataInput {
   kelas: KelasUpdateOneRequiredInput
   dosen: DosenUpdateOneInput
   ujianSelesai: Boolean
+}
+
+input UjianUpsertNestedInput {
+  update: UjianUpdateDataInput!
+  create: UjianCreateInput!
 }
 
 input UjianUpsertWithoutSoalMahasiswasInput {

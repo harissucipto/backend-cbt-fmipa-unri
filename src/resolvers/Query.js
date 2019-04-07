@@ -564,6 +564,9 @@ const Query = {
       `
         {
           id
+          ujian {
+            id
+          }
           soals {
             id
             pertanyaan

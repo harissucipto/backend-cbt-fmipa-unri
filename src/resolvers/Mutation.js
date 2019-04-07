@@ -756,6 +756,34 @@ const mutations = {
     // hasPermission(currentUser, ['ADMIN']);
 
     // // 3. Delete it!
+
+    await ctx.db.mutation.deleteManySkors(
+      {
+        where: {
+          soalMahasiswa: {
+            ujian: { id: args.where.id },
+          },
+        },
+      },
+      `
+      {
+        count
+      }
+      `,
+    );
+
+    await ctx.db.mutation.deleteManyJawabanMahasiswas(
+      {
+        where: {
+          ujian: { id: args.where.id },
+        },
+      },
+      `
+      {
+        count
+      }
+      `);
+
     await ctx.db.mutation.deleteManySoalMahasiswas(
       {
         where: {
@@ -856,12 +884,9 @@ const mutations = {
 
     const { tanggalPelaksanaan, durasiPengerjaan } = statusUjian.ujian;
 
-
     // cek  ujian telah dilaksanakan atau belum atau lewat dari satu hari
     const bedaWaktu =
-      moment(tanggalPelaksanaan).unix() +
-      Number(durasiPengerjaan) * 60 -
-      moment().unix();
+      moment(tanggalPelaksanaan).unix() + Number(durasiPengerjaan) * 60 - moment().unix();
 
     if (bedaWaktu <= 0) {
       throw new Error('Tanggal dan Waktu Pelaksanaan ujian telah berakhir');
