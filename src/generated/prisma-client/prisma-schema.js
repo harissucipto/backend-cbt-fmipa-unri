@@ -1409,6 +1409,8 @@ type Mahasiswa {
   prodi: Prodi!
   user: User!
   kelases(where: KelasWhereInput, orderBy: KelasOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Kelas!]
+  soals(where: SoalMahasiswaWhereInput, orderBy: SoalMahasiswaOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [SoalMahasiswa!]
+  skors(where: SkorWhereInput, orderBy: SkorOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Skor!]
 }
 
 type MahasiswaConnection {
@@ -1423,6 +1425,8 @@ input MahasiswaCreateInput {
   prodi: ProdiCreateOneInput!
   user: UserCreateOneWithoutMahasiswaInput!
   kelases: KelasCreateManyWithoutMahasiswasInput
+  soals: SoalMahasiswaCreateManyWithoutMahasiswaInput
+  skors: SkorCreateManyInput
 }
 
 input MahasiswaCreateManyWithoutKelasesInput {
@@ -1430,8 +1434,8 @@ input MahasiswaCreateManyWithoutKelasesInput {
   connect: [MahasiswaWhereUniqueInput!]
 }
 
-input MahasiswaCreateOneInput {
-  create: MahasiswaCreateInput
+input MahasiswaCreateOneWithoutSoalsInput {
+  create: MahasiswaCreateWithoutSoalsInput
   connect: MahasiswaWhereUniqueInput
 }
 
@@ -1445,6 +1449,17 @@ input MahasiswaCreateWithoutKelasesInput {
   nama: String!
   prodi: ProdiCreateOneInput!
   user: UserCreateOneWithoutMahasiswaInput!
+  soals: SoalMahasiswaCreateManyWithoutMahasiswaInput
+  skors: SkorCreateManyInput
+}
+
+input MahasiswaCreateWithoutSoalsInput {
+  nim: String!
+  nama: String!
+  prodi: ProdiCreateOneInput!
+  user: UserCreateOneWithoutMahasiswaInput!
+  kelases: KelasCreateManyWithoutMahasiswasInput
+  skors: SkorCreateManyInput
 }
 
 input MahasiswaCreateWithoutUserInput {
@@ -1452,6 +1467,8 @@ input MahasiswaCreateWithoutUserInput {
   nama: String!
   prodi: ProdiCreateOneInput!
   kelases: KelasCreateManyWithoutMahasiswasInput
+  soals: SoalMahasiswaCreateManyWithoutMahasiswaInput
+  skors: SkorCreateManyInput
 }
 
 type MahasiswaEdge {
@@ -1496,20 +1513,14 @@ input MahasiswaSubscriptionWhereInput {
   NOT: [MahasiswaSubscriptionWhereInput!]
 }
 
-input MahasiswaUpdateDataInput {
-  nim: String
-  nama: String
-  prodi: ProdiUpdateOneRequiredInput
-  user: UserUpdateOneRequiredWithoutMahasiswaInput
-  kelases: KelasUpdateManyWithoutMahasiswasInput
-}
-
 input MahasiswaUpdateInput {
   nim: String
   nama: String
   prodi: ProdiUpdateOneRequiredInput
   user: UserUpdateOneRequiredWithoutMahasiswaInput
   kelases: KelasUpdateManyWithoutMahasiswasInput
+  soals: SoalMahasiswaUpdateManyWithoutMahasiswaInput
+  skors: SkorUpdateManyInput
 }
 
 input MahasiswaUpdateManyWithoutKelasesInput {
@@ -1521,10 +1532,10 @@ input MahasiswaUpdateManyWithoutKelasesInput {
   upsert: [MahasiswaUpsertWithWhereUniqueWithoutKelasesInput!]
 }
 
-input MahasiswaUpdateOneRequiredInput {
-  create: MahasiswaCreateInput
-  update: MahasiswaUpdateDataInput
-  upsert: MahasiswaUpsertNestedInput
+input MahasiswaUpdateOneRequiredWithoutSoalsInput {
+  create: MahasiswaCreateWithoutSoalsInput
+  update: MahasiswaUpdateWithoutSoalsDataInput
+  upsert: MahasiswaUpsertWithoutSoalsInput
   connect: MahasiswaWhereUniqueInput
 }
 
@@ -1542,6 +1553,17 @@ input MahasiswaUpdateWithoutKelasesDataInput {
   nama: String
   prodi: ProdiUpdateOneRequiredInput
   user: UserUpdateOneRequiredWithoutMahasiswaInput
+  soals: SoalMahasiswaUpdateManyWithoutMahasiswaInput
+  skors: SkorUpdateManyInput
+}
+
+input MahasiswaUpdateWithoutSoalsDataInput {
+  nim: String
+  nama: String
+  prodi: ProdiUpdateOneRequiredInput
+  user: UserUpdateOneRequiredWithoutMahasiswaInput
+  kelases: KelasUpdateManyWithoutMahasiswasInput
+  skors: SkorUpdateManyInput
 }
 
 input MahasiswaUpdateWithoutUserDataInput {
@@ -1549,6 +1571,8 @@ input MahasiswaUpdateWithoutUserDataInput {
   nama: String
   prodi: ProdiUpdateOneRequiredInput
   kelases: KelasUpdateManyWithoutMahasiswasInput
+  soals: SoalMahasiswaUpdateManyWithoutMahasiswaInput
+  skors: SkorUpdateManyInput
 }
 
 input MahasiswaUpdateWithWhereUniqueWithoutKelasesInput {
@@ -1556,9 +1580,9 @@ input MahasiswaUpdateWithWhereUniqueWithoutKelasesInput {
   data: MahasiswaUpdateWithoutKelasesDataInput!
 }
 
-input MahasiswaUpsertNestedInput {
-  update: MahasiswaUpdateDataInput!
-  create: MahasiswaCreateInput!
+input MahasiswaUpsertWithoutSoalsInput {
+  update: MahasiswaUpdateWithoutSoalsDataInput!
+  create: MahasiswaCreateWithoutSoalsInput!
 }
 
 input MahasiswaUpsertWithoutUserInput {
@@ -1620,6 +1644,12 @@ input MahasiswaWhereInput {
   kelases_every: KelasWhereInput
   kelases_some: KelasWhereInput
   kelases_none: KelasWhereInput
+  soals_every: SoalMahasiswaWhereInput
+  soals_some: SoalMahasiswaWhereInput
+  soals_none: SoalMahasiswaWhereInput
+  skors_every: SkorWhereInput
+  skors_some: SkorWhereInput
+  skors_none: SkorWhereInput
   AND: [MahasiswaWhereInput!]
   OR: [MahasiswaWhereInput!]
   NOT: [MahasiswaWhereInput!]
@@ -2161,7 +2191,22 @@ type SkorConnection {
 
 input SkorCreateInput {
   idSoal: String!
-  soalMahasiswa: SoalMahasiswaCreateOneInput!
+  soalMahasiswa: SoalMahasiswaCreateOneWithoutSkorInput!
+  nilai: Float
+}
+
+input SkorCreateManyInput {
+  create: [SkorCreateInput!]
+  connect: [SkorWhereUniqueInput!]
+}
+
+input SkorCreateOneWithoutSoalMahasiswaInput {
+  create: SkorCreateWithoutSoalMahasiswaInput
+  connect: SkorWhereUniqueInput
+}
+
+input SkorCreateWithoutSoalMahasiswaInput {
+  idSoal: String!
   nilai: Float
 }
 
@@ -2207,10 +2252,55 @@ input SkorSubscriptionWhereInput {
   NOT: [SkorSubscriptionWhereInput!]
 }
 
+input SkorUpdateDataInput {
+  idSoal: String
+  soalMahasiswa: SoalMahasiswaUpdateOneRequiredWithoutSkorInput
+  nilai: Float
+}
+
 input SkorUpdateInput {
   idSoal: String
-  soalMahasiswa: SoalMahasiswaUpdateOneRequiredInput
+  soalMahasiswa: SoalMahasiswaUpdateOneRequiredWithoutSkorInput
   nilai: Float
+}
+
+input SkorUpdateManyInput {
+  create: [SkorCreateInput!]
+  delete: [SkorWhereUniqueInput!]
+  connect: [SkorWhereUniqueInput!]
+  disconnect: [SkorWhereUniqueInput!]
+  update: [SkorUpdateWithWhereUniqueNestedInput!]
+  upsert: [SkorUpsertWithWhereUniqueNestedInput!]
+}
+
+input SkorUpdateOneWithoutSoalMahasiswaInput {
+  create: SkorCreateWithoutSoalMahasiswaInput
+  update: SkorUpdateWithoutSoalMahasiswaDataInput
+  upsert: SkorUpsertWithoutSoalMahasiswaInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: SkorWhereUniqueInput
+}
+
+input SkorUpdateWithoutSoalMahasiswaDataInput {
+  idSoal: String
+  nilai: Float
+}
+
+input SkorUpdateWithWhereUniqueNestedInput {
+  where: SkorWhereUniqueInput!
+  data: SkorUpdateDataInput!
+}
+
+input SkorUpsertWithoutSoalMahasiswaInput {
+  update: SkorUpdateWithoutSoalMahasiswaDataInput!
+  create: SkorCreateWithoutSoalMahasiswaInput!
+}
+
+input SkorUpsertWithWhereUniqueNestedInput {
+  where: SkorWhereUniqueInput!
+  update: SkorUpdateDataInput!
+  create: SkorCreateInput!
 }
 
 input SkorWhereInput {
@@ -2325,6 +2415,7 @@ type SoalMahasiswa {
   soals(where: SoalWhereInput, orderBy: SoalOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Soal!]
   jawaban(where: JawabanMahasiswaWhereInput, orderBy: JawabanMahasiswaOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [JawabanMahasiswa!]
   ujianSelesai: Boolean!
+  skor: Skor
 }
 
 type SoalMahasiswaConnection {
@@ -2334,16 +2425,51 @@ type SoalMahasiswaConnection {
 }
 
 input SoalMahasiswaCreateInput {
-  ujian: UjianCreateOneInput!
-  mahasiswa: MahasiswaCreateOneInput!
+  ujian: UjianCreateOneWithoutSoalMahasiswasInput!
+  mahasiswa: MahasiswaCreateOneWithoutSoalsInput!
+  soals: SoalCreateManyInput
+  jawaban: JawabanMahasiswaCreateManyInput
+  ujianSelesai: Boolean
+  skor: SkorCreateOneWithoutSoalMahasiswaInput
+}
+
+input SoalMahasiswaCreateManyWithoutMahasiswaInput {
+  create: [SoalMahasiswaCreateWithoutMahasiswaInput!]
+  connect: [SoalMahasiswaWhereUniqueInput!]
+}
+
+input SoalMahasiswaCreateManyWithoutUjianInput {
+  create: [SoalMahasiswaCreateWithoutUjianInput!]
+  connect: [SoalMahasiswaWhereUniqueInput!]
+}
+
+input SoalMahasiswaCreateOneWithoutSkorInput {
+  create: SoalMahasiswaCreateWithoutSkorInput
+  connect: SoalMahasiswaWhereUniqueInput
+}
+
+input SoalMahasiswaCreateWithoutMahasiswaInput {
+  ujian: UjianCreateOneWithoutSoalMahasiswasInput!
+  soals: SoalCreateManyInput
+  jawaban: JawabanMahasiswaCreateManyInput
+  ujianSelesai: Boolean
+  skor: SkorCreateOneWithoutSoalMahasiswaInput
+}
+
+input SoalMahasiswaCreateWithoutSkorInput {
+  ujian: UjianCreateOneWithoutSoalMahasiswasInput!
+  mahasiswa: MahasiswaCreateOneWithoutSoalsInput!
   soals: SoalCreateManyInput
   jawaban: JawabanMahasiswaCreateManyInput
   ujianSelesai: Boolean
 }
 
-input SoalMahasiswaCreateOneInput {
-  create: SoalMahasiswaCreateInput
-  connect: SoalMahasiswaWhereUniqueInput
+input SoalMahasiswaCreateWithoutUjianInput {
+  mahasiswa: MahasiswaCreateOneWithoutSoalsInput!
+  soals: SoalCreateManyInput
+  jawaban: JawabanMahasiswaCreateManyInput
+  ujianSelesai: Boolean
+  skor: SkorCreateOneWithoutSoalMahasiswaInput
 }
 
 type SoalMahasiswaEdge {
@@ -2385,32 +2511,89 @@ input SoalMahasiswaSubscriptionWhereInput {
   NOT: [SoalMahasiswaSubscriptionWhereInput!]
 }
 
-input SoalMahasiswaUpdateDataInput {
-  ujian: UjianUpdateOneRequiredInput
-  mahasiswa: MahasiswaUpdateOneRequiredInput
-  soals: SoalUpdateManyInput
-  jawaban: JawabanMahasiswaUpdateManyInput
-  ujianSelesai: Boolean
-}
-
 input SoalMahasiswaUpdateInput {
-  ujian: UjianUpdateOneRequiredInput
-  mahasiswa: MahasiswaUpdateOneRequiredInput
+  ujian: UjianUpdateOneRequiredWithoutSoalMahasiswasInput
+  mahasiswa: MahasiswaUpdateOneRequiredWithoutSoalsInput
   soals: SoalUpdateManyInput
   jawaban: JawabanMahasiswaUpdateManyInput
   ujianSelesai: Boolean
+  skor: SkorUpdateOneWithoutSoalMahasiswaInput
 }
 
-input SoalMahasiswaUpdateOneRequiredInput {
-  create: SoalMahasiswaCreateInput
-  update: SoalMahasiswaUpdateDataInput
-  upsert: SoalMahasiswaUpsertNestedInput
+input SoalMahasiswaUpdateManyWithoutMahasiswaInput {
+  create: [SoalMahasiswaCreateWithoutMahasiswaInput!]
+  delete: [SoalMahasiswaWhereUniqueInput!]
+  connect: [SoalMahasiswaWhereUniqueInput!]
+  disconnect: [SoalMahasiswaWhereUniqueInput!]
+  update: [SoalMahasiswaUpdateWithWhereUniqueWithoutMahasiswaInput!]
+  upsert: [SoalMahasiswaUpsertWithWhereUniqueWithoutMahasiswaInput!]
+}
+
+input SoalMahasiswaUpdateManyWithoutUjianInput {
+  create: [SoalMahasiswaCreateWithoutUjianInput!]
+  delete: [SoalMahasiswaWhereUniqueInput!]
+  connect: [SoalMahasiswaWhereUniqueInput!]
+  disconnect: [SoalMahasiswaWhereUniqueInput!]
+  update: [SoalMahasiswaUpdateWithWhereUniqueWithoutUjianInput!]
+  upsert: [SoalMahasiswaUpsertWithWhereUniqueWithoutUjianInput!]
+}
+
+input SoalMahasiswaUpdateOneRequiredWithoutSkorInput {
+  create: SoalMahasiswaCreateWithoutSkorInput
+  update: SoalMahasiswaUpdateWithoutSkorDataInput
+  upsert: SoalMahasiswaUpsertWithoutSkorInput
   connect: SoalMahasiswaWhereUniqueInput
 }
 
-input SoalMahasiswaUpsertNestedInput {
-  update: SoalMahasiswaUpdateDataInput!
-  create: SoalMahasiswaCreateInput!
+input SoalMahasiswaUpdateWithoutMahasiswaDataInput {
+  ujian: UjianUpdateOneRequiredWithoutSoalMahasiswasInput
+  soals: SoalUpdateManyInput
+  jawaban: JawabanMahasiswaUpdateManyInput
+  ujianSelesai: Boolean
+  skor: SkorUpdateOneWithoutSoalMahasiswaInput
+}
+
+input SoalMahasiswaUpdateWithoutSkorDataInput {
+  ujian: UjianUpdateOneRequiredWithoutSoalMahasiswasInput
+  mahasiswa: MahasiswaUpdateOneRequiredWithoutSoalsInput
+  soals: SoalUpdateManyInput
+  jawaban: JawabanMahasiswaUpdateManyInput
+  ujianSelesai: Boolean
+}
+
+input SoalMahasiswaUpdateWithoutUjianDataInput {
+  mahasiswa: MahasiswaUpdateOneRequiredWithoutSoalsInput
+  soals: SoalUpdateManyInput
+  jawaban: JawabanMahasiswaUpdateManyInput
+  ujianSelesai: Boolean
+  skor: SkorUpdateOneWithoutSoalMahasiswaInput
+}
+
+input SoalMahasiswaUpdateWithWhereUniqueWithoutMahasiswaInput {
+  where: SoalMahasiswaWhereUniqueInput!
+  data: SoalMahasiswaUpdateWithoutMahasiswaDataInput!
+}
+
+input SoalMahasiswaUpdateWithWhereUniqueWithoutUjianInput {
+  where: SoalMahasiswaWhereUniqueInput!
+  data: SoalMahasiswaUpdateWithoutUjianDataInput!
+}
+
+input SoalMahasiswaUpsertWithoutSkorInput {
+  update: SoalMahasiswaUpdateWithoutSkorDataInput!
+  create: SoalMahasiswaCreateWithoutSkorInput!
+}
+
+input SoalMahasiswaUpsertWithWhereUniqueWithoutMahasiswaInput {
+  where: SoalMahasiswaWhereUniqueInput!
+  update: SoalMahasiswaUpdateWithoutMahasiswaDataInput!
+  create: SoalMahasiswaCreateWithoutMahasiswaInput!
+}
+
+input SoalMahasiswaUpsertWithWhereUniqueWithoutUjianInput {
+  where: SoalMahasiswaWhereUniqueInput!
+  update: SoalMahasiswaUpdateWithoutUjianDataInput!
+  create: SoalMahasiswaCreateWithoutUjianInput!
 }
 
 input SoalMahasiswaWhereInput {
@@ -2438,6 +2621,7 @@ input SoalMahasiswaWhereInput {
   jawaban_none: JawabanMahasiswaWhereInput
   ujianSelesai: Boolean
   ujianSelesai_not: Boolean
+  skor: SkorWhereInput
   AND: [SoalMahasiswaWhereInput!]
   OR: [SoalMahasiswaWhereInput!]
   NOT: [SoalMahasiswaWhereInput!]
@@ -2677,6 +2861,7 @@ type Ujian {
   kelas: Kelas!
   dosen: Dosen
   ujianSelesai: Boolean!
+  soalMahasiswas(where: SoalMahasiswaWhereInput, orderBy: SoalMahasiswaOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [SoalMahasiswa!]
 }
 
 type UjianConnection {
@@ -2701,11 +2886,30 @@ input UjianCreateInput {
   kelas: KelasCreateOneInput!
   dosen: DosenCreateOneInput
   ujianSelesai: Boolean
+  soalMahasiswas: SoalMahasiswaCreateManyWithoutUjianInput
 }
 
-input UjianCreateOneInput {
-  create: UjianCreateInput
+input UjianCreateOneWithoutSoalMahasiswasInput {
+  create: UjianCreateWithoutSoalMahasiswasInput
   connect: UjianWhereUniqueInput
+}
+
+input UjianCreateWithoutSoalMahasiswasInput {
+  pin: String
+  nama: String!
+  tanggalPelaksanaan: DateTime!
+  lokasi: String!
+  JumlahSoal: Int
+  presentasiSusah: Float
+  presentasiSedang: Float
+  presentasiMudah: Float
+  durasiPengerjaan: Int!
+  status: Boolean
+  prodi: ProdiCreateOneInput!
+  bankSoal: BankSoalCreateOneInput!
+  kelas: KelasCreateOneInput!
+  dosen: DosenCreateOneInput
+  ujianSelesai: Boolean
 }
 
 type UjianEdge {
@@ -2777,24 +2981,6 @@ input UjianSubscriptionWhereInput {
   NOT: [UjianSubscriptionWhereInput!]
 }
 
-input UjianUpdateDataInput {
-  pin: String
-  nama: String
-  tanggalPelaksanaan: DateTime
-  lokasi: String
-  JumlahSoal: Int
-  presentasiSusah: Float
-  presentasiSedang: Float
-  presentasiMudah: Float
-  durasiPengerjaan: Int
-  status: Boolean
-  prodi: ProdiUpdateOneRequiredInput
-  bankSoal: BankSoalUpdateOneRequiredInput
-  kelas: KelasUpdateOneRequiredInput
-  dosen: DosenUpdateOneInput
-  ujianSelesai: Boolean
-}
-
 input UjianUpdateInput {
   pin: String
   nama: String
@@ -2811,18 +2997,37 @@ input UjianUpdateInput {
   kelas: KelasUpdateOneRequiredInput
   dosen: DosenUpdateOneInput
   ujianSelesai: Boolean
+  soalMahasiswas: SoalMahasiswaUpdateManyWithoutUjianInput
 }
 
-input UjianUpdateOneRequiredInput {
-  create: UjianCreateInput
-  update: UjianUpdateDataInput
-  upsert: UjianUpsertNestedInput
+input UjianUpdateOneRequiredWithoutSoalMahasiswasInput {
+  create: UjianCreateWithoutSoalMahasiswasInput
+  update: UjianUpdateWithoutSoalMahasiswasDataInput
+  upsert: UjianUpsertWithoutSoalMahasiswasInput
   connect: UjianWhereUniqueInput
 }
 
-input UjianUpsertNestedInput {
-  update: UjianUpdateDataInput!
-  create: UjianCreateInput!
+input UjianUpdateWithoutSoalMahasiswasDataInput {
+  pin: String
+  nama: String
+  tanggalPelaksanaan: DateTime
+  lokasi: String
+  JumlahSoal: Int
+  presentasiSusah: Float
+  presentasiSedang: Float
+  presentasiMudah: Float
+  durasiPengerjaan: Int
+  status: Boolean
+  prodi: ProdiUpdateOneRequiredInput
+  bankSoal: BankSoalUpdateOneRequiredInput
+  kelas: KelasUpdateOneRequiredInput
+  dosen: DosenUpdateOneInput
+  ujianSelesai: Boolean
+}
+
+input UjianUpsertWithoutSoalMahasiswasInput {
+  update: UjianUpdateWithoutSoalMahasiswasDataInput!
+  create: UjianCreateWithoutSoalMahasiswasInput!
 }
 
 input UjianWhereInput {
@@ -2938,6 +3143,9 @@ input UjianWhereInput {
   dosen: DosenWhereInput
   ujianSelesai: Boolean
   ujianSelesai_not: Boolean
+  soalMahasiswas_every: SoalMahasiswaWhereInput
+  soalMahasiswas_some: SoalMahasiswaWhereInput
+  soalMahasiswas_none: SoalMahasiswaWhereInput
   AND: [UjianWhereInput!]
   OR: [UjianWhereInput!]
   NOT: [UjianWhereInput!]
