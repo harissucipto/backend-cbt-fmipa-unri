@@ -736,6 +736,7 @@ input DosenWhereUniqueInput {
 
 type Jawaban {
   id: ID!
+  image: String
   title: String!
   content: String!
   soal: Soal
@@ -748,6 +749,7 @@ type JawabanConnection {
 }
 
 input JawabanCreateInput {
+  image: String
   title: String!
   content: String!
   soal: SoalCreateOneWithoutJawabanInput
@@ -764,6 +766,7 @@ input JawabanCreateOneInput {
 }
 
 input JawabanCreateWithoutSoalInput {
+  image: String
   title: String!
   content: String!
 }
@@ -933,6 +936,8 @@ input JawabanMahasiswaWhereUniqueInput {
 enum JawabanOrderByInput {
   id_ASC
   id_DESC
+  image_ASC
+  image_DESC
   title_ASC
   title_DESC
   content_ASC
@@ -945,6 +950,7 @@ enum JawabanOrderByInput {
 
 type JawabanPreviousValues {
   id: ID!
+  image: String
   title: String!
   content: String!
 }
@@ -968,12 +974,14 @@ input JawabanSubscriptionWhereInput {
 }
 
 input JawabanUpdateDataInput {
+  image: String
   title: String
   content: String
   soal: SoalUpdateOneWithoutJawabanInput
 }
 
 input JawabanUpdateInput {
+  image: String
   title: String
   content: String
   soal: SoalUpdateOneWithoutJawabanInput
@@ -998,6 +1006,7 @@ input JawabanUpdateOneInput {
 }
 
 input JawabanUpdateWithoutSoalDataInput {
+  image: String
   title: String
   content: String
 }
@@ -1033,6 +1042,20 @@ input JawabanWhereInput {
   id_not_starts_with: ID
   id_ends_with: ID
   id_not_ends_with: ID
+  image: String
+  image_not: String
+  image_in: [String!]
+  image_not_in: [String!]
+  image_lt: String
+  image_lte: String
+  image_gt: String
+  image_gte: String
+  image_contains: String
+  image_not_contains: String
+  image_starts_with: String
+  image_not_starts_with: String
+  image_ends_with: String
+  image_not_ends_with: String
   title: String
   title_not: String
   title_in: [String!]
@@ -2434,6 +2457,7 @@ input SkorWhereUniqueInput {
 type Soal {
   id: ID!
   pertanyaan: String!
+  image: String
   jawaban(where: JawabanWhereInput, orderBy: JawabanOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Jawaban!]
   bankSoal: BankSoal!
   tingkatKesulitan: String!
@@ -2448,6 +2472,7 @@ type SoalConnection {
 
 input SoalCreateInput {
   pertanyaan: String!
+  image: String
   jawaban: JawabanCreateManyWithoutSoalInput
   bankSoal: BankSoalCreateOneWithoutSoalsInput!
   tingkatKesulitan: String!
@@ -2471,6 +2496,7 @@ input SoalCreateOneWithoutJawabanInput {
 
 input SoalCreateWithoutBankSoalInput {
   pertanyaan: String!
+  image: String
   jawaban: JawabanCreateManyWithoutSoalInput
   tingkatKesulitan: String!
   kunciJawaban: String!
@@ -2478,6 +2504,7 @@ input SoalCreateWithoutBankSoalInput {
 
 input SoalCreateWithoutJawabanInput {
   pertanyaan: String!
+  image: String
   bankSoal: BankSoalCreateOneWithoutSoalsInput!
   tingkatKesulitan: String!
   kunciJawaban: String!
@@ -2716,6 +2743,8 @@ enum SoalOrderByInput {
   id_DESC
   pertanyaan_ASC
   pertanyaan_DESC
+  image_ASC
+  image_DESC
   tingkatKesulitan_ASC
   tingkatKesulitan_DESC
   kunciJawaban_ASC
@@ -2729,6 +2758,7 @@ enum SoalOrderByInput {
 type SoalPreviousValues {
   id: ID!
   pertanyaan: String!
+  image: String
   tingkatKesulitan: String!
   kunciJawaban: String!
 }
@@ -2753,6 +2783,7 @@ input SoalSubscriptionWhereInput {
 
 input SoalUpdateDataInput {
   pertanyaan: String
+  image: String
   jawaban: JawabanUpdateManyWithoutSoalInput
   bankSoal: BankSoalUpdateOneRequiredWithoutSoalsInput
   tingkatKesulitan: String
@@ -2761,6 +2792,7 @@ input SoalUpdateDataInput {
 
 input SoalUpdateInput {
   pertanyaan: String
+  image: String
   jawaban: JawabanUpdateManyWithoutSoalInput
   bankSoal: BankSoalUpdateOneRequiredWithoutSoalsInput
   tingkatKesulitan: String
@@ -2796,6 +2828,7 @@ input SoalUpdateOneWithoutJawabanInput {
 
 input SoalUpdateWithoutBankSoalDataInput {
   pertanyaan: String
+  image: String
   jawaban: JawabanUpdateManyWithoutSoalInput
   tingkatKesulitan: String
   kunciJawaban: String
@@ -2803,6 +2836,7 @@ input SoalUpdateWithoutBankSoalDataInput {
 
 input SoalUpdateWithoutJawabanDataInput {
   pertanyaan: String
+  image: String
   bankSoal: BankSoalUpdateOneRequiredWithoutSoalsInput
   tingkatKesulitan: String
   kunciJawaban: String
@@ -2864,6 +2898,20 @@ input SoalWhereInput {
   pertanyaan_not_starts_with: String
   pertanyaan_ends_with: String
   pertanyaan_not_ends_with: String
+  image: String
+  image_not: String
+  image_in: [String!]
+  image_not_in: [String!]
+  image_lt: String
+  image_lte: String
+  image_gt: String
+  image_gte: String
+  image_contains: String
+  image_not_contains: String
+  image_starts_with: String
+  image_not_starts_with: String
+  image_ends_with: String
+  image_not_ends_with: String
   jawaban_every: JawabanWhereInput
   jawaban_some: JawabanWhereInput
   jawaban_none: JawabanWhereInput

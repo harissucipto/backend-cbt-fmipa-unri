@@ -86,6 +86,7 @@ type Kelas {
 type Soal {
   id: ID! @unique
   pertanyaan: String!
+  image: String
   jawaban: [Jawaban!]
   bankSoal: BankSoal!
   tingkatKesulitan: String!
@@ -94,6 +95,7 @@ type Soal {
 
 type Jawaban {
   id: ID! @unique
+  image: String
   title: String!
   content: String!
   soal: Soal

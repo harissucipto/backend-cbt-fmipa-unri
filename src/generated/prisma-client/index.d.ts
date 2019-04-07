@@ -825,6 +825,8 @@ export type SoalOrderByInput =
   | "id_DESC"
   | "pertanyaan_ASC"
   | "pertanyaan_DESC"
+  | "image_ASC"
+  | "image_DESC"
   | "tingkatKesulitan_ASC"
   | "tingkatKesulitan_DESC"
   | "kunciJawaban_ASC"
@@ -837,6 +839,8 @@ export type SoalOrderByInput =
 export type JawabanOrderByInput =
   | "id_ASC"
   | "id_DESC"
+  | "image_ASC"
+  | "image_DESC"
   | "title_ASC"
   | "title_DESC"
   | "content_ASC"
@@ -1019,6 +1023,20 @@ export interface SoalWhereInput {
   pertanyaan_not_starts_with?: String;
   pertanyaan_ends_with?: String;
   pertanyaan_not_ends_with?: String;
+  image?: String;
+  image_not?: String;
+  image_in?: String[] | String;
+  image_not_in?: String[] | String;
+  image_lt?: String;
+  image_lte?: String;
+  image_gt?: String;
+  image_gte?: String;
+  image_contains?: String;
+  image_not_contains?: String;
+  image_starts_with?: String;
+  image_not_starts_with?: String;
+  image_ends_with?: String;
+  image_not_ends_with?: String;
   jawaban_every?: JawabanWhereInput;
   jawaban_some?: JawabanWhereInput;
   jawaban_none?: JawabanWhereInput;
@@ -1549,6 +1567,7 @@ export interface UserCreateInput {
 
 export interface SoalCreateInput {
   pertanyaan: String;
+  image?: String;
   jawaban?: JawabanCreateManyWithoutSoalInput;
   bankSoal: BankSoalCreateOneWithoutSoalsInput;
   tingkatKesulitan: String;
@@ -1605,12 +1624,14 @@ export interface ProdiWhereInput {
 }
 
 export interface JawabanCreateWithoutSoalInput {
+  image?: String;
   title: String;
   content: String;
 }
 
 export interface SoalUpdateInput {
   pertanyaan?: String;
+  image?: String;
   jawaban?: JawabanUpdateManyWithoutSoalInput;
   bankSoal?: BankSoalUpdateOneRequiredWithoutSoalsInput;
   tingkatKesulitan?: String;
@@ -1812,6 +1833,7 @@ export interface SoalMahasiswaUpsertWithWhereUniqueWithoutMahasiswaInput {
 }
 
 export interface JawabanCreateInput {
+  image?: String;
   title: String;
   content: String;
   soal?: SoalCreateOneWithoutJawabanInput;
@@ -1835,6 +1857,7 @@ export interface SoalUpsertWithWhereUniqueWithoutBankSoalInput {
 
 export interface SoalCreateWithoutJawabanInput {
   pertanyaan: String;
+  image?: String;
   bankSoal: BankSoalCreateOneWithoutSoalsInput;
   tingkatKesulitan: String;
   kunciJawaban: String;
@@ -1865,6 +1888,7 @@ export interface SoalUpdateManyWithoutBankSoalInput {
 
 export interface SoalCreateWithoutBankSoalInput {
   pertanyaan: String;
+  image?: String;
   jawaban?: JawabanCreateManyWithoutSoalInput;
   tingkatKesulitan: String;
   kunciJawaban: String;
@@ -1941,6 +1965,7 @@ export interface MahasiswaUpdateOneWithoutUserInput {
 
 export interface SoalUpdateWithoutJawabanDataInput {
   pertanyaan?: String;
+  image?: String;
   bankSoal?: BankSoalUpdateOneRequiredWithoutSoalsInput;
   tingkatKesulitan?: String;
   kunciJawaban?: String;
@@ -1957,6 +1982,7 @@ export interface MahasiswaUpdateWithoutUserDataInput {
 }
 
 export interface JawabanUpdateDataInput {
+  image?: String;
   title?: String;
   content?: String;
   soal?: SoalUpdateOneWithoutJawabanInput;
@@ -2209,6 +2235,20 @@ export interface JawabanWhereInput {
   id_not_starts_with?: ID_Input;
   id_ends_with?: ID_Input;
   id_not_ends_with?: ID_Input;
+  image?: String;
+  image_not?: String;
+  image_in?: String[] | String;
+  image_not_in?: String[] | String;
+  image_lt?: String;
+  image_lte?: String;
+  image_gt?: String;
+  image_gte?: String;
+  image_contains?: String;
+  image_not_contains?: String;
+  image_starts_with?: String;
+  image_not_starts_with?: String;
+  image_ends_with?: String;
+  image_not_ends_with?: String;
   title?: String;
   title_not?: String;
   title_in?: String[] | String;
@@ -2673,6 +2713,7 @@ export interface KelasUpdateManyWithoutMataKuliahInput {
 }
 
 export interface JawabanUpdateInput {
+  image?: String;
   title?: String;
   content?: String;
   soal?: SoalUpdateOneWithoutJawabanInput;
@@ -3086,6 +3127,7 @@ export interface UjianUpsertWithoutSoalMahasiswasInput {
 
 export interface SoalUpdateDataInput {
   pertanyaan?: String;
+  image?: String;
   jawaban?: JawabanUpdateManyWithoutSoalInput;
   bankSoal?: BankSoalUpdateOneRequiredWithoutSoalsInput;
   tingkatKesulitan?: String;
@@ -3126,6 +3168,7 @@ export interface UjianUpsertNestedInput {
 }
 
 export interface JawabanUpdateWithoutSoalDataInput {
+  image?: String;
   title?: String;
   content?: String;
 }
@@ -3463,6 +3506,7 @@ export interface UjianUpdateOneRequiredInput {
 
 export interface SoalUpdateWithoutBankSoalDataInput {
   pertanyaan?: String;
+  image?: String;
   jawaban?: JawabanUpdateManyWithoutSoalInput;
   tingkatKesulitan?: String;
   kunciJawaban?: String;
@@ -4512,6 +4556,7 @@ export interface JawabanMahasiswaEdgeSubscription
 
 export interface JawabanPreviousValuesNode {
   id: ID_Output;
+  image?: String;
   title: String;
   content: String;
 }
@@ -4520,6 +4565,7 @@ export interface JawabanPreviousValues
   extends Promise<JawabanPreviousValuesNode>,
     Fragmentable {
   id: () => Promise<ID_Output>;
+  image: () => Promise<String>;
   title: () => Promise<String>;
   content: () => Promise<String>;
 }
@@ -4528,6 +4574,7 @@ export interface JawabanPreviousValuesSubscription
   extends Promise<AsyncIterator<JawabanPreviousValuesNode>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
+  image: () => Promise<AsyncIterator<String>>;
   title: () => Promise<AsyncIterator<String>>;
   content: () => Promise<AsyncIterator<String>>;
 }
@@ -4802,12 +4849,14 @@ export interface AggregateSoalMahasiswaSubscription
 
 export interface JawabanNode {
   id: ID_Output;
+  image?: String;
   title: String;
   content: String;
 }
 
 export interface Jawaban extends Promise<JawabanNode>, Fragmentable {
   id: () => Promise<ID_Output>;
+  image: () => Promise<String>;
   title: () => Promise<String>;
   content: () => Promise<String>;
   soal: <T = Soal>() => T;
@@ -4817,6 +4866,7 @@ export interface JawabanSubscription
   extends Promise<AsyncIterator<JawabanNode>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
+  image: () => Promise<AsyncIterator<String>>;
   title: () => Promise<AsyncIterator<String>>;
   content: () => Promise<AsyncIterator<String>>;
   soal: <T = SoalSubscription>() => T;
@@ -4917,6 +4967,7 @@ export interface AggregateMataKuliahSubscription
 export interface SoalNode {
   id: ID_Output;
   pertanyaan: String;
+  image?: String;
   tingkatKesulitan: String;
   kunciJawaban: String;
 }
@@ -4924,6 +4975,7 @@ export interface SoalNode {
 export interface Soal extends Promise<SoalNode>, Fragmentable {
   id: () => Promise<ID_Output>;
   pertanyaan: () => Promise<String>;
+  image: () => Promise<String>;
   jawaban: <T = Promise<Array<JawabanNode>>>(args?: {
     where?: JawabanWhereInput;
     orderBy?: JawabanOrderByInput;
@@ -4943,6 +4995,7 @@ export interface SoalSubscription
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
   pertanyaan: () => Promise<AsyncIterator<String>>;
+  image: () => Promise<AsyncIterator<String>>;
   jawaban: <T = Promise<AsyncIterator<Array<JawabanSubscription>>>>(args?: {
     where?: JawabanWhereInput;
     orderBy?: JawabanOrderByInput;
@@ -5700,6 +5753,7 @@ export interface DosenSubscription
 export interface SoalPreviousValuesNode {
   id: ID_Output;
   pertanyaan: String;
+  image?: String;
   tingkatKesulitan: String;
   kunciJawaban: String;
 }
@@ -5709,6 +5763,7 @@ export interface SoalPreviousValues
     Fragmentable {
   id: () => Promise<ID_Output>;
   pertanyaan: () => Promise<String>;
+  image: () => Promise<String>;
   tingkatKesulitan: () => Promise<String>;
   kunciJawaban: () => Promise<String>;
 }
@@ -5718,6 +5773,7 @@ export interface SoalPreviousValuesSubscription
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
   pertanyaan: () => Promise<AsyncIterator<String>>;
+  image: () => Promise<AsyncIterator<String>>;
   tingkatKesulitan: () => Promise<AsyncIterator<String>>;
   kunciJawaban: () => Promise<AsyncIterator<String>>;
 }
