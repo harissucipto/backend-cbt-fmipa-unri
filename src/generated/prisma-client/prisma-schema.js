@@ -2974,6 +2974,7 @@ type Subscription {
 
 type Ujian {
   id: ID!
+  pinPengawas: String
   pin: String
   nama: String!
   tanggalPelaksanaan: DateTime!
@@ -2999,6 +3000,7 @@ type UjianConnection {
 }
 
 input UjianCreateInput {
+  pinPengawas: String
   pin: String
   nama: String!
   tanggalPelaksanaan: DateTime!
@@ -3028,6 +3030,7 @@ input UjianCreateOneWithoutSoalMahasiswasInput {
 }
 
 input UjianCreateWithoutSoalMahasiswasInput {
+  pinPengawas: String
   pin: String
   nama: String!
   tanggalPelaksanaan: DateTime!
@@ -3053,6 +3056,8 @@ type UjianEdge {
 enum UjianOrderByInput {
   id_ASC
   id_DESC
+  pinPengawas_ASC
+  pinPengawas_DESC
   pin_ASC
   pin_DESC
   nama_ASC
@@ -3083,6 +3088,7 @@ enum UjianOrderByInput {
 
 type UjianPreviousValues {
   id: ID!
+  pinPengawas: String
   pin: String
   nama: String!
   tanggalPelaksanaan: DateTime!
@@ -3115,6 +3121,7 @@ input UjianSubscriptionWhereInput {
 }
 
 input UjianUpdateDataInput {
+  pinPengawas: String
   pin: String
   nama: String
   tanggalPelaksanaan: DateTime
@@ -3134,6 +3141,7 @@ input UjianUpdateDataInput {
 }
 
 input UjianUpdateInput {
+  pinPengawas: String
   pin: String
   nama: String
   tanggalPelaksanaan: DateTime
@@ -3167,6 +3175,7 @@ input UjianUpdateOneRequiredWithoutSoalMahasiswasInput {
 }
 
 input UjianUpdateWithoutSoalMahasiswasDataInput {
+  pinPengawas: String
   pin: String
   nama: String
   tanggalPelaksanaan: DateTime
@@ -3209,6 +3218,20 @@ input UjianWhereInput {
   id_not_starts_with: ID
   id_ends_with: ID
   id_not_ends_with: ID
+  pinPengawas: String
+  pinPengawas_not: String
+  pinPengawas_in: [String!]
+  pinPengawas_not_in: [String!]
+  pinPengawas_lt: String
+  pinPengawas_lte: String
+  pinPengawas_gt: String
+  pinPengawas_gte: String
+  pinPengawas_contains: String
+  pinPengawas_not_contains: String
+  pinPengawas_starts_with: String
+  pinPengawas_not_starts_with: String
+  pinPengawas_ends_with: String
+  pinPengawas_not_ends_with: String
   pin: String
   pin_not: String
   pin_in: [String!]
@@ -3317,6 +3340,7 @@ input UjianWhereInput {
 
 input UjianWhereUniqueInput {
   id: ID
+  pinPengawas: String
   pin: String
 }
 

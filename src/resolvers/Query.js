@@ -479,6 +479,7 @@ const Query = {
         {
           id
           nama
+          pin
           dosen {
             id
             nama
@@ -499,10 +500,17 @@ const Query = {
               nama
             }
           }
+          bankSoal {
+            id
+            nama
+          }
           tanggalPelaksanaan
           lokasi
           JumlahSoal
           durasiPengerjaan
+          presentasiSusah
+          presentasiSedang
+          presentasiMudah
         }
       `,
     );
@@ -579,6 +587,7 @@ const Query = {
               title
             }
           }
+
           jawaban {
             id
             idSoal

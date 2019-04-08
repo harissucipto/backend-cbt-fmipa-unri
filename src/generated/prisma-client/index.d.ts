@@ -881,6 +881,8 @@ export type MataKuliahOrderByInput =
 export type UjianOrderByInput =
   | "id_ASC"
   | "id_DESC"
+  | "pinPengawas_ASC"
+  | "pinPengawas_DESC"
   | "pin_ASC"
   | "pin_DESC"
   | "nama_ASC"
@@ -1156,6 +1158,20 @@ export interface UjianWhereInput {
   id_not_starts_with?: ID_Input;
   id_ends_with?: ID_Input;
   id_not_ends_with?: ID_Input;
+  pinPengawas?: String;
+  pinPengawas_not?: String;
+  pinPengawas_in?: String[] | String;
+  pinPengawas_not_in?: String[] | String;
+  pinPengawas_lt?: String;
+  pinPengawas_lte?: String;
+  pinPengawas_gt?: String;
+  pinPengawas_gte?: String;
+  pinPengawas_contains?: String;
+  pinPengawas_not_contains?: String;
+  pinPengawas_starts_with?: String;
+  pinPengawas_not_starts_with?: String;
+  pinPengawas_ends_with?: String;
+  pinPengawas_not_ends_with?: String;
   pin?: String;
   pin_not?: String;
   pin_in?: String[] | String;
@@ -1729,6 +1745,7 @@ export interface JurusanUpdateInput {
 }
 
 export interface UjianCreateInput {
+  pinPengawas?: String;
   pin?: String;
   nama: String;
   tanggalPelaksanaan: DateTimeInput;
@@ -2608,6 +2625,7 @@ export type BankSoalWhereUniqueInput = AtLeastOne<{
 }>;
 
 export interface UjianUpdateWithoutSoalMahasiswasDataInput {
+  pinPengawas?: String;
   pin?: String;
   nama?: String;
   tanggalPelaksanaan?: DateTimeInput;
@@ -2809,6 +2827,7 @@ export interface UserUpdateWithoutMahasiswaDataInput {
 
 export type UjianWhereUniqueInput = AtLeastOne<{
   id: ID_Input;
+  pinPengawas?: String;
   pin?: String;
 }>;
 
@@ -3388,6 +3407,7 @@ export interface DosenUpdateDataInput {
 }
 
 export interface UjianUpdateInput {
+  pinPengawas?: String;
   pin?: String;
   nama?: String;
   tanggalPelaksanaan?: DateTimeInput;
@@ -3513,6 +3533,7 @@ export interface SoalUpdateWithoutBankSoalDataInput {
 }
 
 export interface UjianUpdateDataInput {
+  pinPengawas?: String;
   pin?: String;
   nama?: String;
   tanggalPelaksanaan?: DateTimeInput;
@@ -3572,6 +3593,7 @@ export interface KelasUpdateOneRequiredInput {
 }
 
 export interface UjianCreateWithoutSoalMahasiswasInput {
+  pinPengawas?: String;
   pin?: String;
   nama: String;
   tanggalPelaksanaan: DateTimeInput;
@@ -5246,6 +5268,7 @@ export interface DosenConnectionSubscription
 
 export interface UjianNode {
   id: ID_Output;
+  pinPengawas?: String;
   pin?: String;
   nama: String;
   tanggalPelaksanaan: DateTimeOutput;
@@ -5261,6 +5284,7 @@ export interface UjianNode {
 
 export interface Ujian extends Promise<UjianNode>, Fragmentable {
   id: () => Promise<ID_Output>;
+  pinPengawas: () => Promise<String>;
   pin: () => Promise<String>;
   nama: () => Promise<String>;
   tanggalPelaksanaan: () => Promise<DateTimeOutput>;
@@ -5291,6 +5315,7 @@ export interface UjianSubscription
   extends Promise<AsyncIterator<UjianNode>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
+  pinPengawas: () => Promise<AsyncIterator<String>>;
   pin: () => Promise<AsyncIterator<String>>;
   nama: () => Promise<AsyncIterator<String>>;
   tanggalPelaksanaan: () => Promise<AsyncIterator<DateTimeOutput>>;
@@ -5480,6 +5505,7 @@ export interface SoalMahasiswaSubscription
 
 export interface UjianPreviousValuesNode {
   id: ID_Output;
+  pinPengawas?: String;
   pin?: String;
   nama: String;
   tanggalPelaksanaan: DateTimeOutput;
@@ -5497,6 +5523,7 @@ export interface UjianPreviousValues
   extends Promise<UjianPreviousValuesNode>,
     Fragmentable {
   id: () => Promise<ID_Output>;
+  pinPengawas: () => Promise<String>;
   pin: () => Promise<String>;
   nama: () => Promise<String>;
   tanggalPelaksanaan: () => Promise<DateTimeOutput>;
@@ -5514,6 +5541,7 @@ export interface UjianPreviousValuesSubscription
   extends Promise<AsyncIterator<UjianPreviousValuesNode>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
+  pinPengawas: () => Promise<AsyncIterator<String>>;
   pin: () => Promise<AsyncIterator<String>>;
   nama: () => Promise<AsyncIterator<String>>;
   tanggalPelaksanaan: () => Promise<AsyncIterator<DateTimeOutput>>;

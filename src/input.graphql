@@ -40,3 +40,8 @@ type IdentitasLoginUjian {
   jwt: String!
   id: String!
 }
+
+type IdentitasLoginPengawas {
+  jwt: String!
+  id: String!
+}

@@ -69,6 +69,13 @@ type Mutation {
   ): SoalMahasiswa!
 
   createSkor(soalMahasiswa: ID!): Skor
+
+  loginPengawas(
+    pinPengawas: String!
+    pinUjian: String!
+  ): IdentitasLoginPengawas!
+
+  updatePinUjian(id: ID!, jwt: String!): Ujian!
 }
 
 type Query {

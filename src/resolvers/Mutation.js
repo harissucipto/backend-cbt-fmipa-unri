@@ -3,9 +3,12 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const shortid = require('shortid');
 const moment = require('moment-timezone');
+
 const {
   hasPermission, getRandomSoal, getSoalSiswa, promiseCreateSoal,
 } = require('../utils');
+
+const mutasiPengawas = require('./pengawas/Mutation');
 
 const mutations = {
   // eslint-disable-next-line no-unused-vars
@@ -648,6 +651,7 @@ const mutations = {
 
     args.data.dosen = { connect: { id: idDosen.dosen.id } };
     args.data.pin = shortid();
+    args.data.pinPengawas = shortid();
 
     console.log(args, 'recheck args');
     // 3. if they do, query all the dosens!
@@ -973,6 +977,8 @@ const mutations = {
     `,
     );
   },
+
+  ...mutasiPengawas,
 };
 
 module.exports = mutations;

@@ -112,6 +112,7 @@ type BankSoal {
 
 type Ujian {
   id: ID! @unique
+  pinPengawas: String @unique
   pin: String @unique
   nama: String!
   tanggalPelaksanaan: DateTime!
