@@ -61,6 +61,61 @@ const Mutation = {
       info,
     );
   },
+
+  // update tidak hadir
+  async updateTidakHadir(parent, args, ctx, info) {
+    const { idUjian, idMahasiswa } = args;
+
+    // query tidak hadirs dulu
+    const pilihTidakHadir = {
+      where: {
+        AND: [
+          {
+            mahasiswa: {
+              id: idMahasiswa,
+            },
+          },
+          {
+            ujian: {
+              id: idUjian,
+            },
+          },
+        ],
+      },
+    };
+
+    const tidakHadir = await ctx.db.query.tidakHadirs(pilihTidakHadir);
+    console.log(tidakHadir, 'nii');
+    // bandingkan
+    if (!tidakHadir.length) {
+      await ctx.db.mutation.updateUjian(
+        {
+          where: { id: idUjian },
+          data: {
+            tidakHadirs: {
+              create: {
+                mahasiswa: {
+                  connect: {
+                    id: idMahasiswa,
+                  },
+                },
+              },
+            },
+          },
+        },
+        `
+        {
+          id
+        }
+      `,
+      );
+    } else {
+      console.log('delete...');
+      await ctx.db.mutation.deleteManyTidakHadirs(pilihTidakHadir, '{ count }');
+    }
+
+    return null;
+  },
 };
 
 module.exports = Mutation;

@@ -2,6 +2,8 @@
 const { hasPermission } = require('../utils');
 const jwt = require('jsonwebtoken');
 
+const queryPengawas = require('./pengawas/Query');
+
 const Query = {
   me(parent, args, ctx, info) {
     // check if there is a current user ID
@@ -475,44 +477,7 @@ const Query = {
       {
         where: { id: args.id },
       },
-      `
-        {
-          id
-          nama
-          pin
-          dosen {
-            id
-            nama
-          }
-          prodi {
-            id
-            nama
-            jurusan {
-              id
-              nama
-            }
-          }
-          kelas {
-            id
-            nama
-            mataKuliah {
-              id
-              nama
-            }
-          }
-          bankSoal {
-            id
-            nama
-          }
-          tanggalPelaksanaan
-          lokasi
-          JumlahSoal
-          durasiPengerjaan
-          presentasiSusah
-          presentasiSedang
-          presentasiMudah
-        }
-      `,
+      info,
     );
 
     return getUjian;
@@ -607,6 +572,8 @@ const Query = {
   async skor(parent, args, ctx, info) {
     return ctx.db.query.skor(args, info);
   },
+
+  ...queryPengawas,
 };
 
 module.exports = Query;

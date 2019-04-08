@@ -129,6 +129,7 @@ type Ujian {
   dosen: Dosen
   ujianSelesai: Boolean! @default(value: "false")
   soalMahasiswas: [SoalMahasiswa!]
+  tidakHadirs: [TidakHadir!]
 }
 
 type SoalMahasiswa {
@@ -154,4 +155,10 @@ type Skor {
   idSoal: String! @unique
   soalMahasiswa: SoalMahasiswa!
   nilai: Float! @default(value: 0)
+}
+
+type TidakHadir {
+  id: ID! @unique
+  ujian: Ujian!
+  mahasiswa: Mahasiswa!
 }

@@ -76,6 +76,8 @@ type Mutation {
   ): IdentitasLoginPengawas!
 
   updatePinUjian(id: ID!, jwt: String!): Ujian!
+
+  updateTidakHadir(idUjian: ID!, idMahasiswa: ID!): TidakHadir
 }
 
 type Query {
@@ -208,6 +210,15 @@ type Query {
   soalUjianMahasiswa(id: String!, jwt: String!): SoalMahasiswa!
 
   skor(where: SkorWhereUniqueInput!): Skor!
+  tidakHadirs(
+    where: TidakHadirWhereInput
+    orderBy: TidakHadirOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [TidakHadir]!
 }
 
 type User {
