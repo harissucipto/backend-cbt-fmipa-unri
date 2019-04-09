@@ -512,6 +512,7 @@ const Query = {
 
   async soalUjianMahasiswa(parent, args, ctx, info) {
     const { userId } = jwt.verify(args.jwt, process.env.APP_SECRET);
+
     if (!userId) {
       return null;
     }
@@ -535,42 +536,15 @@ const Query = {
           ],
         },
       },
-      `
-        {
-          id
-          ujian {
-            id
-          }
-          soals {
-            id
-            pertanyaan
-            image
-            jawaban {
-              id
-              image
-              content
-              title
-            }
-          }
-
-          jawaban {
-            id
-            idSoal
-            pegangan
-            jawaban {
-              id
-              title
-            }
-          }
-        }
-      `,
+      info,
     );
 
     return soalUjian[0];
   },
 
-  async skor(parent, args, ctx, info) {
-    return ctx.db.query.skor(args, info);
+  async getInfosoalMahasiswa(parent, args, ctx, info) {
+    console.log(args);
+    return await ctx.db.query.soalMahasiswas(args, info);
   },
 
   ...queryPengawas,

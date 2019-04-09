@@ -18,7 +18,7 @@ const Mutation = {
         id
         tanggalPelaksanaan
         durasiPengerjaan
-        ujianSelesai
+        status
       }
       `,
     );
@@ -27,7 +27,7 @@ const Mutation = {
       throw new Error('Pin Salah');
     }
 
-    if (statusUjian.ujianSelesai) {
+    if (!statusUjian.status) {
       throw new Error('Ujian telah dilaksankan');
     }
 
@@ -207,6 +207,54 @@ const Mutation = {
     }
 
     return null;
+  },
+
+  async createSkorAll(parent, args, ctx, info) {
+    // get jawabanMahasiswa dan kunci jawaban dan kompare denganjawaban
+    if (!args.soalMahasiswa) {
+      throw new Error('Anda jangan curanglah');
+    }
+
+    // hitung skor;
+
+    const nilaiSkor = dataSoalMahasiswa.jawaban.reduce((acc, jawabanSaya) => {
+      // cari kunciJawaban perindex;
+      const kunciJawaban = dataSoalMahasiswa.soals.filter(soal => soal.id === jawabanSaya.idSoal)[0]
+        .kunciJawaban;
+
+      console.log(kunciJawaban);
+      return kunciJawaban === jawabanSaya.jawaban.title ? acc + 1 : acc;
+    }, 0);
+
+    const skorSaya = Math.round(nilaiSkor / dataSoalMahasiswa.soals.length) * 100;
+
+    // masukan ke db
+
+    return ctx.db.mutation.upsertSkor(
+      {
+        where: {
+          idSoal: args.soalMahasiswa,
+        },
+        create: {
+          idSoal: args.soalMahasiswa,
+          soalMahasiswa: {
+            connect: {
+              id: args.soalMahasiswa,
+            },
+          },
+          nilai: skorSaya,
+        },
+        update: {
+          nilai: skorSaya,
+        },
+      },
+      `
+     {
+       id
+       nilai
+     }
+    `,
+    );
   },
 };
 

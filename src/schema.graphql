@@ -68,7 +68,7 @@ type Mutation {
     where: SoalMahasiswaWhereUniqueInput!
   ): SoalMahasiswa!
 
-  createSkor(soalMahasiswa: ID!): Skor
+  createSkor(soalMahasiswa: ID!): SoalMahasiswa
 
   loginPengawas(
     pinPengawas: String!
@@ -89,6 +89,8 @@ type Mutation {
     idMahasiswa: ID!
     kasus: String!
   ): BeritaAcaraUjian
+
+  createSkorAll(idUjian: ID!): Ujian
 }
 
 type Query {
@@ -220,8 +222,6 @@ type Query {
   infoPesertaUjian(id: String!, jwt: String!): User
   soalUjianMahasiswa(id: String!, jwt: String!): SoalMahasiswa!
 
-  skor(where: SkorWhereUniqueInput!): Skor!
-
   tidakHadirs(
     where: TidakHadirWhereInput
     orderBy: TidakHadirOrderByInput
@@ -241,6 +241,16 @@ type Query {
     first: Int
     last: Int
   ): [BeritaAcaraUjian]!
+
+  getInfosoalMahasiswa(
+    where: SoalMahasiswaWhereInput
+    orderBy: SoalMahasiswaOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [SoalMahasiswa!]!
 }
 
 type User {

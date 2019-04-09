@@ -761,12 +761,23 @@ const mutations = {
 
     // // 3. Delete it!
 
-    await ctx.db.mutation.deleteManySkors(
+    await ctx.db.mutation.deleteManyTidakHadirs(
       {
         where: {
-          soalMahasiswa: {
-            ujian: { id: args.where.id },
-          },
+          ujian: { id: args.where.id }
+        },
+      },
+      `
+      {
+        count
+      }
+      `,
+    );
+
+    await ctx.db.mutation.deleteManyBeritaAcaraUjians(
+      {
+        where: {
+          ujian: { id: args.where.id }
         },
       },
       `
@@ -835,7 +846,7 @@ const mutations = {
           },
         ],
       },
-    }
+    };
 
     const [statusUjian] = await ctx.db.query.soalMahasiswas(
       pilihSoalMahasiswa,
@@ -847,7 +858,7 @@ const mutations = {
           id
           tanggalPelaksanaan
           durasiPengerjaan
-          ujianSelesai
+          status
         }
         mahasiswa {
           id
@@ -863,8 +874,16 @@ const mutations = {
       throw new Error('Pin ujian Salah');
     }
 
-    if (statusUjian.status !== 'belum') {
+    if (!statusUjian.status) {
+      throw new Error('Ujian telah berakhir');
+    }
+
+    if (statusUjian.status === 'sedang') {
       throw new Error('Anda Telah Login, minta reset login ke pengawas jika ingin login lagi');
+    }
+
+    if (statusUjian.status === 'sudah') {
+      throw new Error('Anda Telah menyelesaikan Ujian ini');
     }
 
     const { tanggalPelaksanaan, durasiPengerjaan, id } = statusUjian.ujian;
@@ -878,7 +897,10 @@ const mutations = {
     }
 
     // login sudah
-    await ctx.db.mutation.updateSoalMahasiswa({ where: { id: statusUjian.id }, data: { status: 'sedang' } }, ' { id } ');
+    await ctx.db.mutation.updateSoalMahasiswa(
+      { where: { id: statusUjian.id }, data: { status: 'sedang' } },
+      ' { id } ',
+    );
 
     // 3. generate the JWT Token
     const token = jwt.sign({ userId: user.id }, process.env.APP_SECRET);
@@ -935,30 +957,14 @@ const mutations = {
 
     // masukan ke db
 
-    return ctx.db.mutation.upsertSkor(
+    console.log(skorSaya, 'ini skor mahasiswa');
+
+    return ctx.db.mutation.updateSoalMahasiswa(
       {
-        where: {
-          idSoal: args.soalMahasiswa,
-        },
-        create: {
-          idSoal: args.soalMahasiswa,
-          soalMahasiswa: {
-            connect: {
-              id: args.soalMahasiswa,
-            },
-          },
-          nilai: skorSaya,
-        },
-        update: {
-          nilai: skorSaya,
-        },
+        where: { id: args.soalMahasiswa },
+        data: { skor: skorSaya },
       },
-      `
-     {
-       id
-       nilai
-     }
-    `,
+      info,
     );
   },
 

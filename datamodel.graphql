@@ -52,7 +52,6 @@ type Mahasiswa {
   user: User!
   kelases: [Kelas!]
   soals: [SoalMahasiswa!]
-  skors: [Skor!]
   image: String
 }
 
@@ -127,7 +126,6 @@ type Ujian {
   bankSoal: BankSoal!
   kelas: Kelas!
   dosen: Dosen
-  ujianSelesai: Boolean! @default(value: "false")
   soalMahasiswas: [SoalMahasiswa!]
   tidakHadirs: [TidakHadir!]
   beritaAcaraUjian: [BeritaAcaraUjian!]
@@ -139,8 +137,8 @@ type SoalMahasiswa {
   mahasiswa: Mahasiswa!
   soals: [Soal!]
   jawaban: [JawabanMahasiswa!]
-  skor: Skor
   status: String! @default(value: "belum")
+  skor: Float! @default(value: 0)
 }
 
 type JawabanMahasiswa {
@@ -149,13 +147,6 @@ type JawabanMahasiswa {
   idSoal: String!
   jawaban: Jawaban
   pegangan: String @unique
-}
-
-type Skor {
-  id: ID! @unique
-  idSoal: String! @unique
-  soalMahasiswa: SoalMahasiswa!
-  nilai: Float! @default(value: 0)
 }
 
 type TidakHadir {
