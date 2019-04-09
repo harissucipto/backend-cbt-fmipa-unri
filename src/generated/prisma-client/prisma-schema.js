@@ -2742,8 +2742,8 @@ type SoalMahasiswa {
   mahasiswa: Mahasiswa!
   soals(where: SoalWhereInput, orderBy: SoalOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Soal!]
   jawaban(where: JawabanMahasiswaWhereInput, orderBy: JawabanMahasiswaOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [JawabanMahasiswa!]
-  ujianSelesai: Boolean!
   skor: Skor
+  status: String!
 }
 
 type SoalMahasiswaConnection {
@@ -2757,8 +2757,8 @@ input SoalMahasiswaCreateInput {
   mahasiswa: MahasiswaCreateOneWithoutSoalsInput!
   soals: SoalCreateManyInput
   jawaban: JawabanMahasiswaCreateManyInput
-  ujianSelesai: Boolean
   skor: SkorCreateOneWithoutSoalMahasiswaInput
+  status: String
 }
 
 input SoalMahasiswaCreateManyWithoutMahasiswaInput {
@@ -2780,8 +2780,8 @@ input SoalMahasiswaCreateWithoutMahasiswaInput {
   ujian: UjianCreateOneWithoutSoalMahasiswasInput!
   soals: SoalCreateManyInput
   jawaban: JawabanMahasiswaCreateManyInput
-  ujianSelesai: Boolean
   skor: SkorCreateOneWithoutSoalMahasiswaInput
+  status: String
 }
 
 input SoalMahasiswaCreateWithoutSkorInput {
@@ -2789,15 +2789,15 @@ input SoalMahasiswaCreateWithoutSkorInput {
   mahasiswa: MahasiswaCreateOneWithoutSoalsInput!
   soals: SoalCreateManyInput
   jawaban: JawabanMahasiswaCreateManyInput
-  ujianSelesai: Boolean
+  status: String
 }
 
 input SoalMahasiswaCreateWithoutUjianInput {
   mahasiswa: MahasiswaCreateOneWithoutSoalsInput!
   soals: SoalCreateManyInput
   jawaban: JawabanMahasiswaCreateManyInput
-  ujianSelesai: Boolean
   skor: SkorCreateOneWithoutSoalMahasiswaInput
+  status: String
 }
 
 type SoalMahasiswaEdge {
@@ -2808,8 +2808,8 @@ type SoalMahasiswaEdge {
 enum SoalMahasiswaOrderByInput {
   id_ASC
   id_DESC
-  ujianSelesai_ASC
-  ujianSelesai_DESC
+  status_ASC
+  status_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -2818,7 +2818,7 @@ enum SoalMahasiswaOrderByInput {
 
 type SoalMahasiswaPreviousValues {
   id: ID!
-  ujianSelesai: Boolean!
+  status: String!
 }
 
 type SoalMahasiswaSubscriptionPayload {
@@ -2844,8 +2844,8 @@ input SoalMahasiswaUpdateInput {
   mahasiswa: MahasiswaUpdateOneRequiredWithoutSoalsInput
   soals: SoalUpdateManyInput
   jawaban: JawabanMahasiswaUpdateManyInput
-  ujianSelesai: Boolean
   skor: SkorUpdateOneWithoutSoalMahasiswaInput
+  status: String
 }
 
 input SoalMahasiswaUpdateManyWithoutMahasiswaInput {
@@ -2877,8 +2877,8 @@ input SoalMahasiswaUpdateWithoutMahasiswaDataInput {
   ujian: UjianUpdateOneRequiredWithoutSoalMahasiswasInput
   soals: SoalUpdateManyInput
   jawaban: JawabanMahasiswaUpdateManyInput
-  ujianSelesai: Boolean
   skor: SkorUpdateOneWithoutSoalMahasiswaInput
+  status: String
 }
 
 input SoalMahasiswaUpdateWithoutSkorDataInput {
@@ -2886,15 +2886,15 @@ input SoalMahasiswaUpdateWithoutSkorDataInput {
   mahasiswa: MahasiswaUpdateOneRequiredWithoutSoalsInput
   soals: SoalUpdateManyInput
   jawaban: JawabanMahasiswaUpdateManyInput
-  ujianSelesai: Boolean
+  status: String
 }
 
 input SoalMahasiswaUpdateWithoutUjianDataInput {
   mahasiswa: MahasiswaUpdateOneRequiredWithoutSoalsInput
   soals: SoalUpdateManyInput
   jawaban: JawabanMahasiswaUpdateManyInput
-  ujianSelesai: Boolean
   skor: SkorUpdateOneWithoutSoalMahasiswaInput
+  status: String
 }
 
 input SoalMahasiswaUpdateWithWhereUniqueWithoutMahasiswaInput {
@@ -2947,9 +2947,21 @@ input SoalMahasiswaWhereInput {
   jawaban_every: JawabanMahasiswaWhereInput
   jawaban_some: JawabanMahasiswaWhereInput
   jawaban_none: JawabanMahasiswaWhereInput
-  ujianSelesai: Boolean
-  ujianSelesai_not: Boolean
   skor: SkorWhereInput
+  status: String
+  status_not: String
+  status_in: [String!]
+  status_not_in: [String!]
+  status_lt: String
+  status_lte: String
+  status_gt: String
+  status_gte: String
+  status_contains: String
+  status_not_contains: String
+  status_starts_with: String
+  status_not_starts_with: String
+  status_ends_with: String
+  status_not_ends_with: String
   AND: [SoalMahasiswaWhereInput!]
   OR: [SoalMahasiswaWhereInput!]
   NOT: [SoalMahasiswaWhereInput!]

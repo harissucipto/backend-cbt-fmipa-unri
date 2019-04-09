@@ -917,8 +917,8 @@ export type MahasiswaOrderByInput =
 export type SoalMahasiswaOrderByInput =
   | "id_ASC"
   | "id_DESC"
-  | "ujianSelesai_ASC"
-  | "ujianSelesai_DESC"
+  | "status_ASC"
+  | "status_DESC"
   | "createdAt_ASC"
   | "createdAt_DESC"
   | "updatedAt_ASC"
@@ -1312,7 +1312,7 @@ export interface SoalMahasiswaCreateWithoutSkorInput {
   mahasiswa: MahasiswaCreateOneWithoutSoalsInput;
   soals?: SoalCreateManyInput;
   jawaban?: JawabanMahasiswaCreateManyInput;
-  ujianSelesai?: Boolean;
+  status?: String;
 }
 
 export interface MataKuliahSubscriptionWhereInput {
@@ -1716,8 +1716,8 @@ export interface SoalMahasiswaCreateWithoutUjianInput {
   mahasiswa: MahasiswaCreateOneWithoutSoalsInput;
   soals?: SoalCreateManyInput;
   jawaban?: JawabanMahasiswaCreateManyInput;
-  ujianSelesai?: Boolean;
   skor?: SkorCreateOneWithoutSoalMahasiswaInput;
+  status?: String;
 }
 
 export interface SoalUpdateInput {
@@ -2346,8 +2346,8 @@ export interface SoalMahasiswaUpdateWithoutMahasiswaDataInput {
   ujian?: UjianUpdateOneRequiredWithoutSoalMahasiswasInput;
   soals?: SoalUpdateManyInput;
   jawaban?: JawabanMahasiswaUpdateManyInput;
-  ujianSelesai?: Boolean;
   skor?: SkorUpdateOneWithoutSoalMahasiswaInput;
+  status?: String;
 }
 
 export interface MahasiswaCreateManyWithoutKelasesInput {
@@ -2668,9 +2668,21 @@ export interface SoalMahasiswaWhereInput {
   jawaban_every?: JawabanMahasiswaWhereInput;
   jawaban_some?: JawabanMahasiswaWhereInput;
   jawaban_none?: JawabanMahasiswaWhereInput;
-  ujianSelesai?: Boolean;
-  ujianSelesai_not?: Boolean;
   skor?: SkorWhereInput;
+  status?: String;
+  status_not?: String;
+  status_in?: String[] | String;
+  status_not_in?: String[] | String;
+  status_lt?: String;
+  status_lte?: String;
+  status_gt?: String;
+  status_gte?: String;
+  status_contains?: String;
+  status_not_contains?: String;
+  status_starts_with?: String;
+  status_not_starts_with?: String;
+  status_ends_with?: String;
+  status_not_ends_with?: String;
   AND?: SoalMahasiswaWhereInput[] | SoalMahasiswaWhereInput;
   OR?: SoalMahasiswaWhereInput[] | SoalMahasiswaWhereInput;
   NOT?: SoalMahasiswaWhereInput[] | SoalMahasiswaWhereInput;
@@ -2960,8 +2972,8 @@ export interface SoalMahasiswaUpdateInput {
   mahasiswa?: MahasiswaUpdateOneRequiredWithoutSoalsInput;
   soals?: SoalUpdateManyInput;
   jawaban?: JawabanMahasiswaUpdateManyInput;
-  ujianSelesai?: Boolean;
   skor?: SkorUpdateOneWithoutSoalMahasiswaInput;
+  status?: String;
 }
 
 export interface UserUpdateWithoutMahasiswaDataInput {
@@ -3145,7 +3157,7 @@ export interface SoalMahasiswaUpdateWithoutSkorDataInput {
   mahasiswa?: MahasiswaUpdateOneRequiredWithoutSoalsInput;
   soals?: SoalUpdateManyInput;
   jawaban?: JawabanMahasiswaUpdateManyInput;
-  ujianSelesai?: Boolean;
+  status?: String;
 }
 
 export interface JawabanMahasiswaUpsertWithWhereUniqueNestedInput {
@@ -3260,8 +3272,8 @@ export interface SoalMahasiswaCreateWithoutMahasiswaInput {
   ujian: UjianCreateOneWithoutSoalMahasiswasInput;
   soals?: SoalCreateManyInput;
   jawaban?: JawabanMahasiswaCreateManyInput;
-  ujianSelesai?: Boolean;
   skor?: SkorCreateOneWithoutSoalMahasiswaInput;
+  status?: String;
 }
 
 export interface JawabanUpdateWithWhereUniqueWithoutSoalInput {
@@ -3527,8 +3539,8 @@ export interface SoalMahasiswaCreateInput {
   mahasiswa: MahasiswaCreateOneWithoutSoalsInput;
   soals?: SoalCreateManyInput;
   jawaban?: JawabanMahasiswaCreateManyInput;
-  ujianSelesai?: Boolean;
   skor?: SkorCreateOneWithoutSoalMahasiswaInput;
+  status?: String;
 }
 
 export interface SoalUpsertWithWhereUniqueNestedInput {
@@ -3719,8 +3731,8 @@ export interface SoalMahasiswaUpdateWithoutUjianDataInput {
   mahasiswa?: MahasiswaUpdateOneRequiredWithoutSoalsInput;
   soals?: SoalUpdateManyInput;
   jawaban?: JawabanMahasiswaUpdateManyInput;
-  ujianSelesai?: Boolean;
   skor?: SkorUpdateOneWithoutSoalMahasiswaInput;
+  status?: String;
 }
 
 export interface SkorWhereInput {
@@ -6126,7 +6138,7 @@ export interface UserSubscription
 
 export interface SoalMahasiswaNode {
   id: ID_Output;
-  ujianSelesai: Boolean;
+  status: String;
 }
 
 export interface SoalMahasiswa
@@ -6153,8 +6165,8 @@ export interface SoalMahasiswa
     first?: Int;
     last?: Int;
   }) => T;
-  ujianSelesai: () => Promise<Boolean>;
   skor: <T = Skor>() => T;
+  status: () => Promise<String>;
 }
 
 export interface SoalMahasiswaSubscription
@@ -6183,8 +6195,8 @@ export interface SoalMahasiswaSubscription
     first?: Int;
     last?: Int;
   }) => T;
-  ujianSelesai: () => Promise<AsyncIterator<Boolean>>;
   skor: <T = SkorSubscription>() => T;
+  status: () => Promise<AsyncIterator<String>>;
 }
 
 export interface SoalEdgeNode {
@@ -6573,21 +6585,21 @@ export interface DosenSubscription
 
 export interface SoalMahasiswaPreviousValuesNode {
   id: ID_Output;
-  ujianSelesai: Boolean;
+  status: String;
 }
 
 export interface SoalMahasiswaPreviousValues
   extends Promise<SoalMahasiswaPreviousValuesNode>,
     Fragmentable {
   id: () => Promise<ID_Output>;
-  ujianSelesai: () => Promise<Boolean>;
+  status: () => Promise<String>;
 }
 
 export interface SoalMahasiswaPreviousValuesSubscription
   extends Promise<AsyncIterator<SoalMahasiswaPreviousValuesNode>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
-  ujianSelesai: () => Promise<AsyncIterator<Boolean>>;
+  status: () => Promise<AsyncIterator<String>>;
 }
 
 export interface SoalMahasiswaSubscriptionPayloadNode {

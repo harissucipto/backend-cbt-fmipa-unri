@@ -786,7 +786,8 @@ const mutations = {
       {
         count
       }
-      `);
+      `,
+    );
 
     await ctx.db.mutation.deleteManySoalMahasiswas(
       {
@@ -817,29 +818,31 @@ const mutations = {
     }
 
     // check mahasiswa bisa ujian?
+    const pilihSoalMahasiswa = {
+      where: {
+        AND: [
+          {
+            ujian: {
+              pin: pinUjian,
+            },
+          },
+          {
+            mahasiswa: {
+              user: {
+                id: user.id,
+              },
+            },
+          },
+        ],
+      },
+    }
 
     const [statusUjian] = await ctx.db.query.soalMahasiswas(
-      {
-        where: {
-          AND: [
-            {
-              ujian: {
-                pin: pinUjian,
-              },
-            },
-            {
-              mahasiswa: {
-                user: {
-                  id: user.id,
-                },
-              },
-            },
-          ],
-        },
-      },
+      pilihSoalMahasiswa,
       `
       {
-        ujianSelesai
+        id
+        status
         ujian {
           id
           tanggalPelaksanaan
@@ -860,33 +863,11 @@ const mutations = {
       throw new Error('Pin ujian Salah');
     }
 
-    if (statusUjian.ujianSelesai) {
-      throw new Error('Ujian telah dilaksankan');
+    if (statusUjian.status !== 'belum') {
+      throw new Error('Anda Telah Login, minta reset login ke pengawas jika ingin login lagi');
     }
 
-    // 3.  check if pinUjian is correct
-    // get ujian
-    const validPinUjian = await ctx.db.query.ujian(
-      { where: { pin: pinUjian } },
-      `
-      {
-        id
-        tanggalPelaksanaan
-        durasiPengerjaan
-        ujianSelesai
-        kelas {
-          mahasiswas {
-            id
-            user {
-              id
-            }
-          }
-        }
-      }
-    `,
-    );
-
-    const { tanggalPelaksanaan, durasiPengerjaan } = statusUjian.ujian;
+    const { tanggalPelaksanaan, durasiPengerjaan, id } = statusUjian.ujian;
 
     // cek  ujian telah dilaksanakan atau belum atau lewat dari satu hari
     const bedaWaktu =
@@ -896,6 +877,9 @@ const mutations = {
       throw new Error('Tanggal dan Waktu Pelaksanaan ujian telah berakhir');
     }
 
+    // login sudah
+    await ctx.db.mutation.updateSoalMahasiswa({ where: { id: statusUjian.id }, data: { status: 'sedang' } }, ' { id } ');
+
     // 3. generate the JWT Token
     const token = jwt.sign({ userId: user.id }, process.env.APP_SECRET);
     console.log(token, 'cookie login');
@@ -903,7 +887,7 @@ const mutations = {
     // 5. finally we return the user to the browser
     return {
       jwt: token,
-      id: validPinUjian.id,
+      id,
     };
   },
 
@@ -920,7 +904,7 @@ const mutations = {
     const dataSoalMahasiswa = await ctx.db.mutation.updateSoalMahasiswa(
       {
         where: { id: args.soalMahasiswa },
-        data: { ujianSelesai: true },
+        data: { status: 'sudah' },
       },
       `{
         soals {

@@ -139,8 +139,8 @@ type SoalMahasiswa {
   mahasiswa: Mahasiswa!
   soals: [Soal!]
   jawaban: [JawabanMahasiswa!]
-  ujianSelesai: Boolean! @default(value: "false")
   skor: Skor
+  status: String! @default(value: "belum")
 }
 
 type JawabanMahasiswa {
