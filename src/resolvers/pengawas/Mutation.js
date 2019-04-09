@@ -85,8 +85,7 @@ const Mutation = {
     };
 
     const tidakHadir = await ctx.db.query.tidakHadirs(pilihTidakHadir);
-    console.log(tidakHadir, 'nii');
-    // bandingkan
+
     if (!tidakHadir.length) {
       await ctx.db.mutation.updateUjian(
         {
@@ -110,8 +109,101 @@ const Mutation = {
       `,
       );
     } else {
-      console.log('delete...');
       await ctx.db.mutation.deleteManyTidakHadirs(pilihTidakHadir, '{ count }');
+    }
+
+    return null;
+  },
+
+  // login ke aplikasi
+  async updateUjianPengawas(parent, args, ctx, info) {
+    return ctx.db.mutation.updateUjian(args, info);
+  },
+
+  // update tidak hadir
+  async updateBeritaAcara(parent, args, ctx, info) {
+    const { idUjian, idMahasiswa, kasus } = args;
+
+    // query tidak hadirs dulu
+    const pilihItem = {
+      where: {
+        AND: [
+          {
+            mahasiswa: {
+              id: idMahasiswa,
+            },
+          },
+          {
+            ujian: {
+              id: idUjian,
+            },
+          },
+        ],
+      },
+    };
+
+    let [pilihBerita] = await ctx.db.query.beritaAcaraUjians(pilihItem);
+
+    console.log(pilihBerita, 'pilih berita dulu gan');
+    console.log(idUjian, idMahasiswa, kasus);
+
+    // pilih berita dulu
+
+    // jika tidak ada bikin dummy
+    if (!pilihBerita) {
+      pilihBerita = {
+        id: 'first',
+        [kasus]: false,
+      };
+    }
+
+    const updateUjian = await ctx.db.mutation.updateUjian(
+      {
+        where: { id: idUjian },
+        data: {
+          beritaAcaraUjian: {
+            upsert: {
+              where: {
+                id: pilihBerita.id,
+              },
+              create: {
+                mahasiswa: {
+                  connect: {
+                    id: idMahasiswa,
+                  },
+                },
+                [kasus]: true,
+              },
+              update: {
+                [kasus]: !pilihBerita[kasus],
+              },
+            },
+          },
+        },
+      },
+      `{
+        id
+        beritaAcaraUjian {
+          id
+          teralambat
+          wajah
+          sakit
+          menyontek
+          alatDilarang
+        }
+      }`,
+    );
+
+    // hapus berita acara letola mahasiswa tdak
+    const [tidakTerlibat] = updateUjian.beritaAcaraUjian.filter((berita) => {
+      const {
+        teralambat, wajah, sakit, menyontek, alatDilarang,
+      } = berita;
+      return !teralambat && !wajah && !sakit && !menyontek && !alatDilarang;
+    });
+
+    if (tidakTerlibat) {
+      await ctx.db.mutation.deleteManyBeritaAcaraUjians(pilihItem, '{ count }');
     }
 
     return null;

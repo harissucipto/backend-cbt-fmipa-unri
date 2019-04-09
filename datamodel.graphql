@@ -130,6 +130,7 @@ type Ujian {
   ujianSelesai: Boolean! @default(value: "false")
   soalMahasiswas: [SoalMahasiswa!]
   tidakHadirs: [TidakHadir!]
+  beritaAcaraUjian: [BeritaAcaraUjian!]
 }
 
 type SoalMahasiswa {
@@ -161,4 +162,15 @@ type TidakHadir {
   id: ID! @unique
   ujian: Ujian!
   mahasiswa: Mahasiswa!
+}
+
+type BeritaAcaraUjian {
+  id: ID! @unique
+  mahasiswa: Mahasiswa!
+  ujian: Ujian!
+  teralambat: Boolean! @default(value: false)
+  wajah: Boolean! @default(value: false)
+  sakit: Boolean! @default(value: false)
+  menyontek: Boolean! @default(value: false)
+  alatDilarang: Boolean! @default(value: false)
 }

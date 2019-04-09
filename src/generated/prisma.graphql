@@ -159,6 +159,10 @@ type AggregateBankSoal {
   count: Int!
 }
 
+type AggregateBeritaAcaraUjian {
+  count: Int!
+}
+
 type AggregateDosen {
   count: Int!
 }
@@ -484,6 +488,173 @@ input BankSoalWhereUniqueInput {
 
 type BatchPayload {
   count: Long!
+}
+
+type BeritaAcaraUjian {
+  id: ID!
+  mahasiswa: Mahasiswa!
+  ujian: Ujian!
+  teralambat: Boolean!
+  wajah: Boolean!
+  sakit: Boolean!
+  menyontek: Boolean!
+  alatDilarang: Boolean!
+}
+
+type BeritaAcaraUjianConnection {
+  pageInfo: PageInfo!
+  edges: [BeritaAcaraUjianEdge]!
+  aggregate: AggregateBeritaAcaraUjian!
+}
+
+input BeritaAcaraUjianCreateInput {
+  mahasiswa: MahasiswaCreateOneInput!
+  ujian: UjianCreateOneWithoutBeritaAcaraUjianInput!
+  teralambat: Boolean
+  wajah: Boolean
+  sakit: Boolean
+  menyontek: Boolean
+  alatDilarang: Boolean
+}
+
+input BeritaAcaraUjianCreateManyWithoutUjianInput {
+  create: [BeritaAcaraUjianCreateWithoutUjianInput!]
+  connect: [BeritaAcaraUjianWhereUniqueInput!]
+}
+
+input BeritaAcaraUjianCreateWithoutUjianInput {
+  mahasiswa: MahasiswaCreateOneInput!
+  teralambat: Boolean
+  wajah: Boolean
+  sakit: Boolean
+  menyontek: Boolean
+  alatDilarang: Boolean
+}
+
+type BeritaAcaraUjianEdge {
+  node: BeritaAcaraUjian!
+  cursor: String!
+}
+
+enum BeritaAcaraUjianOrderByInput {
+  id_ASC
+  id_DESC
+  teralambat_ASC
+  teralambat_DESC
+  wajah_ASC
+  wajah_DESC
+  sakit_ASC
+  sakit_DESC
+  menyontek_ASC
+  menyontek_DESC
+  alatDilarang_ASC
+  alatDilarang_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type BeritaAcaraUjianPreviousValues {
+  id: ID!
+  teralambat: Boolean!
+  wajah: Boolean!
+  sakit: Boolean!
+  menyontek: Boolean!
+  alatDilarang: Boolean!
+}
+
+type BeritaAcaraUjianSubscriptionPayload {
+  mutation: MutationType!
+  node: BeritaAcaraUjian
+  updatedFields: [String!]
+  previousValues: BeritaAcaraUjianPreviousValues
+}
+
+input BeritaAcaraUjianSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: BeritaAcaraUjianWhereInput
+  AND: [BeritaAcaraUjianSubscriptionWhereInput!]
+  OR: [BeritaAcaraUjianSubscriptionWhereInput!]
+  NOT: [BeritaAcaraUjianSubscriptionWhereInput!]
+}
+
+input BeritaAcaraUjianUpdateInput {
+  mahasiswa: MahasiswaUpdateOneRequiredInput
+  ujian: UjianUpdateOneRequiredWithoutBeritaAcaraUjianInput
+  teralambat: Boolean
+  wajah: Boolean
+  sakit: Boolean
+  menyontek: Boolean
+  alatDilarang: Boolean
+}
+
+input BeritaAcaraUjianUpdateManyWithoutUjianInput {
+  create: [BeritaAcaraUjianCreateWithoutUjianInput!]
+  delete: [BeritaAcaraUjianWhereUniqueInput!]
+  connect: [BeritaAcaraUjianWhereUniqueInput!]
+  disconnect: [BeritaAcaraUjianWhereUniqueInput!]
+  update: [BeritaAcaraUjianUpdateWithWhereUniqueWithoutUjianInput!]
+  upsert: [BeritaAcaraUjianUpsertWithWhereUniqueWithoutUjianInput!]
+}
+
+input BeritaAcaraUjianUpdateWithoutUjianDataInput {
+  mahasiswa: MahasiswaUpdateOneRequiredInput
+  teralambat: Boolean
+  wajah: Boolean
+  sakit: Boolean
+  menyontek: Boolean
+  alatDilarang: Boolean
+}
+
+input BeritaAcaraUjianUpdateWithWhereUniqueWithoutUjianInput {
+  where: BeritaAcaraUjianWhereUniqueInput!
+  data: BeritaAcaraUjianUpdateWithoutUjianDataInput!
+}
+
+input BeritaAcaraUjianUpsertWithWhereUniqueWithoutUjianInput {
+  where: BeritaAcaraUjianWhereUniqueInput!
+  update: BeritaAcaraUjianUpdateWithoutUjianDataInput!
+  create: BeritaAcaraUjianCreateWithoutUjianInput!
+}
+
+input BeritaAcaraUjianWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  mahasiswa: MahasiswaWhereInput
+  ujian: UjianWhereInput
+  teralambat: Boolean
+  teralambat_not: Boolean
+  wajah: Boolean
+  wajah_not: Boolean
+  sakit: Boolean
+  sakit_not: Boolean
+  menyontek: Boolean
+  menyontek_not: Boolean
+  alatDilarang: Boolean
+  alatDilarang_not: Boolean
+  AND: [BeritaAcaraUjianWhereInput!]
+  OR: [BeritaAcaraUjianWhereInput!]
+  NOT: [BeritaAcaraUjianWhereInput!]
+}
+
+input BeritaAcaraUjianWhereUniqueInput {
+  id: ID
 }
 
 scalar DateTime
@@ -1997,6 +2168,12 @@ type Mutation {
   upsertBankSoal(where: BankSoalWhereUniqueInput!, create: BankSoalCreateInput!, update: BankSoalUpdateInput!): BankSoal!
   deleteBankSoal(where: BankSoalWhereUniqueInput!): BankSoal
   deleteManyBankSoals(where: BankSoalWhereInput): BatchPayload!
+  createBeritaAcaraUjian(data: BeritaAcaraUjianCreateInput!): BeritaAcaraUjian!
+  updateBeritaAcaraUjian(data: BeritaAcaraUjianUpdateInput!, where: BeritaAcaraUjianWhereUniqueInput!): BeritaAcaraUjian
+  updateManyBeritaAcaraUjians(data: BeritaAcaraUjianUpdateInput!, where: BeritaAcaraUjianWhereInput): BatchPayload!
+  upsertBeritaAcaraUjian(where: BeritaAcaraUjianWhereUniqueInput!, create: BeritaAcaraUjianCreateInput!, update: BeritaAcaraUjianUpdateInput!): BeritaAcaraUjian!
+  deleteBeritaAcaraUjian(where: BeritaAcaraUjianWhereUniqueInput!): BeritaAcaraUjian
+  deleteManyBeritaAcaraUjians(where: BeritaAcaraUjianWhereInput): BatchPayload!
   createDosen(data: DosenCreateInput!): Dosen!
   updateDosen(data: DosenUpdateInput!, where: DosenWhereUniqueInput!): Dosen
   updateManyDosens(data: DosenUpdateInput!, where: DosenWhereInput): BatchPayload!
@@ -2274,6 +2451,9 @@ type Query {
   bankSoal(where: BankSoalWhereUniqueInput!): BankSoal
   bankSoals(where: BankSoalWhereInput, orderBy: BankSoalOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [BankSoal]!
   bankSoalsConnection(where: BankSoalWhereInput, orderBy: BankSoalOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): BankSoalConnection!
+  beritaAcaraUjian(where: BeritaAcaraUjianWhereUniqueInput!): BeritaAcaraUjian
+  beritaAcaraUjians(where: BeritaAcaraUjianWhereInput, orderBy: BeritaAcaraUjianOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [BeritaAcaraUjian]!
+  beritaAcaraUjiansConnection(where: BeritaAcaraUjianWhereInput, orderBy: BeritaAcaraUjianOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): BeritaAcaraUjianConnection!
   dosen(where: DosenWhereUniqueInput!): Dosen
   dosens(where: DosenWhereInput, orderBy: DosenOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Dosen]!
   dosensConnection(where: DosenWhereInput, orderBy: DosenOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): DosenConnection!
@@ -2997,6 +3177,7 @@ type Subscription {
   admin(where: AdminSubscriptionWhereInput): AdminSubscriptionPayload
   angkatan(where: AngkatanSubscriptionWhereInput): AngkatanSubscriptionPayload
   bankSoal(where: BankSoalSubscriptionWhereInput): BankSoalSubscriptionPayload
+  beritaAcaraUjian(where: BeritaAcaraUjianSubscriptionWhereInput): BeritaAcaraUjianSubscriptionPayload
   dosen(where: DosenSubscriptionWhereInput): DosenSubscriptionPayload
   jawaban(where: JawabanSubscriptionWhereInput): JawabanSubscriptionPayload
   jawabanMahasiswa(where: JawabanMahasiswaSubscriptionWhereInput): JawabanMahasiswaSubscriptionPayload
@@ -3150,6 +3331,7 @@ type Ujian {
   ujianSelesai: Boolean!
   soalMahasiswas(where: SoalMahasiswaWhereInput, orderBy: SoalMahasiswaOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [SoalMahasiswa!]
   tidakHadirs(where: TidakHadirWhereInput, orderBy: TidakHadirOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [TidakHadir!]
+  beritaAcaraUjian(where: BeritaAcaraUjianWhereInput, orderBy: BeritaAcaraUjianOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [BeritaAcaraUjian!]
 }
 
 type UjianConnection {
@@ -3177,10 +3359,16 @@ input UjianCreateInput {
   ujianSelesai: Boolean
   soalMahasiswas: SoalMahasiswaCreateManyWithoutUjianInput
   tidakHadirs: TidakHadirCreateManyWithoutUjianInput
+  beritaAcaraUjian: BeritaAcaraUjianCreateManyWithoutUjianInput
 }
 
 input UjianCreateOneInput {
   create: UjianCreateInput
+  connect: UjianWhereUniqueInput
+}
+
+input UjianCreateOneWithoutBeritaAcaraUjianInput {
+  create: UjianCreateWithoutBeritaAcaraUjianInput
   connect: UjianWhereUniqueInput
 }
 
@@ -3192,6 +3380,27 @@ input UjianCreateOneWithoutSoalMahasiswasInput {
 input UjianCreateOneWithoutTidakHadirsInput {
   create: UjianCreateWithoutTidakHadirsInput
   connect: UjianWhereUniqueInput
+}
+
+input UjianCreateWithoutBeritaAcaraUjianInput {
+  pinPengawas: String
+  pin: String
+  nama: String!
+  tanggalPelaksanaan: DateTime!
+  lokasi: String!
+  JumlahSoal: Int
+  presentasiSusah: Float
+  presentasiSedang: Float
+  presentasiMudah: Float
+  durasiPengerjaan: Int!
+  status: Boolean
+  prodi: ProdiCreateOneInput!
+  bankSoal: BankSoalCreateOneInput!
+  kelas: KelasCreateOneInput!
+  dosen: DosenCreateOneInput
+  ujianSelesai: Boolean
+  soalMahasiswas: SoalMahasiswaCreateManyWithoutUjianInput
+  tidakHadirs: TidakHadirCreateManyWithoutUjianInput
 }
 
 input UjianCreateWithoutSoalMahasiswasInput {
@@ -3212,6 +3421,7 @@ input UjianCreateWithoutSoalMahasiswasInput {
   dosen: DosenCreateOneInput
   ujianSelesai: Boolean
   tidakHadirs: TidakHadirCreateManyWithoutUjianInput
+  beritaAcaraUjian: BeritaAcaraUjianCreateManyWithoutUjianInput
 }
 
 input UjianCreateWithoutTidakHadirsInput {
@@ -3232,6 +3442,7 @@ input UjianCreateWithoutTidakHadirsInput {
   dosen: DosenCreateOneInput
   ujianSelesai: Boolean
   soalMahasiswas: SoalMahasiswaCreateManyWithoutUjianInput
+  beritaAcaraUjian: BeritaAcaraUjianCreateManyWithoutUjianInput
 }
 
 type UjianEdge {
@@ -3325,6 +3536,7 @@ input UjianUpdateDataInput {
   ujianSelesai: Boolean
   soalMahasiswas: SoalMahasiswaUpdateManyWithoutUjianInput
   tidakHadirs: TidakHadirUpdateManyWithoutUjianInput
+  beritaAcaraUjian: BeritaAcaraUjianUpdateManyWithoutUjianInput
 }
 
 input UjianUpdateInput {
@@ -3346,12 +3558,20 @@ input UjianUpdateInput {
   ujianSelesai: Boolean
   soalMahasiswas: SoalMahasiswaUpdateManyWithoutUjianInput
   tidakHadirs: TidakHadirUpdateManyWithoutUjianInput
+  beritaAcaraUjian: BeritaAcaraUjianUpdateManyWithoutUjianInput
 }
 
 input UjianUpdateOneRequiredInput {
   create: UjianCreateInput
   update: UjianUpdateDataInput
   upsert: UjianUpsertNestedInput
+  connect: UjianWhereUniqueInput
+}
+
+input UjianUpdateOneRequiredWithoutBeritaAcaraUjianInput {
+  create: UjianCreateWithoutBeritaAcaraUjianInput
+  update: UjianUpdateWithoutBeritaAcaraUjianDataInput
+  upsert: UjianUpsertWithoutBeritaAcaraUjianInput
   connect: UjianWhereUniqueInput
 }
 
@@ -3367,6 +3587,27 @@ input UjianUpdateOneRequiredWithoutTidakHadirsInput {
   update: UjianUpdateWithoutTidakHadirsDataInput
   upsert: UjianUpsertWithoutTidakHadirsInput
   connect: UjianWhereUniqueInput
+}
+
+input UjianUpdateWithoutBeritaAcaraUjianDataInput {
+  pinPengawas: String
+  pin: String
+  nama: String
+  tanggalPelaksanaan: DateTime
+  lokasi: String
+  JumlahSoal: Int
+  presentasiSusah: Float
+  presentasiSedang: Float
+  presentasiMudah: Float
+  durasiPengerjaan: Int
+  status: Boolean
+  prodi: ProdiUpdateOneRequiredInput
+  bankSoal: BankSoalUpdateOneRequiredInput
+  kelas: KelasUpdateOneRequiredInput
+  dosen: DosenUpdateOneInput
+  ujianSelesai: Boolean
+  soalMahasiswas: SoalMahasiswaUpdateManyWithoutUjianInput
+  tidakHadirs: TidakHadirUpdateManyWithoutUjianInput
 }
 
 input UjianUpdateWithoutSoalMahasiswasDataInput {
@@ -3387,6 +3628,7 @@ input UjianUpdateWithoutSoalMahasiswasDataInput {
   dosen: DosenUpdateOneInput
   ujianSelesai: Boolean
   tidakHadirs: TidakHadirUpdateManyWithoutUjianInput
+  beritaAcaraUjian: BeritaAcaraUjianUpdateManyWithoutUjianInput
 }
 
 input UjianUpdateWithoutTidakHadirsDataInput {
@@ -3407,11 +3649,17 @@ input UjianUpdateWithoutTidakHadirsDataInput {
   dosen: DosenUpdateOneInput
   ujianSelesai: Boolean
   soalMahasiswas: SoalMahasiswaUpdateManyWithoutUjianInput
+  beritaAcaraUjian: BeritaAcaraUjianUpdateManyWithoutUjianInput
 }
 
 input UjianUpsertNestedInput {
   update: UjianUpdateDataInput!
   create: UjianCreateInput!
+}
+
+input UjianUpsertWithoutBeritaAcaraUjianInput {
+  update: UjianUpdateWithoutBeritaAcaraUjianDataInput!
+  create: UjianCreateWithoutBeritaAcaraUjianInput!
 }
 
 input UjianUpsertWithoutSoalMahasiswasInput {
@@ -3557,6 +3805,9 @@ input UjianWhereInput {
   tidakHadirs_every: TidakHadirWhereInput
   tidakHadirs_some: TidakHadirWhereInput
   tidakHadirs_none: TidakHadirWhereInput
+  beritaAcaraUjian_every: BeritaAcaraUjianWhereInput
+  beritaAcaraUjian_some: BeritaAcaraUjianWhereInput
+  beritaAcaraUjian_none: BeritaAcaraUjianWhereInput
   AND: [UjianWhereInput!]
   OR: [UjianWhereInput!]
   NOT: [UjianWhereInput!]
