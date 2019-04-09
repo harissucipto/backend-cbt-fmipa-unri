@@ -90,7 +90,7 @@ type Mutation {
     kasus: String!
   ): BeritaAcaraUjian
 
-  createSkorAll(idUjian: ID!): Ujian
+  akhiriUjianPengawas(idUjian: ID!, jwt: String!): Ujian
 }
 
 type Query {
