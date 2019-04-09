@@ -300,36 +300,6 @@ const Mutation = {
     }
 
     return null;
-
-    // const skorSaya = Math.round(nilaiSkor / dataSoalMahasiswa.soals.length) * 100;
-
-    // // masukan ke db
-
-    // return ctx.db.mutation.upsertSkor(
-    //   {
-    //     where: {
-    //       idSoal: args.soalMahasiswa,
-    //     },
-    //     create: {
-    //       idSoal: args.soalMahasiswa,
-    //       soalMahasiswa: {
-    //         connect: {
-    //           id: args.soalMahasiswa,
-    //         },
-    //       },
-    //       nilai: skorSaya,
-    //     },
-    //     update: {
-    //       nilai: skorSaya,
-    //     },
-    //   },
-    //   `
-    //  {
-    //    id
-    //    nilai
-    //  }
-    // `,
-    // );
   },
 };
 
