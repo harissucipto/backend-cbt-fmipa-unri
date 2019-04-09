@@ -543,8 +543,7 @@ const Query = {
   },
 
   async getInfosoalMahasiswa(parent, args, ctx, info) {
-    console.log(args);
-    return await ctx.db.query.soalMahasiswas(args, info);
+    return ctx.db.query.soalMahasiswas(args, info);
   },
 
   ...queryPengawas,
