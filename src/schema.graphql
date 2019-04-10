@@ -251,6 +251,8 @@ type Query {
     first: Int
     last: Int
   ): [SoalMahasiswa!]!
+
+  infosoalMahasiswa(idUjian: ID!): [SoalMahasiswa!]!
 }
 
 type User {

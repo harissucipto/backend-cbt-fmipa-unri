@@ -546,6 +546,34 @@ const Query = {
     return ctx.db.query.soalMahasiswas(args, info);
   },
 
+  async infosoalMahasiswa(parent, args, ctx, info) {
+    const { userId } = ctx.request;
+
+    if (!userId) {
+      throw new Error('curanggg');
+    }
+
+    const user = await ctx.db.query.user(
+      {
+        where: { id: ctx.request.userId },
+      },
+      `{
+        id
+        email
+        mahasiswa { id }
+      }`,
+    );
+
+    console.log(user.mahasiswa.id, 'ini usser');
+
+    return await ctx.db.query.soalMahasiswas(
+      {
+        where: { AND: [{ mahasiswa: { id: user.mahasiswa.id } }, { ujian: { id: args.idUjian } }] },
+      },
+      info,
+    );
+  },
+
   ...queryPengawas,
 };
 
