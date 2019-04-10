@@ -5,6 +5,13 @@ type SuccessMessage {
   message: String
 }
 
+type Subscription {
+  ujian(where: UjianSubscriptionWhereInput): UjianSubscriptionPayload
+  soalMahasiswa(
+    where: SoalMahasiswaSubscriptionWhereInput
+  ): SoalMahasiswaSubscriptionPayload
+}
+
 type Mutation {
   signup(email: String!, password: String!): User!
   signin(email: String!, password: String!): User!

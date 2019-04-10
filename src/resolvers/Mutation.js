@@ -929,6 +929,9 @@ const mutations = {
         data: { status: 'sudah' },
       },
       `{
+        ujian {
+          JumlahSoal
+        }
         soals {
           id
           kunciJawaban
@@ -953,7 +956,7 @@ const mutations = {
       return kunciJawaban === jawabanSaya.jawaban.title ? acc + 1 : acc;
     }, 0);
 
-    const skorSaya = (nilaiSkor / dataSoalMahasiswa.soals.length) * 100;
+    const skorSaya = (nilaiSkor / dataSoalMahasiswa.ujian.JumlahSoal) * 100;
 
     // masukan ke db
 
