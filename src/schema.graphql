@@ -98,6 +98,7 @@ type Mutation {
   ): BeritaAcaraUjian
 
   akhiriUjianPengawas(idUjian: ID!, jwt: String!): Ujian
+  akhiriUjianDosen(idUjian: ID!): Ujian
 }
 
 type Query {

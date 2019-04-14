@@ -41,6 +41,8 @@ const Query = {
       return null;
     }
 
+    console.log(ctx.request.userId, 'ini akun dosen baru lo!');
+
     // 2. Check if the user has the permissions to query all the users
     hasPermission(ctx.request.user, ['DOSEN']);
 
@@ -354,6 +356,14 @@ const Query = {
     }
     // // 2. Check if the user has the permissions to query all the users
     // hasPermission(ctx.request.user, ['ADMIN']);
+
+    console.log('bank soal', ctx.request.userId, 'banks oal di user');
+
+    args.where.AND.push({
+      dosen: {
+        user: { id: ctx.request.userId },
+      },
+    });
 
     // 3. if they do, query all the angkatans!
     return ctx.db.query.bankSoals(args, info);

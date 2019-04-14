@@ -283,7 +283,7 @@ const mutations = {
       throw new Error("You don't have permission to do that!");
     }
 
-    // // 3. Delete it!
+
     await ctx.db.mutation.deleteMahasiswa({ where }, info);
     await ctx.db.mutation.deleteUser(
       {
@@ -743,6 +743,98 @@ const mutations = {
     return ctx.db.mutation.updateUjian(args, info);
   },
 
+  async akhiriUjianDosen(parent, args, ctx, info) {
+    // check jwt
+    if (!ctx.request.userId) {
+      throw new Error('You must be logged in!');
+    }
+
+    const { idUjian } = args;
+
+    // get all jawabanMahasiswas
+    const ujian = await ctx.db.query.ujian(
+      { where: { id: idUjian } },
+      `
+        {
+          id
+          JumlahSoal
+          bankSoal {
+            id
+            soals {
+              id
+              kunciJawaban
+            }
+          }
+          soalMahasiswas {
+            id
+            jawaban {
+              idSoal
+              jawaban {
+                id
+                title
+              }
+            }
+          }
+        }
+      `,
+    );
+
+    const { JumlahSoal } = ujian;
+
+    // fn generate model data skor ke db
+    const updateSkor = (idSoalMahasiswa, skor = 0) => ({
+      where: {
+        id: idSoalMahasiswa,
+      },
+      data: {
+        skor,
+      },
+    });
+    const hitungSkor = totalSoal => benar => (benar / totalSoal) * 100;
+
+    // funsgi yang dibutuhkan
+
+    const skorUjian = hitungSkor(JumlahSoal);
+
+    if (ujian.soalMahasiswas.length) {
+      const dataSkor = [];
+
+      const { soals } = ujian.bankSoal;
+
+      for (const mahasiswa of ujian.soalMahasiswas) {
+        // ambil id mahasiswa
+        const { id, jawaban } = mahasiswa;
+        // check jawaban
+        const totalNilai = jawaban.reduce((acc, lembarJawaban) => {
+          const { title } = lembarJawaban.jawaban;
+          const nilai =
+            soals.find(soal => soal.id === lembarJawaban.idSoal).kunciJawaban === title ? 1 : 0;
+
+          return acc + nilai;
+        }, 0);
+
+        if (totalNilai > 0) {
+          dataSkor.push(updateSkor(id, skorUjian(totalNilai)));
+        }
+      }
+
+      return ctx.db.mutation.updateUjian(
+        {
+          where: { id: idUjian },
+          data: {
+            soalMahasiswas: {
+              update: dataSkor,
+            },
+            status: false,
+          },
+        },
+        info,
+      );
+    }
+
+    return null;
+  },
+
   async deleteUjian(parent, args, ctx, info) {
     // 1. login  punya hak akses dan query user login tersebut
 
@@ -764,7 +856,7 @@ const mutations = {
     await ctx.db.mutation.deleteManyTidakHadirs(
       {
         where: {
-          ujian: { id: args.where.id }
+          ujian: { id: args.where.id },
         },
       },
       `
@@ -777,7 +869,7 @@ const mutations = {
     await ctx.db.mutation.deleteManyBeritaAcaraUjians(
       {
         where: {
-          ujian: { id: args.where.id }
+          ujian: { id: args.where.id },
         },
       },
       `
