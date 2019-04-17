@@ -1095,7 +1095,7 @@ const mutations = {
     return ctx.db.mutation.updateSoalMahasiswa(
       {
         where: { id: args.soalMahasiswa },
-        data: { skor: skorSaya },
+        data: { skor: Math.round(skorSaya * 100) / 100 },
       },
       info,
     );

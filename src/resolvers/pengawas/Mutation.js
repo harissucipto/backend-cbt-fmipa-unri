@@ -257,7 +257,8 @@ const Mutation = {
         skor,
       },
     });
-    const hitungSkor = totalSoal => benar => (benar / totalSoal) * 100;
+    const kecilkanDesimal = num => Math.round(num * 100) / 100;
+    const hitungSkor = totalSoal => benar => kecilkanDesimal((benar / totalSoal) * 100);
 
     // funsgi yang dibutuhkan
 
