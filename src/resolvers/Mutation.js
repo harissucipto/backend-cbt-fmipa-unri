@@ -283,7 +283,6 @@ const mutations = {
       throw new Error("You don't have permission to do that!");
     }
 
-
     await ctx.db.mutation.deleteMahasiswa({ where }, info);
     await ctx.db.mutation.deleteUser(
       {
@@ -722,25 +721,64 @@ const mutations = {
     // 2. Check if the user has the permissions to query all the users
     // hasPermission(ctx.request.user, ['ADMIN']);
 
-    const idDosen = await ctx.db.query.user(
-      {
-        where: { id: ctx.request.userId },
-      },
-      `
-        {
-          dosen {
-            id
-          }
-        }
-      `,
-    );
-
-    args.data.dosen = { connect: { id: idDosen.dosen.id } };
     args.data.pin = shortid();
+    args.data.pinPengawas = shortid();
 
     console.log(args, 'recheck args');
     // 3. if they do, query all the dosens!
-    return ctx.db.mutation.updateUjian(args, info);
+    const {
+      id,
+      kelas: { mahasiswas },
+      bankSoal: { soals },
+    } = await ctx.db.mutation.updateUjian(args, `
+      {
+        id
+        nama
+        kelas {
+          mahasiswas {
+            id
+            nama
+          }
+        }
+        bankSoal {
+          soals {
+            id
+            tingkatKesulitan
+          }
+        }
+      }
+      ` );
+
+    // ambil data presentasi
+    const {
+      data: {
+        presentasiMudah, presentasiSedang, presentasiSusah, JumlahSoal,
+      },
+    } = args;
+
+    // bikin fungsi ambil acak soal
+    const ambilSoal = (bankSoal, persenSoal, permintaan) => () =>
+      getSoalSiswa(bankSoal, persenSoal, permintaan);
+
+    const getSoalAcak = ambilSoal(
+      soals,
+      { presentasiMudah, presentasiSedang, presentasiSusah },
+      JumlahSoal,
+    );
+
+    await ctx.db.mutation.deleteManySoalMahasiswas(
+      {
+        where: {
+          ujian: {
+            id,
+          },
+        },
+      },
+    `{count}`);
+
+    await promiseCreateSoal(ctx, mahasiswas, getSoalAcak, id);
+
+    return ctx.db.query.ujian({ where: { id } }, info);
   },
 
   async akhiriUjianDosen(parent, args, ctx, info) {
