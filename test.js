@@ -10,11 +10,16 @@ function getRandomSoal(storage, diminta) {
   // copy storage
   const copyStorage = storage.map(item => item);
 
+  console.log(0, copyStorage.length, 'awal')
   // lakukan pengacakan
   while (hasilAcak.length < diminta) {
     const index = batasAcak(copyStorage.length);
+
+    console.log(index, 'shuffle')
     const item = copyStorage.splice(index, 1);
+    console.log(0, copyStorage.length)
     hasilAcak.push(item);
+    console.log(hasilAcak)
   }
 
   return hasilAcak;
@@ -32,8 +37,8 @@ const bankSoalA = [
   { id: '9' },
   { id: '10' },
 ];
-// // misalkan ada 10 mahasiswa dimana tiap mahasiswa mendapatkan 2 soal
-// for (let i = 0; i < 10; i++) console.log(getRandomSoal(bankSoalA, 2));
+// misalkan ada 10 mahasiswa dimana tiap mahasiswa mendapatkan 2 soal
+// for (let i = 0; i < 10; i++) console.log(getRandomSoal(bankSoalA, 5));
 
 // fungsi bantu buang soal yang sudah kepakai
 function notIncluded(total, ...minus) {
@@ -94,6 +99,6 @@ const persentasiTingkatKesulitanSoal = {
 const jumlahSoal = 3;
 
 // misal ada 10 peserta ujian
-for (let i = 0; i < 10; i++) {
+// for (let i = 0; i < 10; i++) {
   console.log(getSoalSiswa(bankSoalB, persentasiTingkatKesulitanSoal, jumlahSoal));
-}
+// }
