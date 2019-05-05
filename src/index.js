@@ -39,12 +39,17 @@ server.express.use(async (req, res, next) => {
 });
 
 server.start(
-  // {
-  //   cors: {
-  //     credentials: true,
-  //     origin: [process.env.FRONTEND_URL, 'http://localhost:3000'],
-  //   },
-  // },
+  {
+    cors: {
+      credentials: true,
+      origin: [
+        'https://portal-cbt.herokuapp.com/',
+        process.env.FRONTEND_URL,
+        'http://localhost:3000',
+      ],
+    },
+  },
   (deets) => {
     console.log(`server backend berjalan di http:/localhost${deets.port}`);
-  });
+  },
+);
