@@ -39,12 +39,7 @@ server.express.use(async (req, res, next) => {
 });
 
 server.start(
-  {
-    cors: {
-      credentials: true,
-      origin: [process.env.FRONTEND_URL, 'http://localhost:3000'],
-    },
-  },
+  null,
   (deets) => {
     console.log(`server backend berjalan di http:/localhost${deets.port}`);
   },
