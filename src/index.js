@@ -42,11 +42,7 @@ server.start(
   {
     cors: {
       credentials: true,
-      origin: [
-        'https://portal-cbt.herokuapp.com/',
-        process.env.FRONTEND_URL,
-        'http://localhost:3000',
-      ],
+      origin: false,
     },
   },
   (deets) => {
