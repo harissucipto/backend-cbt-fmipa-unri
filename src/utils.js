@@ -13,9 +13,9 @@ function hasPermission(user, permissionsNeeded) {
   }
 }
 
-function getRandomSoal(storage, diminta) {
+function getRandomSoal(storage) {
   // storage harus lebih besar dari diminta
-  console.log(diminta);
+  const diminta = storage.length;
 
   if (storage.length < diminta) {
     return [];
@@ -23,59 +23,27 @@ function getRandomSoal(storage, diminta) {
 
   // fn acak  dari 1 sampai batas (dijadikan index array)
   const batasAcak = batas => Math.floor(Math.random() * batas);
-
   // hasil dari sini
   const hasilAcak = [];
   // copy storage
-  const copyStorage = storage.map(item => item);
+  const copyStorage = storage.map((item, i) => i + 1);
 
   while (hasilAcak.length < diminta) {
     const index = batasAcak(copyStorage.length);
-    const item = copyStorage.splice(index, 1);
+    const [item] = copyStorage.splice(index, 1);
     hasilAcak.push(item);
   }
 
-  return hasilAcak;
+  const urutan = hasilAcak.join(',');
+
+  return urutan;
 }
 
-function notIncluded(total, ...minus) {
-  const banList = minus.reduce((a, b) => a.concat(...b), []);
-  return total.filter(item => banList.every(ban => ban.id !== item.id));
-}
-
-function concatSoal(...items) {
-  return items.reduce((a, b) => a.concat(...b), []);
-}
-
-const filterSoal = bankSoal => tingkatKesulitan =>
-  bankSoal.filter(soal => soal.tingkatKesulitan === tingkatKesulitan);
-
-const persenKeAngka = jumlahSoalUjian => presentasiDiminta =>
-  Math.round((presentasiDiminta / 100) * jumlahSoalUjian);
-
-function getSoalSiswa(bankSoal, presentasiSoal, jumlahSoalUjian) {
-  const { presentasiMudah, presentasiSedang, presentasiSusah } = presentasiSoal;
-  const pisahKanSoal = filterSoal(bankSoal);
-  const soalDiminta = persenKeAngka(jumlahSoalUjian);
-  const totalSoalMudah = soalDiminta(presentasiMudah);
-  const totalSoalSedang = soalDiminta(presentasiSedang);
-  const totalSoalSusah = soalDiminta(presentasiSusah);
-
-  // kelompokkan
-  const soalMudah = getRandomSoal(pisahKanSoal('MUDAH'), totalSoalMudah);
-  const soalSedang = getRandomSoal(pisahKanSoal('SEDANG'), totalSoalSedang);
-  const soalSusah = getRandomSoal(pisahKanSoal('SUSAH'), totalSoalSusah);
-  const soalAcak = getRandomSoal(
-    notIncluded(bankSoal, soalMudah, soalSedang, soalSusah),
-    jumlahSoalUjian - totalSoalMudah - totalSoalSedang - totalSoalSusah,
-  );
-
-  return concatSoal(soalAcak, soalMudah, soalSedang, soalSusah).map(item => ({ id: item.id }));
-}
-
-async function promiseCreateSoal(ctx, mahasiswas, getSoalAcak, idUjian) {
+async function promiseCreateSoal(ctx, mahasiswas, soals, idUjian) {
   const results = [];
+
   for (const mahasiswa of mahasiswas) {
+    console.log(getRandomSoal(soals), 'random');
     results.push(ctx.db.mutation.createSoalMahasiswa(
       {
         data: {
@@ -89,9 +57,7 @@ async function promiseCreateSoal(ctx, mahasiswas, getSoalAcak, idUjian) {
               id: mahasiswa.id,
             },
           },
-          soals: {
-            connect: getSoalAcak(),
-          },
+          urutan: getRandomSoal(soals),
         },
       },
       `{
@@ -105,5 +71,4 @@ async function promiseCreateSoal(ctx, mahasiswas, getSoalAcak, idUjian) {
 
 exports.hasPermission = hasPermission;
 exports.getRandomSoal = getRandomSoal;
-exports.getSoalSiswa = getSoalSiswa;
 exports.promiseCreateSoal = promiseCreateSoal;

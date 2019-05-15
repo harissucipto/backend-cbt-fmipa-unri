@@ -2480,7 +2480,6 @@ type Soal {
   image: String
   jawaban(where: JawabanWhereInput, orderBy: JawabanOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Jawaban!]
   bankSoal: BankSoal!
-  tingkatKesulitan: String!
   kunciJawaban: String!
 }
 
@@ -2495,7 +2494,6 @@ input SoalCreateInput {
   image: String
   jawaban: JawabanCreateManyWithoutSoalInput
   bankSoal: BankSoalCreateOneWithoutSoalsInput!
-  tingkatKesulitan: String!
   kunciJawaban: String!
 }
 
@@ -2518,7 +2516,6 @@ input SoalCreateWithoutBankSoalInput {
   pertanyaan: String!
   image: String
   jawaban: JawabanCreateManyWithoutSoalInput
-  tingkatKesulitan: String!
   kunciJawaban: String!
 }
 
@@ -2526,7 +2523,6 @@ input SoalCreateWithoutJawabanInput {
   pertanyaan: String!
   image: String
   bankSoal: BankSoalCreateOneWithoutSoalsInput!
-  tingkatKesulitan: String!
   kunciJawaban: String!
 }
 
@@ -2539,10 +2535,10 @@ type SoalMahasiswa {
   id: ID!
   ujian: Ujian!
   mahasiswa: Mahasiswa!
-  soals(where: SoalWhereInput, orderBy: SoalOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Soal!]
   jawaban(where: JawabanMahasiswaWhereInput, orderBy: JawabanMahasiswaOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [JawabanMahasiswa!]
   status: String!
   skor: Float!
+  urutan: String!
 }
 
 type SoalMahasiswaConnection {
@@ -2554,10 +2550,10 @@ type SoalMahasiswaConnection {
 input SoalMahasiswaCreateInput {
   ujian: UjianCreateOneWithoutSoalMahasiswasInput!
   mahasiswa: MahasiswaCreateOneWithoutSoalsInput!
-  soals: SoalCreateManyInput
   jawaban: JawabanMahasiswaCreateManyInput
   status: String
   skor: Float
+  urutan: String!
 }
 
 input SoalMahasiswaCreateManyWithoutMahasiswaInput {
@@ -2572,18 +2568,18 @@ input SoalMahasiswaCreateManyWithoutUjianInput {
 
 input SoalMahasiswaCreateWithoutMahasiswaInput {
   ujian: UjianCreateOneWithoutSoalMahasiswasInput!
-  soals: SoalCreateManyInput
   jawaban: JawabanMahasiswaCreateManyInput
   status: String
   skor: Float
+  urutan: String!
 }
 
 input SoalMahasiswaCreateWithoutUjianInput {
   mahasiswa: MahasiswaCreateOneWithoutSoalsInput!
-  soals: SoalCreateManyInput
   jawaban: JawabanMahasiswaCreateManyInput
   status: String
   skor: Float
+  urutan: String!
 }
 
 type SoalMahasiswaEdge {
@@ -2598,6 +2594,8 @@ enum SoalMahasiswaOrderByInput {
   status_DESC
   skor_ASC
   skor_DESC
+  urutan_ASC
+  urutan_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -2608,6 +2606,7 @@ type SoalMahasiswaPreviousValues {
   id: ID!
   status: String!
   skor: Float!
+  urutan: String!
 }
 
 type SoalMahasiswaSubscriptionPayload {
@@ -2631,10 +2630,10 @@ input SoalMahasiswaSubscriptionWhereInput {
 input SoalMahasiswaUpdateInput {
   ujian: UjianUpdateOneRequiredWithoutSoalMahasiswasInput
   mahasiswa: MahasiswaUpdateOneRequiredWithoutSoalsInput
-  soals: SoalUpdateManyInput
   jawaban: JawabanMahasiswaUpdateManyInput
   status: String
   skor: Float
+  urutan: String
 }
 
 input SoalMahasiswaUpdateManyWithoutMahasiswaInput {
@@ -2657,18 +2656,18 @@ input SoalMahasiswaUpdateManyWithoutUjianInput {
 
 input SoalMahasiswaUpdateWithoutMahasiswaDataInput {
   ujian: UjianUpdateOneRequiredWithoutSoalMahasiswasInput
-  soals: SoalUpdateManyInput
   jawaban: JawabanMahasiswaUpdateManyInput
   status: String
   skor: Float
+  urutan: String
 }
 
 input SoalMahasiswaUpdateWithoutUjianDataInput {
   mahasiswa: MahasiswaUpdateOneRequiredWithoutSoalsInput
-  soals: SoalUpdateManyInput
   jawaban: JawabanMahasiswaUpdateManyInput
   status: String
   skor: Float
+  urutan: String
 }
 
 input SoalMahasiswaUpdateWithWhereUniqueWithoutMahasiswaInput {
@@ -2710,9 +2709,6 @@ input SoalMahasiswaWhereInput {
   id_not_ends_with: ID
   ujian: UjianWhereInput
   mahasiswa: MahasiswaWhereInput
-  soals_every: SoalWhereInput
-  soals_some: SoalWhereInput
-  soals_none: SoalWhereInput
   jawaban_every: JawabanMahasiswaWhereInput
   jawaban_some: JawabanMahasiswaWhereInput
   jawaban_none: JawabanMahasiswaWhereInput
@@ -2738,6 +2734,20 @@ input SoalMahasiswaWhereInput {
   skor_lte: Float
   skor_gt: Float
   skor_gte: Float
+  urutan: String
+  urutan_not: String
+  urutan_in: [String!]
+  urutan_not_in: [String!]
+  urutan_lt: String
+  urutan_lte: String
+  urutan_gt: String
+  urutan_gte: String
+  urutan_contains: String
+  urutan_not_contains: String
+  urutan_starts_with: String
+  urutan_not_starts_with: String
+  urutan_ends_with: String
+  urutan_not_ends_with: String
   AND: [SoalMahasiswaWhereInput!]
   OR: [SoalMahasiswaWhereInput!]
   NOT: [SoalMahasiswaWhereInput!]
@@ -2754,8 +2764,6 @@ enum SoalOrderByInput {
   pertanyaan_DESC
   image_ASC
   image_DESC
-  tingkatKesulitan_ASC
-  tingkatKesulitan_DESC
   kunciJawaban_ASC
   kunciJawaban_DESC
   createdAt_ASC
@@ -2768,7 +2776,6 @@ type SoalPreviousValues {
   id: ID!
   pertanyaan: String!
   image: String
-  tingkatKesulitan: String!
   kunciJawaban: String!
 }
 
@@ -2795,7 +2802,6 @@ input SoalUpdateDataInput {
   image: String
   jawaban: JawabanUpdateManyWithoutSoalInput
   bankSoal: BankSoalUpdateOneRequiredWithoutSoalsInput
-  tingkatKesulitan: String
   kunciJawaban: String
 }
 
@@ -2804,7 +2810,6 @@ input SoalUpdateInput {
   image: String
   jawaban: JawabanUpdateManyWithoutSoalInput
   bankSoal: BankSoalUpdateOneRequiredWithoutSoalsInput
-  tingkatKesulitan: String
   kunciJawaban: String
 }
 
@@ -2839,7 +2844,6 @@ input SoalUpdateWithoutBankSoalDataInput {
   pertanyaan: String
   image: String
   jawaban: JawabanUpdateManyWithoutSoalInput
-  tingkatKesulitan: String
   kunciJawaban: String
 }
 
@@ -2847,7 +2851,6 @@ input SoalUpdateWithoutJawabanDataInput {
   pertanyaan: String
   image: String
   bankSoal: BankSoalUpdateOneRequiredWithoutSoalsInput
-  tingkatKesulitan: String
   kunciJawaban: String
 }
 
@@ -2925,20 +2928,6 @@ input SoalWhereInput {
   jawaban_some: JawabanWhereInput
   jawaban_none: JawabanWhereInput
   bankSoal: BankSoalWhereInput
-  tingkatKesulitan: String
-  tingkatKesulitan_not: String
-  tingkatKesulitan_in: [String!]
-  tingkatKesulitan_not_in: [String!]
-  tingkatKesulitan_lt: String
-  tingkatKesulitan_lte: String
-  tingkatKesulitan_gt: String
-  tingkatKesulitan_gte: String
-  tingkatKesulitan_contains: String
-  tingkatKesulitan_not_contains: String
-  tingkatKesulitan_starts_with: String
-  tingkatKesulitan_not_starts_with: String
-  tingkatKesulitan_ends_with: String
-  tingkatKesulitan_not_ends_with: String
   kunciJawaban: String
   kunciJawaban_not: String
   kunciJawaban_in: [String!]
@@ -3106,10 +3095,7 @@ type Ujian {
   nama: String!
   tanggalPelaksanaan: DateTime!
   lokasi: String!
-  JumlahSoal: Int!
-  presentasiSusah: Float!
-  presentasiSedang: Float!
-  presentasiMudah: Float!
+  soals(where: SoalWhereInput, orderBy: SoalOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Soal!]
   durasiPengerjaan: Int!
   status: Boolean!
   prodi: Prodi!
@@ -3133,10 +3119,7 @@ input UjianCreateInput {
   nama: String!
   tanggalPelaksanaan: DateTime!
   lokasi: String!
-  JumlahSoal: Int
-  presentasiSusah: Float
-  presentasiSedang: Float
-  presentasiMudah: Float
+  soals: SoalCreateManyInput
   durasiPengerjaan: Int!
   status: Boolean
   prodi: ProdiCreateOneInput!
@@ -3174,10 +3157,7 @@ input UjianCreateWithoutBeritaAcaraUjianInput {
   nama: String!
   tanggalPelaksanaan: DateTime!
   lokasi: String!
-  JumlahSoal: Int
-  presentasiSusah: Float
-  presentasiSedang: Float
-  presentasiMudah: Float
+  soals: SoalCreateManyInput
   durasiPengerjaan: Int!
   status: Boolean
   prodi: ProdiCreateOneInput!
@@ -3194,10 +3174,7 @@ input UjianCreateWithoutSoalMahasiswasInput {
   nama: String!
   tanggalPelaksanaan: DateTime!
   lokasi: String!
-  JumlahSoal: Int
-  presentasiSusah: Float
-  presentasiSedang: Float
-  presentasiMudah: Float
+  soals: SoalCreateManyInput
   durasiPengerjaan: Int!
   status: Boolean
   prodi: ProdiCreateOneInput!
@@ -3214,10 +3191,7 @@ input UjianCreateWithoutTidakHadirsInput {
   nama: String!
   tanggalPelaksanaan: DateTime!
   lokasi: String!
-  JumlahSoal: Int
-  presentasiSusah: Float
-  presentasiSedang: Float
-  presentasiMudah: Float
+  soals: SoalCreateManyInput
   durasiPengerjaan: Int!
   status: Boolean
   prodi: ProdiCreateOneInput!
@@ -3246,14 +3220,6 @@ enum UjianOrderByInput {
   tanggalPelaksanaan_DESC
   lokasi_ASC
   lokasi_DESC
-  JumlahSoal_ASC
-  JumlahSoal_DESC
-  presentasiSusah_ASC
-  presentasiSusah_DESC
-  presentasiSedang_ASC
-  presentasiSedang_DESC
-  presentasiMudah_ASC
-  presentasiMudah_DESC
   durasiPengerjaan_ASC
   durasiPengerjaan_DESC
   status_ASC
@@ -3271,10 +3237,6 @@ type UjianPreviousValues {
   nama: String!
   tanggalPelaksanaan: DateTime!
   lokasi: String!
-  JumlahSoal: Int!
-  presentasiSusah: Float!
-  presentasiSedang: Float!
-  presentasiMudah: Float!
   durasiPengerjaan: Int!
   status: Boolean!
 }
@@ -3303,10 +3265,7 @@ input UjianUpdateDataInput {
   nama: String
   tanggalPelaksanaan: DateTime
   lokasi: String
-  JumlahSoal: Int
-  presentasiSusah: Float
-  presentasiSedang: Float
-  presentasiMudah: Float
+  soals: SoalUpdateManyInput
   durasiPengerjaan: Int
   status: Boolean
   prodi: ProdiUpdateOneRequiredInput
@@ -3324,10 +3283,7 @@ input UjianUpdateInput {
   nama: String
   tanggalPelaksanaan: DateTime
   lokasi: String
-  JumlahSoal: Int
-  presentasiSusah: Float
-  presentasiSedang: Float
-  presentasiMudah: Float
+  soals: SoalUpdateManyInput
   durasiPengerjaan: Int
   status: Boolean
   prodi: ProdiUpdateOneRequiredInput
@@ -3373,10 +3329,7 @@ input UjianUpdateWithoutBeritaAcaraUjianDataInput {
   nama: String
   tanggalPelaksanaan: DateTime
   lokasi: String
-  JumlahSoal: Int
-  presentasiSusah: Float
-  presentasiSedang: Float
-  presentasiMudah: Float
+  soals: SoalUpdateManyInput
   durasiPengerjaan: Int
   status: Boolean
   prodi: ProdiUpdateOneRequiredInput
@@ -3393,10 +3346,7 @@ input UjianUpdateWithoutSoalMahasiswasDataInput {
   nama: String
   tanggalPelaksanaan: DateTime
   lokasi: String
-  JumlahSoal: Int
-  presentasiSusah: Float
-  presentasiSedang: Float
-  presentasiMudah: Float
+  soals: SoalUpdateManyInput
   durasiPengerjaan: Int
   status: Boolean
   prodi: ProdiUpdateOneRequiredInput
@@ -3413,10 +3363,7 @@ input UjianUpdateWithoutTidakHadirsDataInput {
   nama: String
   tanggalPelaksanaan: DateTime
   lokasi: String
-  JumlahSoal: Int
-  presentasiSusah: Float
-  presentasiSedang: Float
-  presentasiMudah: Float
+  soals: SoalUpdateManyInput
   durasiPengerjaan: Int
   status: Boolean
   prodi: ProdiUpdateOneRequiredInput
@@ -3526,38 +3473,9 @@ input UjianWhereInput {
   lokasi_not_starts_with: String
   lokasi_ends_with: String
   lokasi_not_ends_with: String
-  JumlahSoal: Int
-  JumlahSoal_not: Int
-  JumlahSoal_in: [Int!]
-  JumlahSoal_not_in: [Int!]
-  JumlahSoal_lt: Int
-  JumlahSoal_lte: Int
-  JumlahSoal_gt: Int
-  JumlahSoal_gte: Int
-  presentasiSusah: Float
-  presentasiSusah_not: Float
-  presentasiSusah_in: [Float!]
-  presentasiSusah_not_in: [Float!]
-  presentasiSusah_lt: Float
-  presentasiSusah_lte: Float
-  presentasiSusah_gt: Float
-  presentasiSusah_gte: Float
-  presentasiSedang: Float
-  presentasiSedang_not: Float
-  presentasiSedang_in: [Float!]
-  presentasiSedang_not_in: [Float!]
-  presentasiSedang_lt: Float
-  presentasiSedang_lte: Float
-  presentasiSedang_gt: Float
-  presentasiSedang_gte: Float
-  presentasiMudah: Float
-  presentasiMudah_not: Float
-  presentasiMudah_in: [Float!]
-  presentasiMudah_not_in: [Float!]
-  presentasiMudah_lt: Float
-  presentasiMudah_lte: Float
-  presentasiMudah_gt: Float
-  presentasiMudah_gte: Float
+  soals_every: SoalWhereInput
+  soals_some: SoalWhereInput
+  soals_none: SoalWhereInput
   durasiPengerjaan: Int
   durasiPengerjaan_not: Int
   durasiPengerjaan_in: [Int!]

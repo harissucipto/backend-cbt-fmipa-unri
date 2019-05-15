@@ -5,6 +5,6 @@ var typeDefs = require("./prisma-schema").typeDefs;
 
 exports.Prisma = prisma_lib_1.makePrismaClientClass({
   typeDefs,
-  endpoint: "https://cbt-fmipa-ur-5671325706.herokuapp.com/cbt-fmipa-ur/prod"
+  endpoint: "http://localhost:4466"
 });
 exports.prisma = new exports.Prisma();

@@ -88,7 +88,6 @@ type Soal {
   image: String
   jawaban: [Jawaban!]
   bankSoal: BankSoal!
-  tingkatKesulitan: String!
   kunciJawaban: String!
 }
 
@@ -116,10 +115,7 @@ type Ujian {
   nama: String!
   tanggalPelaksanaan: DateTime!
   lokasi: String!
-  JumlahSoal: Int! @default(value: "0")
-  presentasiSusah: Float! @default(value: "0")
-  presentasiSedang: Float! @default(value: "0")
-  presentasiMudah: Float! @default(value: "0")
+  soals: [Soal!]
   durasiPengerjaan: Int!
   status: Boolean! @default(value: "true")
   prodi: Prodi!
@@ -135,10 +131,10 @@ type SoalMahasiswa {
   id: ID! @unique
   ujian: Ujian!
   mahasiswa: Mahasiswa!
-  soals: [Soal!]
   jawaban: [JawabanMahasiswa!]
   status: String! @default(value: "belum")
   skor: Float! @default(value: 0)
+  urutan: String!
 }
 
 type JawabanMahasiswa {

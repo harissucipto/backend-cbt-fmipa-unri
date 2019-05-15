@@ -1,5 +1,5 @@
-# endpoint: http://localhost:4466
-endpoint: https://cbt-fmipa-ur-5671325706.herokuapp.com/cbt-fmipa-ur/prod
+endpoint: http://localhost:4466
+# endpoint: https://cbt-fmipa-ur-5671325706.herokuapp.com/cbt-fmipa-ur/prod
 datamodel: datamodel.graphql
 
 generate:

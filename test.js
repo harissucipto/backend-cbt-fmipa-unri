@@ -37,8 +37,8 @@ const bankSoalA = [
   { id: '9' },
   { id: '10' },
 ];
-// misalkan ada 10 mahasiswa dimana tiap mahasiswa mendapatkan 2 soal
-// for (let i = 0; i < 10; i++) console.log(getRandomSoal(bankSoalA, 5));
+// // misalkan ada 10 mahasiswa dimana tiap mahasiswa mendapatkan 2 soal
+//  console.log(getRandomSoal(bankSoalA, 5));
 
 // fungsi bantu buang soal yang sudah kepakai
 function notIncluded(total, ...minus) {

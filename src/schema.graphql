@@ -60,7 +60,7 @@ type Mutation {
   updateSoal(data: SoalUpdateInput!, where: SoalWhereUniqueInput!): Soal
   deleteSoal(where: SoalWhereUniqueInput!): Soal
 
-  createUjian(data: UjianCreateInput!): Ujian!
+  createUjian(data: UjianCreateInput!): Ujian
   deleteUjian(where: UjianWhereUniqueInput!): Ujian
   updateUjian(data: UjianUpdateInput!, where: UjianWhereUniqueInput!): Ujian
 

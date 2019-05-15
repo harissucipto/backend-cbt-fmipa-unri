@@ -5,7 +5,7 @@ const shortid = require('shortid');
 const moment = require('moment-timezone');
 
 const {
-  hasPermission, getRandomSoal, getSoalSiswa, promiseCreateSoal,
+  hasPermission, getSoalSiswa, promiseCreateSoal, getRandomSoal
 } = require('../utils');
 
 const mutasiPengawas = require('./pengawas/Mutation');
@@ -522,6 +522,26 @@ const mutations = {
     // hasPermission(currentUser, ['ADMIN']);
 
     // // 3. Delete it!
+    await ctx.db.mutation.deleteManyJawabans(
+      {
+        soal: {
+          bankSoal: {
+            id: args.id,
+          },
+        },
+      },
+      '{ count }',
+    );
+
+    await ctx.db.mutation.deleteManySoals(
+    {
+        bankSoal: {
+          id: args.id,
+        }
+    },
+      '{ count }'
+    );
+
     return ctx.db.mutation.deleteBankSoal({ where }, info);
   },
 
@@ -635,6 +655,7 @@ const mutations = {
     // 2. Check if the user has the permissions to query all the users
     // hasPermission(ctx.request.user, ['ADMIN']);
 
+
     const idDosen = await ctx.db.query.user(
       {
         where: { id: ctx.request.userId },
@@ -656,13 +677,12 @@ const mutations = {
     // 3. if they do, query all the dosens!
     const ujian = await ctx.db.mutation.createUjian(args, info);
 
-    // buat soal ke mahasiswa
+
 
     const idUjian = ujian.id;
 
     const {
       kelas: { mahasiswas },
-      bankSoal: { soals },
     } = await ctx.db.query.ujian(
       {
         where: {
@@ -679,35 +699,13 @@ const mutations = {
             nama
           }
         }
-        bankSoal {
-          soals {
-            id
-            tingkatKesulitan
-          }
-        }
       }
       `,
     );
 
-    // ambil data presentasi
-    const {
-      data: {
-        presentasiMudah, presentasiSedang, presentasiSusah, JumlahSoal,
-      },
-    } = args;
 
-    // bikin fungsi ambil acak soal
-    const ambilSoal = (bankSoal, persenSoal, permintaan) => () =>
-      getSoalSiswa(bankSoal, persenSoal, permintaan);
-
-    const getSoalAcak = ambilSoal(
-      soals,
-      { presentasiMudah, presentasiSedang, presentasiSusah },
-      JumlahSoal,
-    );
-
-    // buat soal acak pada mahasiswa
-    await promiseCreateSoal(ctx, mahasiswas, getSoalAcak, idUjian);
+    const soalUjian = args.data.soals.connect;
+    await promiseCreateSoal(ctx, mahasiswas, soalUjian, idUjian);
 
     return ujian;
   },
@@ -730,7 +728,9 @@ const mutations = {
       id,
       kelas: { mahasiswas },
       bankSoal: { soals },
-    } = await ctx.db.mutation.updateUjian(args, `
+    } = await ctx.db.mutation.updateUjian(
+      args,
+      `
       {
         id
         nama
@@ -747,7 +747,8 @@ const mutations = {
           }
         }
       }
-      ` );
+      `,
+    );
 
     // ambil data presentasi
     const {
@@ -774,7 +775,8 @@ const mutations = {
           },
         },
       },
-    `{count}`);
+      '{count}',
+    );
 
     await promiseCreateSoal(ctx, mahasiswas, getSoalAcak, id);
 
