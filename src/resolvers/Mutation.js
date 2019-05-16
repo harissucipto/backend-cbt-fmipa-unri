@@ -722,65 +722,8 @@ const mutations = {
     args.data.pin = shortid();
     args.data.pinPengawas = shortid();
 
-    console.log(args, 'recheck args');
-    // 3. if they do, query all the dosens!
-    const {
-      id,
-      kelas: { mahasiswas },
-      bankSoal: { soals },
-    } = await ctx.db.mutation.updateUjian(
-      args,
-      `
-      {
-        id
-        nama
-        kelas {
-          mahasiswas {
-            id
-            nama
-          }
-        }
-        bankSoal {
-          soals {
-            id
-            tingkatKesulitan
-          }
-        }
-      }
-      `,
-    );
-
-    // ambil data presentasi
-    const {
-      data: {
-        presentasiMudah, presentasiSedang, presentasiSusah, JumlahSoal,
-      },
-    } = args;
-
-    // bikin fungsi ambil acak soal
-    const ambilSoal = (bankSoal, persenSoal, permintaan) => () =>
-      getSoalSiswa(bankSoal, persenSoal, permintaan);
-
-    const getSoalAcak = ambilSoal(
-      soals,
-      { presentasiMudah, presentasiSedang, presentasiSusah },
-      JumlahSoal,
-    );
-
-    await ctx.db.mutation.deleteManySoalMahasiswas(
-      {
-        where: {
-          ujian: {
-            id,
-          },
-        },
-      },
-      '{count}',
-    );
-
-    await promiseCreateSoal(ctx, mahasiswas, getSoalAcak, id);
-
-    return ctx.db.query.ujian({ where: { id } }, info);
+    return ctx.db.mutation.updateUjian(
+      args, info)
   },
 
   async akhiriUjianDosen(parent, args, ctx, info) {
@@ -797,13 +740,9 @@ const mutations = {
       `
         {
           id
-          JumlahSoal
-          bankSoal {
+          soals {
             id
-            soals {
-              id
-              kunciJawaban
-            }
+            kunciJawaban
           }
           soalMahasiswas {
             id
@@ -819,8 +758,7 @@ const mutations = {
       `,
     );
 
-    const { JumlahSoal } = ujian;
-
+    const jumlahSoal = ujian.soals.length;
     // fn generate model data skor ke db
     const updateSkor = (idSoalMahasiswa, skor = 0) => ({
       where: {
@@ -830,16 +768,18 @@ const mutations = {
         skor,
       },
     });
-    const hitungSkor = totalSoal => benar => (benar / totalSoal) * 100;
+    const kecilkanDesimal = num => Math.round(num * 100) / 100;
+    const hitungSkor = totalSoal => benar => kecilkanDesimal((benar / totalSoal) * 100);
+
 
     // funsgi yang dibutuhkan
 
-    const skorUjian = hitungSkor(JumlahSoal);
+    const skorUjian = hitungSkor(jumlahSoal);
 
     if (ujian.soalMahasiswas.length) {
       const dataSkor = [];
 
-      const { soals } = ujian.bankSoal;
+      const { soals } = ujian;
 
       for (const mahasiswa of ujian.soalMahasiswas) {
         // ambil id mahasiswa
@@ -1062,11 +1002,7 @@ const mutations = {
       },
       `{
         ujian {
-          JumlahSoal
-        }
-        soals {
           id
-          kunciJawaban
         }
         jawaban {
           idSoal
@@ -1077,18 +1013,32 @@ const mutations = {
       }`,
     );
 
+    const { soals } = await ctx.db.query.ujian(
+      { where: { id: dataSoalMahasiswa.ujian.id } },
+    `
+      {
+        soals {
+          id
+          kunciJawaban
+        }
+      }
+    `
+    );
+    const jumlahSoal = soals.length;
+
     // hitung skor;
 
     const nilaiSkor = dataSoalMahasiswa.jawaban.reduce((acc, jawabanSaya) => {
       // cari kunciJawaban perindex;
-      const kunciJawaban = dataSoalMahasiswa.soals.filter(soal => soal.id === jawabanSaya.idSoal)[0]
+      const kunciJawaban = soals
+        .find(soal => soal.id === jawabanSaya.idSoal)
         .kunciJawaban;
 
       console.log(kunciJawaban);
       return kunciJawaban === jawabanSaya.jawaban.title ? acc + 1 : acc;
     }, 0);
 
-    const skorSaya = (nilaiSkor / dataSoalMahasiswa.ujian.JumlahSoal) * 100;
+    const skorSaya = (nilaiSkor / jumlahSoal) * 100;
 
     // masukan ke db
 

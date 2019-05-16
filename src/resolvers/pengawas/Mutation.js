@@ -224,13 +224,9 @@ const Mutation = {
       `
         {
           id
-          JumlahSoal
-          bankSoal {
+          soals {
             id
-            soals {
-              id
-              kunciJawaban
-            }
+            kunciJawaban
           }
           soalMahasiswas {
             id
@@ -246,7 +242,7 @@ const Mutation = {
       `,
     );
 
-    const { JumlahSoal } = ujian;
+    const jumlahSoal = ujian.soals.length;
 
     // fn generate model data skor ke db
     const updateSkor = (idSoalMahasiswa, skor = 0) => ({
@@ -262,12 +258,12 @@ const Mutation = {
 
     // funsgi yang dibutuhkan
 
-    const skorUjian = hitungSkor(JumlahSoal);
+    const skorUjian = hitungSkor(jumlahSoal);
 
     if (ujian.soalMahasiswas.length) {
       const dataSkor = [];
 
-      const { soals } = ujian.bankSoal;
+      const { soals } = ujian;
 
       for (const mahasiswa of ujian.soalMahasiswas) {
         // ambil id mahasiswa
