@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 require('moment/locale/id');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
@@ -5,7 +6,7 @@ const shortid = require('shortid');
 const moment = require('moment-timezone');
 
 const {
-  hasPermission, getSoalSiswa, promiseCreateSoal, getRandomSoal
+  hasPermission, getSoalSiswa, promiseCreateSoal, getRandomSoal,
 } = require('../utils');
 
 const mutasiPengawas = require('./pengawas/Mutation');
@@ -534,12 +535,12 @@ const mutations = {
     );
 
     await ctx.db.mutation.deleteManySoals(
-    {
+      {
         bankSoal: {
           id: args.id,
-        }
-    },
-      '{ count }'
+        },
+      },
+      '{ count }',
     );
 
     return ctx.db.mutation.deleteBankSoal({ where }, info);
@@ -655,7 +656,6 @@ const mutations = {
     // 2. Check if the user has the permissions to query all the users
     // hasPermission(ctx.request.user, ['ADMIN']);
 
-
     const idDosen = await ctx.db.query.user(
       {
         where: { id: ctx.request.userId },
@@ -676,8 +676,6 @@ const mutations = {
     console.log(args, 'recheck args');
     // 3. if they do, query all the dosens!
     const ujian = await ctx.db.mutation.createUjian(args, info);
-
-
 
     const idUjian = ujian.id;
 
@@ -703,7 +701,6 @@ const mutations = {
       `,
     );
 
-
     const soalUjian = args.data.soals.connect;
     await promiseCreateSoal(ctx, mahasiswas, soalUjian, idUjian);
 
@@ -722,8 +719,7 @@ const mutations = {
     args.data.pin = shortid();
     args.data.pinPengawas = shortid();
 
-    return ctx.db.mutation.updateUjian(
-      args, info)
+    return ctx.db.mutation.updateUjian(args, info);
   },
 
   async akhiriUjianDosen(parent, args, ctx, info) {
@@ -770,7 +766,6 @@ const mutations = {
     });
     const kecilkanDesimal = num => Math.round(num * 100) / 100;
     const hitungSkor = totalSoal => benar => kecilkanDesimal((benar / totalSoal) * 100);
-
 
     // funsgi yang dibutuhkan
 
@@ -1015,14 +1010,14 @@ const mutations = {
 
     const { soals } = await ctx.db.query.ujian(
       { where: { id: dataSoalMahasiswa.ujian.id } },
-    `
+      `
       {
         soals {
           id
           kunciJawaban
         }
       }
-    `
+    `,
     );
     const jumlahSoal = soals.length;
 
@@ -1030,9 +1025,7 @@ const mutations = {
 
     const nilaiSkor = dataSoalMahasiswa.jawaban.reduce((acc, jawabanSaya) => {
       // cari kunciJawaban perindex;
-      const kunciJawaban = soals
-        .find(soal => soal.id === jawabanSaya.idSoal)
-        .kunciJawaban;
+      const kunciJawaban = soals.find(soal => soal.id === jawabanSaya.idSoal).kunciJawaban;
 
       console.log(kunciJawaban);
       return kunciJawaban === jawabanSaya.jawaban.title ? acc + 1 : acc;
@@ -1054,6 +1047,94 @@ const mutations = {
   },
 
   ...mutasiPengawas,
+
+  async importAkunMahasiswa(parent, args, ctx, info) {
+    // 1. login  punya hak akses dan query user login tersebut
+
+    const { userId } = ctx.request;
+    if (!userId) throw new Error('Kamu Harus Login dahulu, untuk melakukan aksi ini');
+    const currentUser = await ctx.db.query.user(
+      { where: { id: userId } },
+      `{
+        id
+        permissions
+      }`,
+    );
+
+    // 2. cek hak akses untuk menambah akun
+    hasPermission(currentUser, ['ADMIN']);
+
+    const { prodi, akunMahasiswas } = args;
+
+    if (!prodi.length || !akunMahasiswas.length) {
+      throw new Error('Kamu Harus Punya Data');
+    }
+
+    // kondisi data
+    const nim_in = akunMahasiswas.map(item => item.nim);
+    const email_in = akunMahasiswas.map(item => item.email);
+
+    // query nim mahasiswa yang sudah ada
+    const mahasiswaSudahAda = await ctx.db.query.mahasiswas(
+      {
+        where: {
+          OR: [
+            {
+              nim_in,
+            },
+            {
+              user: {
+                email_in,
+              },
+            },
+          ],
+        },
+      },
+      '{ nim, user { email } }',
+    );
+
+    console.log(mahasiswaSudahAda, 'sudah ada siapa aja sih');
+
+    // filter data baru yang belum ada
+    const akunBaru = akunMahasiswas.filter((akun) => {
+      const nim = mahasiswaSudahAda.findIndex(item => item.nim === akun.nim) >= 0;
+      const email = mahasiswaSudahAda.findIndex(item => item.user.email === akun.email) >= 0;
+      return !nim || !email;
+    });
+
+    console.log(akunBaru, 'sudah ada');
+
+    // buat akun data terseubt
+    const results = [];
+    for (const akun of akunBaru) {
+      results.push(ctx.db.mutation.createUser(
+        {
+          data: {
+            email: akun.email,
+            password: akun.password,
+            passwordKasih: akun.password,
+            permissions: { set: ['USER', 'MAHASISWA'] },
+            mahasiswa: {
+              create: {
+                nama: akun.nama,
+                nim: akun.nim,
+                prodi: {
+                  connect: {
+                    nama: prodi,
+                  },
+                },
+              },
+            },
+          },
+        },
+        '{id}',
+      ));
+    }
+
+    await Promise.all(results);
+
+    return null;
+  },
 };
 
 module.exports = mutations;

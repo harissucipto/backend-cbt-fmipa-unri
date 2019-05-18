@@ -99,6 +99,11 @@ type Mutation {
 
   akhiriUjianPengawas(idUjian: ID!, jwt: String!): Ujian
   akhiriUjianDosen(idUjian: ID!): Ujian
+
+  importAkunMahasiswa(
+    akunMahasiswas: [AkunMahasiswa!]
+    prodi: String!
+  ): SuccessMessage
 }
 
 type Query {

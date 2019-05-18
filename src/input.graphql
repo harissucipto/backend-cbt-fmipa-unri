@@ -36,6 +36,13 @@ input KelasBaruInput {
   nama: String!
 }
 
+input AkunMahasiswa {
+  nama: String!
+  nim: String!
+  email: String!
+  password: String!
+}
+
 type IdentitasLoginUjian {
   jwt: String!
   id: String!
