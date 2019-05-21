@@ -4,6 +4,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const shortid = require('shortid');
 const moment = require('moment-timezone');
+const kodeJurusan  = require('../kodeJurusan');
 
 const {
   hasPermission, getSoalSiswa, promiseCreateSoal, getRandomSoal,
@@ -1064,9 +1065,9 @@ const mutations = {
     // 2. cek hak akses untuk menambah akun
     hasPermission(currentUser, ['ADMIN']);
 
-    const { prodi, akunMahasiswas } = args;
+    const {  akunMahasiswas } = args;
 
-    if (!prodi.length || !akunMahasiswas.length) {
+    if (!akunMahasiswas.length) {
       throw new Error('Kamu Harus Punya Data');
     }
 
@@ -1120,7 +1121,7 @@ const mutations = {
                 nim: akun.nim,
                 prodi: {
                   connect: {
-                    nama: prodi,
+                    nama: kodeJurusan[akun.prodi],
                   },
                 },
               },

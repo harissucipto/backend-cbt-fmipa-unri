@@ -41,6 +41,7 @@ input AkunMahasiswa {
   nim: String!
   email: String!
   password: String!
+  prodi: String!
 }
 
 type IdentitasLoginUjian {
