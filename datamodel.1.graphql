@@ -7,17 +7,12 @@ enum Permission {
 }
 
 type User {
-  id: ID! @unique
-  gambar: String
   email: String! @unique
   password: String!
-  passwordKasih: String
   permissions: [Permission]
   admin: Admin
   mahasiswa: Mahasiswa
   dosen: Dosen
-  resetToken: String
-  resetTokenExpiry: String
 }
 
 type Admin {
@@ -34,19 +29,12 @@ type Jurusan {
 }
 
 type Prodi {
-  id: ID! @unique
+  kode: String! @unique
   jurusan: Jurusan!
-  nama: String! @unique
-  kode: String @unique
-}
-
-type Angkatan {
-  id: ID! @unique
   nama: String! @unique
 }
 
 type Mahasiswa {
-  id: ID! @unique
   nim: String! @unique
   nama: String!
   prodi: Prodi!
@@ -57,7 +45,6 @@ type Mahasiswa {
 }
 
 type Dosen {
-  id: ID! @unique
   nip: String! @unique
   nama: String!
   user: User!
@@ -67,7 +54,6 @@ type Dosen {
 }
 
 type MataKuliah {
-  id: ID! @unique
   kode: String! @unique
   nama: String!
   prodi: Prodi!
@@ -141,9 +127,7 @@ type SoalMahasiswa {
 type JawabanMahasiswa {
   id: ID! @unique
   ujian: Ujian!
-  idSoal: String!
   jawaban: Jawaban
-  pegangan: String @unique
 }
 
 type TidakHadir {

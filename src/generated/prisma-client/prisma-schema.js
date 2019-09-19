@@ -2267,6 +2267,7 @@ type Prodi {
   id: ID!
   jurusan: Jurusan!
   nama: String!
+  kode: String
 }
 
 type ProdiConnection {
@@ -2278,6 +2279,7 @@ type ProdiConnection {
 input ProdiCreateInput {
   jurusan: JurusanCreateOneWithoutProdisInput!
   nama: String!
+  kode: String
 }
 
 input ProdiCreateManyWithoutJurusanInput {
@@ -2292,6 +2294,7 @@ input ProdiCreateOneInput {
 
 input ProdiCreateWithoutJurusanInput {
   nama: String!
+  kode: String
 }
 
 type ProdiEdge {
@@ -2304,6 +2307,8 @@ enum ProdiOrderByInput {
   id_DESC
   nama_ASC
   nama_DESC
+  kode_ASC
+  kode_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -2313,6 +2318,7 @@ enum ProdiOrderByInput {
 type ProdiPreviousValues {
   id: ID!
   nama: String!
+  kode: String
 }
 
 type ProdiSubscriptionPayload {
@@ -2336,11 +2342,13 @@ input ProdiSubscriptionWhereInput {
 input ProdiUpdateDataInput {
   jurusan: JurusanUpdateOneRequiredWithoutProdisInput
   nama: String
+  kode: String
 }
 
 input ProdiUpdateInput {
   jurusan: JurusanUpdateOneRequiredWithoutProdisInput
   nama: String
+  kode: String
 }
 
 input ProdiUpdateManyWithoutJurusanInput {
@@ -2361,6 +2369,7 @@ input ProdiUpdateOneRequiredInput {
 
 input ProdiUpdateWithoutJurusanDataInput {
   nama: String
+  kode: String
 }
 
 input ProdiUpdateWithWhereUniqueWithoutJurusanInput {
@@ -2409,6 +2418,20 @@ input ProdiWhereInput {
   nama_not_starts_with: String
   nama_ends_with: String
   nama_not_ends_with: String
+  kode: String
+  kode_not: String
+  kode_in: [String!]
+  kode_not_in: [String!]
+  kode_lt: String
+  kode_lte: String
+  kode_gt: String
+  kode_gte: String
+  kode_contains: String
+  kode_not_contains: String
+  kode_starts_with: String
+  kode_not_starts_with: String
+  kode_ends_with: String
+  kode_not_ends_with: String
   AND: [ProdiWhereInput!]
   OR: [ProdiWhereInput!]
   NOT: [ProdiWhereInput!]
@@ -2417,6 +2440,7 @@ input ProdiWhereInput {
 input ProdiWhereUniqueInput {
   id: ID
   nama: String
+  kode: String
 }
 
 type Query {

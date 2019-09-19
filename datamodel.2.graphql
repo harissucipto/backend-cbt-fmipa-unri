@@ -37,7 +37,6 @@ type Prodi {
   id: ID! @unique
   jurusan: Jurusan!
   nama: String! @unique
-  kode: String @unique
 }
 
 type Angkatan {

@@ -740,6 +740,8 @@ export type ProdiOrderByInput =
   | "id_DESC"
   | "nama_ASC"
   | "nama_DESC"
+  | "kode_ASC"
+  | "kode_DESC"
   | "createdAt_ASC"
   | "createdAt_DESC"
   | "updatedAt_ASC"
@@ -1754,6 +1756,20 @@ export interface ProdiWhereInput {
   nama_not_starts_with?: String;
   nama_ends_with?: String;
   nama_not_ends_with?: String;
+  kode?: String;
+  kode_not?: String;
+  kode_in?: String[] | String;
+  kode_not_in?: String[] | String;
+  kode_lt?: String;
+  kode_lte?: String;
+  kode_gt?: String;
+  kode_gte?: String;
+  kode_contains?: String;
+  kode_not_contains?: String;
+  kode_starts_with?: String;
+  kode_not_starts_with?: String;
+  kode_ends_with?: String;
+  kode_not_ends_with?: String;
   AND?: ProdiWhereInput[] | ProdiWhereInput;
   OR?: ProdiWhereInput[] | ProdiWhereInput;
   NOT?: ProdiWhereInput[] | ProdiWhereInput;
@@ -1874,6 +1890,7 @@ export interface UjianCreateOneInput {
 
 export interface ProdiUpdateWithoutJurusanDataInput {
   nama?: String;
+  kode?: String;
 }
 
 export interface UjianCreateInput {
@@ -2132,6 +2149,7 @@ export interface SoalUpsertWithoutJawabanInput {
 export interface ProdiUpdateDataInput {
   jurusan?: JurusanUpdateOneRequiredWithoutProdisInput;
   nama?: String;
+  kode?: String;
 }
 
 export interface SoalUpdateWithoutJawabanDataInput {
@@ -3162,6 +3180,7 @@ export interface KelasUpdateWithWhereUniqueWithoutDosenInput {
 export interface ProdiCreateInput {
   jurusan: JurusanCreateOneWithoutProdisInput;
   nama: String;
+  kode?: String;
 }
 
 export interface KelasUpdateWithoutDosenDataInput {
@@ -3418,6 +3437,7 @@ export interface BankSoalUpdateOneRequiredInput {
 
 export interface ProdiCreateWithoutJurusanInput {
   nama: String;
+  kode?: String;
 }
 
 export interface BankSoalUpdateDataInput {
@@ -3449,6 +3469,7 @@ export interface SoalUpdateManyWithoutBankSoalInput {
 export type ProdiWhereUniqueInput = AtLeastOne<{
   id: ID_Input;
   nama?: String;
+  kode?: String;
 }>;
 
 export interface SoalUpdateWithWhereUniqueWithoutBankSoalInput {
@@ -3619,6 +3640,7 @@ export interface TidakHadirUpdateWithoutUjianDataInput {
 export interface ProdiUpdateInput {
   jurusan?: JurusanUpdateOneRequiredWithoutProdisInput;
   nama?: String;
+  kode?: String;
 }
 
 export interface MahasiswaUpdateOneRequiredInput {
@@ -5346,12 +5368,14 @@ export interface MahasiswaSubscriptionPayloadSubscription
 export interface ProdiNode {
   id: ID_Output;
   nama: String;
+  kode?: String;
 }
 
 export interface Prodi extends Promise<ProdiNode>, Fragmentable {
   id: () => Promise<ID_Output>;
   jurusan: <T = Jurusan>() => T;
   nama: () => Promise<String>;
+  kode: () => Promise<String>;
 }
 
 export interface ProdiSubscription
@@ -5360,6 +5384,7 @@ export interface ProdiSubscription
   id: () => Promise<AsyncIterator<ID_Output>>;
   jurusan: <T = JurusanSubscription>() => T;
   nama: () => Promise<AsyncIterator<String>>;
+  kode: () => Promise<AsyncIterator<String>>;
 }
 
 export interface MahasiswaPreviousValuesNode {
@@ -5726,6 +5751,7 @@ export interface BatchPayloadSubscription
 export interface ProdiPreviousValuesNode {
   id: ID_Output;
   nama: String;
+  kode?: String;
 }
 
 export interface ProdiPreviousValues
@@ -5733,6 +5759,7 @@ export interface ProdiPreviousValues
     Fragmentable {
   id: () => Promise<ID_Output>;
   nama: () => Promise<String>;
+  kode: () => Promise<String>;
 }
 
 export interface ProdiPreviousValuesSubscription
@@ -5740,6 +5767,7 @@ export interface ProdiPreviousValuesSubscription
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
   nama: () => Promise<AsyncIterator<String>>;
+  kode: () => Promise<AsyncIterator<String>>;
 }
 
 export interface MahasiswaNode {
